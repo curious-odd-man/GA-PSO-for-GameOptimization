@@ -44,7 +44,7 @@ PSO::PSO(size_t numberOfParticles,
         // TODO: change when game is reusable
         PsoParticle * p  = new PsoParticle(init);
         aGames.push_back({ p, 
-            new OptimizationGame(*p, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount) });
+            new OptimizationGame(p, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount) });
     }
 }
 
@@ -147,7 +147,7 @@ void PSO::testSolution()
 
     for (size_t i = 0; i < aNumberOfFinalTests; ++i)
     {
-        OptimizationGame g(aGbest, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
+        OptimizationGame g(&aGbest, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
         future_results.push_back(async(&OptimizationGame::play, g, nullptr));
     }
 
