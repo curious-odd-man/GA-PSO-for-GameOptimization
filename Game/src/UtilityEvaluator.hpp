@@ -17,29 +17,50 @@ public:
     {
     }
 
-    UtilityEvaluator(size_t countOfParams);
+    UtilityEvaluator(size_t countOfParams)
+            : aMultipliers(countOfParams, (double) rand() / RAND_MAX * 2 - 1), aUtility(0)
+    {
+    }
+
     virtual ~UtilityEvaluator()
     {
     }
 
-    virtual double evaluate(const vector<double>& params) const;
+    virtual double evaluate(const vector<double>& params) const
+    {
+        if (params.size() != aMultipliers.size())
+            raise (SIGABRT);
 
-    friend ostream& operator<<(ostream& os, const UtilityEvaluator& u);
+        double utility = 0;
+        for (size_t i = 0; i < aMultipliers.size(); ++i)
+            utility += aMultipliers[i] * params[i];
+        return utility;
+    }
 
-    size_t getUtility() const;
-    void setScore(size_t score);
+    inline size_t getUtility() const
+    {
+        return aUtility;
+    }
+
+    inline void setUtility(size_t utility)
+    {
+        aUtility = utility;
+    }
 
     inline bool operator<(const UtilityEvaluator& other)
     {
         if (aUtility < other.aUtility)
             return true;
-        return false;
+        else
+            return false;
     }
 
     inline const vector<double>& getMultipliers() const
     {
         return aMultipliers;
     }
+
+    friend ostream& operator<<(ostream& os, const UtilityEvaluator& u);
 
 protected:
     vector<double> aMultipliers;

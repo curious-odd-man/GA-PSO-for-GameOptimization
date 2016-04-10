@@ -47,7 +47,7 @@ size_t Game::play(UtilityEvaluator* evaluator)
 
     aScore = accumulate(game_scores.begin(), game_scores.end(), 0ULL, [](size_t a, size_t b)
     {   return a + b;}) / game_scores.size();
-    aUtilityEvaluator->setScore(aScore);
+    aUtilityEvaluator->setUtility(aScore);
     return aScore;
 }
 
