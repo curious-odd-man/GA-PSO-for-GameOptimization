@@ -16,7 +16,7 @@ template <typename GeneType>
 class Chromosome
 {
 public:
-	Chromosome(size_t geneCount, GeneType minValue, GeneType maxValue) : aGeneCount(geneCount), aGenes(new Gene<GeneType>[aGeneCount]()) {}
+	Chromosome(size_t geneCount) : aGeneCount(geneCount), aGenes(new Gene<GeneType>[aGeneCount]()) {}
 
 	Chromosome(size_t geneCount, Gene<GeneType>* genes) : aGeneCount(geneCount), aGenes(genes) {}
 
@@ -30,17 +30,19 @@ public:
 			aGenes[i] = other.aGenes[i];
 	}
 
-    ~Chromosome() { delete[] aGenes; aGenes = nullptr; }
+	~Chromosome() { delete[] aGenes; }
 
 	/* Mutation */
 	Chromosome<GeneType>& operator++();
 	Chromosome<GeneType> operator++(int);
 
 	/* Crossover */
-	Chromosome<GeneType> operator+(const Chromosome<GeneType>& other);
+	pair<Chromosome<GeneType>, Chromosome<GeneType>> operator+(const Chromosome<GeneType>& other);
 
 	/* Clone */
 	Chromosome<GeneType>& operator=(const Chromosome<GeneType>& other);
+
+	/* Move */
 	Chromosome<GeneType>& operator=(Chromosome<GeneType>&& other);
 
 	/* Print */
@@ -70,23 +72,23 @@ template <typename GeneType>
 double Chromosome<GeneType>::getRandom(double)
 {
 	static uniform_real_distribution<double> unif(0, 1); // TODO: maybe they should be static too ?
-	static default_random_engine re((unsigned int)time(0));
+	static default_random_engine re(time(0));
 	return unif(re);
 }
 
 template <typename GeneType>
 int Chromosome<GeneType>::getMutationRandom()
 {
-	static uniform_int_distribution<int> unif(0, (unsigned int)aGeneCount); // TODO: maybe they should be static too ?
-	static default_random_engine re((unsigned int)time(0));
+	static uniform_int_distribution<int> unif(0, aGeneCount); // TODO: maybe they should be static too ?
+	static default_random_engine re(time(0));
 	return unif(re);
 }
 
 template <typename GeneType>
 int Chromosome<GeneType>::getCrossoverRandom()
 {
-	static uniform_int_distribution<int> unif(1, (unsigned int)(aGeneCount - 1)); // TODO: maybe they should be static too ?
-	static default_random_engine re((unsigned int)time(0));
+	static uniform_int_distribution<int> unif(1, aGeneCount - 1); // TODO: maybe they should be static too ?
+	static default_random_engine re(time(0));
 	return unif(re);
 }
 
@@ -94,19 +96,26 @@ int Chromosome<GeneType>::getCrossoverRandom()
 /* Public methods */
 
 template <typename GeneType>
-Chromosome<GeneType> Chromosome<GeneType>::operator+(const Chromosome<GeneType>& other)
+pair<Chromosome<GeneType>, Chromosome<GeneType>> Chromosome<GeneType>::operator+(const Chromosome<GeneType>& other)
 {
-	Gene<GeneType>* genes = new Gene<GeneType>[aGeneCount]();
+	Gene<GeneType>* genes1 = new Gene<GeneType>[aGeneCount]();
+	Gene<GeneType>* genes2 = new Gene<GeneType>[aGeneCount]();
 
 	size_t algorithm = getCrossoverRandom();
 
 	for (size_t i = 0; i < algorithm; i++)
-		genes[i] = aGenes[i];
+	{
+		genes1[i] = aGenes[i];
+		genes2[i] = other.aGenes[i];
+	}
 
 	for (size_t i = algorithm; i < aGeneCount; i++)
-		genes[i] = other.aGenes[i];
+	{
+		genes1[i] = other.aGenes[i];
+		genes2[i] = aGenes[i];
+	}
 
-	return Chromosome(aGeneCount, genes);
+	return pair<Chromosome<GeneType>, Chromosome<GeneType>>(++Chromosome(aGeneCount, genes1), ++Chromosome(aGeneCount, genes2));
 }
 
 
@@ -119,9 +128,7 @@ Chromosome<GeneType>& Chromosome<GeneType>::operator=(const Chromosome<GeneType>
 	aGenes = new Gene<GeneType>[aGeneCount]();
 
 	for (size_t i = 0; i < aGeneCount; ++i)
-	{
 		aGenes[i] = other.aGenes[i];
-	}
 
 	return *this;
 }
@@ -130,8 +137,6 @@ template <typename GeneType>
 Chromosome<GeneType>& Chromosome<GeneType>::operator=(Chromosome<GeneType>&& other)
 {
 	aGeneCount = other.aGeneCount;
-
-    delete[] aGenes;
 	aGenes = other.aGenes;
 
 	other.aGenes = nullptr;

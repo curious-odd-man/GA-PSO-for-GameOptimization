@@ -2,12 +2,16 @@
 
 #include "Population.hpp"
 
-int main() {
-	cout << "Hello, Genetic Algorithms!" << endl; // prints Hello, Genetic Algorithms!
+int main ()
+{
 
-	Population test;
+    Population<double> test (50, 50);
 
-    test.live();
+    //cout << test << endl;
 
-	return 0;
+    test.live ();
+
+    //cout << test << endl;
+
+    return 0;
 }

@@ -9,28 +9,28 @@ class Game;
 class Field
 {
 public:
-	Field(size_t width, size_t height, UtilityEvaluator& evaluator);                                     // create new emtpy field
+    Field (size_t width, size_t height, UtilityEvaluator* evaluator);
+    Field (const Field& field);
+
+    virtual ~Field ();
+
+    /* OPERATORS */
     Field& operator= (const Field &);
+    bool operator< (const Field& f);
 
-    Field(const Field& field);                                                    // use in putFigure() to generate next state,  NOTE!
+    /* METHODS */
+    vector<Field>& getNextStates (const Figure& figure, vector<Field>& res) const;
 
-	virtual ~Field();
+    void reset ();
 
-    vector<Field>& getNextStates(const Figure& figure, vector<Field>& res) const;                      // generate all possible next field states and calculate their utility
+    void setEvaluator(UtilityEvaluator* evaluator) { aUtilityEvaluator = evaluator; }
 
-    // compare by utility only
-    bool operator<(const Field& f)
+    size_t getRemoved () const
     {
-        if (aUtility < f.aUtility)
-            return true;
-        return false;
+        return aRemoved;
     }
 
-    void reset();
-
-    size_t getRemoved() const { return aRemoved; }
-
- protected:
+protected:
     unsigned char * aField;
     size_t aWidth;
     size_t aHeight;
@@ -48,17 +48,17 @@ public:
     vector<double> aFieldParameters;
     vector<size_t> aColumnHeights;
     double aUtility;                                    // calculated utility for field state
-    UtilityEvaluator& aUtilityEvaluator;
+    UtilityEvaluator* aUtilityEvaluator;
 
-    void putFigure(const Figure& figure, size_t pos);        // generate next possible field states this way
+    void putFigure (const Figure& figure, size_t pos);        // generate next possible field states this way
 
-    void fillRemoveMask(unsigned char* mask, bool& changed);
-    void compact();
-    void removeColors();                    // remove all 3 in line of same color and move blocks above down
-    void calculateUtility();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
+    void fillRemoveMask (unsigned char* mask, bool& changed);
+    void compact ();
+    void removeColors ();                    // remove all 3 in line of same color and move blocks above down
+    void calculateUtility ();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
 
-    friend ostream& operator<<(ostream& os, const Field& f);
-    void printMask(unsigned char* mask);
+    friend ostream& operator<< (ostream& os, const Field& f);
+    void printMask (unsigned char* mask);
 
-    void calculateFieldConstants();
+    void calculateFieldConstants ();
 };

@@ -86,7 +86,7 @@ template <typename GeneType>
 GeneType Gene<GeneType>::getRandom()
 {
 	static uniform_real_distribution<GeneType> unif(aMinValue, aMaxValue); // TODO: maybe they should be static too ?
-	static default_random_engine re((unsigned int)time(0));
+	static default_random_engine re(time(0));
 	return unif(re);
 }
 
