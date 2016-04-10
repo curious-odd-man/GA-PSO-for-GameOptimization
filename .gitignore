@@ -33,3 +33,7 @@
 # Directories
 Release/
 Debug/
+
+# Eclipse project files
+**/.cproject
+
