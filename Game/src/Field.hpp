@@ -9,23 +9,26 @@ class Game;
 class Field
 {
 public:
-    Field (size_t width, size_t height, UtilityEvaluator* evaluator);
-    Field (const Field& field);
+    Field(size_t width, size_t height, UtilityEvaluator* evaluator);
+    Field(const Field& field);
 
-    virtual ~Field ();
+    virtual ~Field();
 
     /* OPERATORS */
-    Field& operator= (const Field &);
-    bool operator< (const Field& f);
+    Field& operator=(const Field &);
+    bool operator<(const Field& f);
 
     /* METHODS */
-    vector<Field>& getNextStates (const Figure& figure, vector<Field>& res) const;
+    vector<Field>& getNextStates(const Figure& figure, vector<Field>& res) const;
 
-    void reset ();
+    void reset();
 
-    void setEvaluator(UtilityEvaluator* evaluator) { aUtilityEvaluator = evaluator; }
+    void setEvaluator(UtilityEvaluator* evaluator)
+    {
+        aUtilityEvaluator = evaluator;
+    }
 
-    size_t getRemoved () const
+    size_t getRemoved() const
     {
         return aRemoved;
     }
@@ -50,15 +53,15 @@ protected:
     double aUtility;                                    // calculated utility for field state
     UtilityEvaluator* aUtilityEvaluator;
 
-    void putFigure (const Figure& figure, size_t pos);        // generate next possible field states this way
+    void putFigure(const Figure& figure, size_t pos);        // generate next possible field states this way
 
-    void fillRemoveMask (unsigned char* mask, bool& changed);
-    void compact ();
-    void removeColors ();                    // remove all 3 in line of same color and move blocks above down
-    void calculateUtility ();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
+    void fillRemoveMask(unsigned char* mask, bool& changed);
+    void compact();
+    void removeColors();                    // remove all 3 in line of same color and move blocks above down
+    void calculateUtility();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
 
-    friend ostream& operator<< (ostream& os, const Field& f);
-    void printMask (unsigned char* mask);
+    friend ostream& operator<<(ostream& os, const Field& f);
+    void printMask(unsigned char* mask);
 
-    void calculateFieldConstants ();
+    void calculateFieldConstants();
 };

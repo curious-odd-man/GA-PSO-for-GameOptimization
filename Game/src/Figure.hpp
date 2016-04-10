@@ -12,7 +12,7 @@ public:
     const unsigned char * begin();
     const unsigned char * end();
 
-    vector<Figure> getAllStates() const;        // get all possible variations of this figure (variations count is equal with aSize;
+    vector<Figure> getAllStates() const; // get all possible variations of this figure (variations count is equal with aSize;
 
     size_t getSize() const;                     // for the Field; (put figure on field and generate new Field states);
 

@@ -1,8 +1,7 @@
 #include "Common.hpp"
 
 Figure::Figure(size_t figureSize, unsigned char colorsCount, const unsigned char * data)
-    : aSize(figureSize), 
-      aColorsCount(colorsCount)
+        : aSize(figureSize), aColorsCount(colorsCount)
 {
     aData = new unsigned char[(aSize << 1) - 1];       // reserve n + n - 1
     if (data)

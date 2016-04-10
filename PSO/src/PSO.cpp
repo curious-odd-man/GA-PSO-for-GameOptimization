@@ -3,24 +3,15 @@
 #include "Common.hpp"
 #include "PSO.hpp"
 
-PSO::PSO(size_t numberOfParticles, 
-         size_t numberOfIterations, 
-         size_t numberOfFinalTests, 
-         size_t fieldWidth, 
-         size_t fieldHeight,
-         size_t figureSize, 
-         size_t colorsCount)
-    : aSwarmSize(numberOfParticles),
-      aIterationCount(numberOfIterations),
-      aNumberOfFinalTests(numberOfFinalTests),
-      aFieldWidth(fieldWidth),
-      aFieldHeight(fieldHeight),
-      aFigureSize(figureSize),
-      aColorsCount(colorsCount)
+PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
+         size_t fieldHeight, size_t figureSize, size_t colorsCount)
+        : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
+                fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount)
 {
-    srand((unsigned int)time(NULL));
+    srand((unsigned int) time(NULL));
     cout << DELIMITER;
-    cout << "PSO otimization created with " << aSwarmSize << " particles and " << aIterationCount << " iterations" << endl;
+    cout << "PSO otimization created with " << aSwarmSize << " particles and " << aIterationCount << " iterations"
+            << endl;
     cout << "\t Field width is " << aFieldWidth << ", field height is " << aFieldHeight << endl;
     cout << "\t Figure size is " << aFigureSize << endl;
     cout << "\t " << aColorsCount << " diffrent colors" << endl;
@@ -32,19 +23,14 @@ PSO::PSO(size_t numberOfParticles,
     // PSO initialization
     for (size_t i = 0; i < aSwarmSize; ++i)
     {
-        vector <double> init = { 
-            distribution(generator), 
-            distribution(generator),
-            distribution(generator),
-            distribution(generator),
-            distribution(generator),
-            distribution(generator) 
-        };
+        vector<double> init =
+            { distribution(generator), distribution(generator), distribution(generator), distribution(generator),
+                    distribution(generator), distribution(generator) };
 
         // TODO: change when game is reusable
-        PsoParticle * p  = new PsoParticle(init);
-        aGames.push_back({ p, 
-            new OptimizationGame(p, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount) });
+        PsoParticle * p = new PsoParticle(init);
+        aGames.push_back(
+            { p, new OptimizationGame(p, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount) });
     }
 }
 
@@ -76,7 +62,6 @@ void PSO::optimize()
         for (size_t i = 0; i < aGames.size(); ++i)
         {
             pso_game_t& g = aGames[i];
-            // TODO: 10 games with same evaluator
             g.game->play();
         }
 
@@ -90,39 +75,39 @@ void PSO::optimize()
             out << ", ";
 
         // TODO: this should be moved into g->play();
-    	int c = 0;
-    	while (key_pressed(&c));
-
+        int c = 0;
+        while (key_pressed(&c))
+            ;
 
         if (c)
         {
             switch (c)
             {
-            case 'P':
-            case 'p':
-                cout << "Optimization status: " << endl;
-                cout << "\t Iterations left: " << aIterationCount << endl;
-                cout << "\t Current gbest: " << endl;
-                cout << aGbest << endl;
-                cout << "\t Current pbest: " << endl;
-                cout << aPbest << endl;
-                break;
+                case 'P':
+                case 'p':
+                    cout << "Optimization status: " << endl;
+                    cout << "\t Iterations left: " << aIterationCount << endl;
+                    cout << "\t Current gbest: " << endl;
+                    cout << aGbest << endl;
+                    cout << "\t Current pbest: " << endl;
+                    cout << aPbest << endl;
+                    break;
 
-            case 'T':
-            case 't':
-                cout << "Optimization terminated by user" << endl;
-                aOptimizationEnd = Chronometer::now();
-                return;
-                break;
+                case 'T':
+                case 't':
+                    cout << "Optimization terminated by user" << endl;
+                    aOptimizationEnd = Chronometer::now();
+                    return;
+                    break;
 
-            default:
-                break;
+                default:
+                    break;
             }
         }
         // move particles 
         for (auto g : aGames)
             g.evaluator->move(aGbest, aPbest);
-         
+
     } while (--aIterationCount > 0);
 
     aOptimizationEnd = Chronometer::now();
@@ -133,9 +118,9 @@ void PSO::optimize()
 
 void PSO::print()
 {
-   cout << DELIMITER;
-   cout << "Optimization took " << Chronometer::duration_seconds(aOptimizationStart, aOptimizationEnd) << "s" << endl;
-   cout << aGbest << endl;
+    cout << DELIMITER;
+    cout << "Optimization took " << Chronometer::duration_seconds(aOptimizationStart, aOptimizationEnd) << "s" << endl;
+    cout << aGbest << endl;
 }
 
 void PSO::testSolution()
@@ -160,7 +145,9 @@ void PSO::testSolution()
     cout << "test games:" << endl;
     cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
     cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
-    cout << "\t avg:" << ((double)accumulate(results.begin(), results.end(), (size_t)0, plus<size_t>()) / results.size()) << endl;
+    cout << "\t avg:"
+            << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
+            << endl;
     cout << "\t duration: " << Chronometer::duration_seconds(aTestsStart, aTestsEnd) << "s" << endl;
 }
 

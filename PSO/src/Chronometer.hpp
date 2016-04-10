@@ -8,5 +8,4 @@ namespace Chronometer
 
     TimePoint now();
     double duration_seconds(const TimePoint& t1, const TimePoint& t2);
-};
-
+}

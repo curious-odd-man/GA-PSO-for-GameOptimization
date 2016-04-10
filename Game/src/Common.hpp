@@ -21,11 +21,10 @@ using namespace std;
 #include "DemonstrationGame.hpp"
 #include "OptimizationGame.hpp"
 
-
-template <typename T, typename TT, typename TTT>
+template<typename T, typename TT, typename TTT>
 bool in_range(T const& s, TT const& e, TTT const& v)
 {
     return s <= v && v <= e;
 }
 
-bool key_pressed (int* code);
+bool key_pressed(int* code);

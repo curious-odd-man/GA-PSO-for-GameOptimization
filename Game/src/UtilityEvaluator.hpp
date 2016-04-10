@@ -7,10 +7,21 @@ using namespace std;
 class UtilityEvaluator
 {
 public:
-    UtilityEvaluator() : aUtility(0) {};
-    UtilityEvaluator(const vector<double>& init) : aMultipliers(init), aUtility(0) {};
+    UtilityEvaluator()
+            : aUtility(0)
+    {
+    }
+
+    UtilityEvaluator(const vector<double>& init)
+            : aMultipliers(init), aUtility(0)
+    {
+    }
+
     UtilityEvaluator(size_t countOfParams);             // create countOfParams random multipliers
-    virtual ~UtilityEvaluator() {};
+    virtual ~UtilityEvaluator()
+    {
+    }
+
     virtual double evaluate(const vector<double>& params) const;
 
     friend ostream& operator<<(ostream& os, const UtilityEvaluator& u);

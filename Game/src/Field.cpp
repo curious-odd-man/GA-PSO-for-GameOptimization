@@ -1,25 +1,25 @@
 #include "Common.hpp"
 
-Field::Field (size_t width, size_t height, UtilityEvaluator* evaluator)
-        : aWidth (width), aHeight (height), aSize (width * height), aRemoved (0), aTwoCellsCount (0), aTwoCellsOnTop (
-                0), aColumnHeights (aWidth, 0), aUtility (0), aUtilityEvaluator (evaluator)
+Field::Field(size_t width, size_t height, UtilityEvaluator* evaluator)
+        : aWidth(width), aHeight(height), aSize(width * height), aRemoved(0), aTwoCellsCount(0), aTwoCellsOnTop(0), aColumnHeights(
+                aWidth, 0), aUtility(0), aUtilityEvaluator(evaluator)
 {
-    aField = new unsigned char[aSize] ();
-    calculateFieldConstants ();
-    memset (aField, 0, aSize);
+    aField = new unsigned char[aSize]();
+    calculateFieldConstants();
+    memset(aField, 0, aSize);
 }
 
-Field::Field (const Field & field)
-        : aWidth (field.aWidth), aHeight (field.aHeight), aSize (field.aSize), aRemoved (field.aRemoved), aTwoCellsCount (
-                field.aTwoCellsCount), aTwoCellsOnTop (field.aTwoCellsOnTop), aFieldParameters (field.aFieldParameters), aColumnHeights (
-                field.aColumnHeights), aUtility (field.aUtility), aUtilityEvaluator (field.aUtilityEvaluator)
+Field::Field(const Field & field)
+        : aWidth(field.aWidth), aHeight(field.aHeight), aSize(field.aSize), aRemoved(field.aRemoved), aTwoCellsCount(
+                field.aTwoCellsCount), aTwoCellsOnTop(field.aTwoCellsOnTop), aFieldParameters(field.aFieldParameters), aColumnHeights(
+                field.aColumnHeights), aUtility(field.aUtility), aUtilityEvaluator(field.aUtilityEvaluator)
 {
-    aField = new unsigned char[aSize] ();
-    calculateFieldConstants ();
-    memmove (aField, field.aField, aSize);
+    aField = new unsigned char[aSize]();
+    calculateFieldConstants();
+    memmove(aField, field.aField, aSize);
 }
 
-Field& Field::operator= (const Field & field)
+Field& Field::operator=(const Field & field)
 {
     if (this == &field)
         return *this;
@@ -33,14 +33,14 @@ Field& Field::operator= (const Field & field)
 
     aTwoCellsCount = field.aTwoCellsCount;
     aTwoCellsOnTop = field.aTwoCellsOnTop;
-    aColumnHeights.assign (field.aColumnHeights.begin (), field.aColumnHeights.end ());
-    memcpy (aField, field.aField, aSize);
-    aFieldParameters.assign (field.aFieldParameters.begin (), field.aFieldParameters.end ());
+    aColumnHeights.assign(field.aColumnHeights.begin(), field.aColumnHeights.end());
+    memcpy(aField, field.aField, aSize);
+    aFieldParameters.assign(field.aFieldParameters.begin(), field.aFieldParameters.end());
 
     return *this;
 }
 
-bool Field::operator< (const Field& f)
+bool Field::operator<(const Field& f)
 {
     if (aUtility < f.aUtility)
         return true;
@@ -48,12 +48,12 @@ bool Field::operator< (const Field& f)
         return false;
 }
 
-Field::~Field ()
+Field::~Field()
 {
     delete[] aField;
 }
 
-void Field::calculateFieldConstants ()
+void Field::calculateFieldConstants()
 {
     aFieldEnd = aField + aSize;
     aFieldLastLineStart = aFieldEnd - aWidth;
@@ -61,15 +61,15 @@ void Field::calculateFieldConstants ()
     aFieldSecondLine = aField + aWidth;
 }
 
-vector<Field>& Field::getNextStates (const Figure & figure, vector<Field>& res) const
+vector<Field>& Field::getNextStates(const Figure & figure, vector<Field>& res) const
 {
-    res.clear ();
-    res.reserve (figure.getSize () * aWidth);
-    vector<Figure> figures (figure.getAllStates ());
+    res.clear();
+    res.reserve(figure.getSize() * aWidth);
+    vector<Figure> figures(figure.getAllStates());
 
     // find place to put a figure
     // we can stop at third row, since we need 3 rows to put a figure
-    const size_t figureEndShift = (figure.getSize () - 1) * aWidth;
+    const size_t figureEndShift = (figure.getSize() - 1) * aWidth;
 
     // for each column
     for (unsigned char * columnPtr = aFieldLastCell; columnPtr >= aFieldLastLineStart; --columnPtr)
@@ -84,8 +84,8 @@ vector<Field>& Field::getNextStates (const Figure & figure, vector<Field>& res) 
                 for (auto f : figures)
                 {
                     // create new Field and put a current figure on that field
-                    res.emplace_back (*this);
-                    res.back ().putFigure (f, ptr - aField);
+                    res.emplace_back(*this);
+                    res.back().putFigure(f, ptr - aField);
                 }
                 break;
             }
@@ -95,21 +95,21 @@ vector<Field>& Field::getNextStates (const Figure & figure, vector<Field>& res) 
     return res;
 }
 
-void Field::reset ()
+void Field::reset()
 {
     for (unsigned char * ptr = aField; ptr < aFieldEnd; ++ptr)
         (*ptr) = 0;
 }
 
 // position is a lower end of a figure
-void Field::putFigure (const Figure & figure, size_t pos)
+void Field::putFigure(const Figure & figure, size_t pos)
 {
-    for (size_t i = 0; i < figure.getSize (); ++i)
-        aField[pos - aWidth * i] = figure.getData ()[i];
-    removeColors ();
+    for (size_t i = 0; i < figure.getSize(); ++i)
+        aField[pos - aWidth * i] = figure.getData()[i];
+    removeColors();
 }
 
-void Field::fillRemoveMask (unsigned char* mask, bool& changed)
+void Field::fillRemoveMask(unsigned char* mask, bool& changed)
 {
     // Test and mark for deletion
     auto TnM_for_deletion = [this](const unsigned char * ptr, unsigned char &lastColor,
@@ -154,7 +154,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
     };
 
     changed = false;
-    memset (mask, 0, aSize);
+    memset(mask, 0, aSize);
 
     unsigned char lastColor = 0;
     unsigned char colorRepeats = 0;
@@ -165,7 +165,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
         lastColor = 0;
         colorRepeats = 0;
         for (unsigned char* ptr = start; ptr < start + aWidth; ++ptr)
-            TnM_for_deletion (ptr, lastColor, mask, changed, colorRepeats, -1);
+            TnM_for_deletion(ptr, lastColor, mask, changed, colorRepeats, -1);
     }
 
     // search vertical lines from the end
@@ -174,7 +174,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
         lastColor = 0;
         colorRepeats = 0;
         for (unsigned char * ptr = columnPtr; ptr >= aField; ptr -= aWidth)
-            TnM_for_deletion (ptr, lastColor, mask, changed, colorRepeats, (int) aWidth);
+            TnM_for_deletion(ptr, lastColor, mask, changed, colorRepeats, (int) aWidth);
     }
 
     if (aWidth < 3 || aHeight < 3)  // can 3 in line be on diagonale?
@@ -194,7 +194,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
 
     for (unsigned char * ptr = startPtr; ptr != endPtr;)
     {
-        TnM_for_deletion (ptr, lastColor, mask, changed, colorRepeats, -((int) aWidth + 1));
+        TnM_for_deletion(ptr, lastColor, mask, changed, colorRepeats, -((int) aWidth + 1));
 
         if (ptr != diagEndPtr)      // reached end of diagonale
             ptr += aWidth + 1;
@@ -233,7 +233,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
 
     for (unsigned char * ptr = startPtr; ptr != endPtr;)
     {
-        TnM_for_deletion (ptr, lastColor, mask, changed, colorRepeats, -((int) aWidth - 1));
+        TnM_for_deletion(ptr, lastColor, mask, changed, colorRepeats, -((int) aWidth - 1));
 
         if (ptr != diagEndPtr)      // reached end of diagonale
             ptr += aWidth - 1;
@@ -259,7 +259,7 @@ void Field::fillRemoveMask (unsigned char* mask, bool& changed)
     }
 }
 
-void Field::compact ()
+void Field::compact()
 {
     for (unsigned char * columnPtr = aFieldLastCell; columnPtr >= aFieldLastLineStart; --columnPtr)
     {
@@ -278,7 +278,7 @@ void Field::compact ()
     }
 }
 
-void Field::removeColors ()
+void Field::removeColors()
 {
     unsigned char* removeMask = new unsigned char[aSize];
     bool fieldChanged = false;     // flag if field has changed
@@ -289,7 +289,7 @@ void Field::removeColors ()
     {
         aTwoCellsCount = 0;
         aTwoCellsOnTop = 0;
-        fillRemoveMask (removeMask, fieldChanged);
+        fillRemoveMask(removeMask, fieldChanged);
         if (!fieldChanged)
             break;
 
@@ -300,7 +300,7 @@ void Field::removeColors ()
                 aField[i] = 0;
             }
 
-        compact ();
+        compact();
 
         // repeat from start unless nothing was removed
     } while (fieldChanged);
@@ -313,12 +313,12 @@ void Field::removeColors ()
             ++aColumnHeights[columnIdx];
     }
 
-    calculateUtility ();
+    calculateUtility();
 
     delete[] removeMask;
 }
 
-void Field::calculateUtility ()
+void Field::calculateUtility()
 {
     size_t sum = 0;
     size_t last = 0;
@@ -327,22 +327,22 @@ void Field::calculateUtility ()
     {
         sum += ch;
         if (last != 0)
-            avgColumnDiff += abs ((int) (last - ch));
+            avgColumnDiff += abs((int) (last - ch));
         last = ch;
     }
 
-    aFieldParameters.assign (
+    aFieldParameters.assign(
         { (double) aRemoved,                                                       // count of removed cells
-                (double) *max_element (aColumnHeights.begin (), aColumnHeights.end ()),     // max column height
+                (double) *max_element(aColumnHeights.begin(), aColumnHeights.end()),     // max column height
                 (double) sum / aWidth,                                                   // average column height
                 (double) avgColumnDiff,                                                // column difference absolute sum
                 (double) aTwoCellsCount,                                       // Count of 2 cells with one color in row
                 (double) aTwoCellsOnTop       // Count of previous cells that are on top (can be remove with next turn)
             });
-    aUtility = aUtilityEvaluator->evaluate (aFieldParameters);
+    aUtility = aUtilityEvaluator->evaluate(aFieldParameters);
 }
 
-void Field::printMask (unsigned char* mask)
+void Field::printMask(unsigned char* mask)
 {
     for (size_t i = 0; i < aSize; ++i)
     {

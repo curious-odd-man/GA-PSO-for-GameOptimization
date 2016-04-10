@@ -11,14 +11,13 @@ class OptimizationGame;
 class PSO
 {
 public:
-    PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth, size_t fieldHeight,
-        size_t figureSize, size_t colorsCount);
+    PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
+        size_t fieldHeight, size_t figureSize, size_t colorsCount);
     ~PSO();
 
     void optimize();
     void print();
     void testSolution();
-    
 
 private:
     typedef struct
@@ -40,17 +39,14 @@ private:
     size_t aFigureSize;
     size_t aColorsCount;
     // TODO: maybe add count of elements in line to remove?
-    
+
     Chronometer::TimePoint aOptimizationStart;
     Chronometer::TimePoint aOptimizationEnd;
     Chronometer::TimePoint aTestsStart;
     Chronometer::TimePoint aTestsEnd;
-    
 
     const size_t PARAM_COUNT = 6;
     const string DELIMITER = "================================================================================\n";
 };
-
-
 
 void testSolution(size_t gamesCount = 100);

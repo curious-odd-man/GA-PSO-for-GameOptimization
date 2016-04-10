@@ -1,7 +1,6 @@
 #include "Common.hpp"
 #include "PSO.hpp"
 
-
 ostream& operator<<(ostream& os, const PsoParticle& u)
 {
     os << "PSOUtilityEvaluator: " << endl << "\tMultipliers: ";
@@ -14,12 +13,6 @@ ostream& operator<<(ostream& os, const PsoParticle& u)
     os << "\tGained score: " << u.aUtility << endl;
     return os;
 }
-
-
-// TODO:
-// dump game info
-// fix vector in PSO
-// multithreading
 
 void printHelp()
 {
@@ -58,29 +51,29 @@ int main(int argc, char** argv)
         stringstream value(argv[++i]);      // take parameter value
         switch (param[1])
         {
-        case 'w':
-            value >> fieldWidth;
-            break;
-        case 'h':
-            value >> fieldHeight;
-            break;
-        case 'f':
-            value >> figureSize;
-            break;
-        case 'c':
-            value >> colorsCount;
-            break;
-        case 'i':
-            value >> iterations;
-            break;
-        case 's':
-            value >> swarmSize;
-            break;
-        case 't':
-            value >> numberOfSolutionTests;
-            break;
-        default:
-            break;
+            case 'w':
+                value >> fieldWidth;
+                break;
+            case 'h':
+                value >> fieldHeight;
+                break;
+            case 'f':
+                value >> figureSize;
+                break;
+            case 'c':
+                value >> colorsCount;
+                break;
+            case 'i':
+                value >> iterations;
+                break;
+            case 's':
+                value >> swarmSize;
+                break;
+            case 't':
+                value >> numberOfSolutionTests;
+                break;
+            default:
+                break;
         }
     }
 
