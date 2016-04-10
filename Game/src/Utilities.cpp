@@ -1,8 +1,12 @@
-#include "Common.hpp"
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#include <thread>
+#include <future>
+
+#include "Common.hpp"
+#include "Chronometer.hpp"
 
 ostream& operator<<(ostream& os, const Figure& f)
 {
@@ -86,4 +90,32 @@ bool key_pressed(int* code)
     }
 
     return isPressed;
+}
+
+void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount)
+{
+    cout << DELIMITER;
+    cout << "Solution test started..." << endl;
+    Chronometer::TimePoint testStart = Chronometer::now();
+    vector<future<size_t>> future_results;
+
+    for (size_t i = 0; i < count; ++i)
+    {
+        OptimizationGame g(&testObject, width, height, figureSize, colorsCount);
+        future_results.push_back(async(&OptimizationGame::play, g, nullptr));
+    }
+
+    vector<size_t> results;
+    for (auto& r : future_results)
+        results.push_back(r.get());
+
+    Chronometer::TimePoint testEnd = Chronometer::now();
+
+    cout << "test games:" << endl;
+    cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
+    cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
+    cout << "\t avg:"
+            << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
+            << endl;
+    cout << "\t duration: " << Chronometer::duration_seconds(testStart, testEnd) << "s" << endl;
 }

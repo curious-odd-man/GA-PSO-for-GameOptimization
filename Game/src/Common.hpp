@@ -21,6 +21,8 @@ using namespace std;
 #include "DemonstrationGame.hpp"
 #include "OptimizationGame.hpp"
 
+const string DELIMITER = "================================================================================\n";
+
 template<typename T, typename TT, typename TTT>
 bool in_range(T const& s, TT const& e, TTT const& v)
 {
@@ -28,3 +30,5 @@ bool in_range(T const& s, TT const& e, TTT const& v)
 }
 
 bool key_pressed(int* code);
+
+void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount);

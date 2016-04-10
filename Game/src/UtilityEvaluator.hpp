@@ -17,7 +17,7 @@ public:
     {
     }
 
-    UtilityEvaluator(size_t countOfParams);             // create countOfParams random multipliers
+    UtilityEvaluator(size_t countOfParams);
     virtual ~UtilityEvaluator()
     {
     }
@@ -42,7 +42,7 @@ public:
     }
 
 protected:
-    vector<double> aMultipliers;                    // multipliers for each param
+    vector<double> aMultipliers;
     size_t aUtility;
 };
 

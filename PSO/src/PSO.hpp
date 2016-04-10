@@ -17,7 +17,6 @@ public:
 
     void optimize();
     void print();
-    void testSolution();
 
 private:
     typedef struct
@@ -42,11 +41,7 @@ private:
 
     Chronometer::TimePoint aOptimizationStart;
     Chronometer::TimePoint aOptimizationEnd;
-    Chronometer::TimePoint aTestsStart;
-    Chronometer::TimePoint aTestsEnd;
 
     const size_t PARAM_COUNT = 6;
-    const string DELIMITER = "================================================================================\n";
-};
 
-void testSolution(size_t gamesCount = 100);
+};

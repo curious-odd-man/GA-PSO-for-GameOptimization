@@ -80,5 +80,4 @@ int main(int argc, char** argv)
     PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
     p.optimize();
     p.print();
-    p.testSolution();
 }

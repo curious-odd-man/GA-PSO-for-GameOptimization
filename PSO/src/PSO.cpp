@@ -114,6 +114,8 @@ void PSO::optimize()
 
     out << "}]" << endl;
     out.close();
+
+    testSolution(aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
 }
 
 void PSO::print()
@@ -121,33 +123,5 @@ void PSO::print()
     cout << DELIMITER;
     cout << "Optimization took " << Chronometer::duration_seconds(aOptimizationStart, aOptimizationEnd) << "s" << endl;
     cout << aGbest << endl;
-}
-
-void PSO::testSolution()
-{
-    cout << DELIMITER;
-    cout << "Solution test started..." << endl;
-    aTestsStart = Chronometer::now();
-    vector<future<size_t>> future_results;
-
-    for (size_t i = 0; i < aNumberOfFinalTests; ++i)
-    {
-        OptimizationGame g(&aGbest, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
-        future_results.push_back(async(&OptimizationGame::play, g, nullptr));
-    }
-
-    vector<size_t> results;
-    for (auto& r : future_results)
-        results.push_back(r.get());
-
-    aTestsEnd = Chronometer::now();
-
-    cout << "test games:" << endl;
-    cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
-    cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
-    cout << "\t avg:"
-            << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
-            << endl;
-    cout << "\t duration: " << Chronometer::duration_seconds(aTestsStart, aTestsEnd) << "s" << endl;
 }
 
