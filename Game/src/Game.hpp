@@ -4,29 +4,19 @@ class Game
 {
 public:
     Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, size_t colorsCount);
-    Game(UtilityEvaluator* evaluator)
-            : Game(evaluator, FIELD_WIDTH, FIELD_HEIGHT, FIGURE_SIZE, COLORS_COUNT)
-    {
-    }
-    ;
-    Game()
-            : Game(nullptr, FIELD_WIDTH, FIELD_HEIGHT, FIGURE_SIZE, COLORS_COUNT)
-    {
-    }
-    ;
+    Game(UtilityEvaluator* evaluator);
+    Game();
 
     virtual ~Game()
     {
     }
-    ;
 
-    size_t play(UtilityEvaluator* evaluator = nullptr);      // play the game and return aScore;
+    size_t play();
 
-    static const size_t FIELD_WIDTH;
-    static const size_t FIELD_HEIGHT;
-    static const size_t FIGURE_SIZE;
-    static const size_t COLORS_COUNT;
-    static const size_t GAMES_COUNT;
+    inline void setEvaluator(UtilityEvaluator* evaluator)
+    {
+        aUtilityEvaluator = evaluator;
+    }
 
 protected:
     Figure* aCurrentFigure;
@@ -46,4 +36,9 @@ protected:
     }
 
     friend ostream& operator<<(ostream& os, const Game& g);
+
+    const size_t DEFAULT_FIELD_WIDTH = 7;
+    const size_t DEFAULT_FIELD_HEIGHT = 14;
+    const size_t DEFAULT_FIGURE_SIZE = 3;
+    const size_t DEFAULT_COLORS_COUNT = 7;
 };

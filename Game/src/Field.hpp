@@ -34,19 +34,19 @@ public:
     }
 
 protected:
-    unsigned char * aField;
+    unsigned char* aField;
     size_t aWidth;
     size_t aHeight;
-    size_t aSize;
+    size_t aFieldSize;
     size_t aRemoved;                                    // number of cells removed
 
     size_t aTwoCellsCount;
     size_t aTwoCellsOnTop;
 
-    unsigned char * aFieldLastLineStart;
-    unsigned char * aFieldLastCell;
-    unsigned char * aFieldEnd;
-    unsigned char * aFieldSecondLine;
+    unsigned char* aFieldLeftBottomCorner;
+    unsigned char* aFieldRightBottomCorner;
+    unsigned char* aFieldEnd;
+    unsigned char* aFieldSecondLine;
 
     vector<double> aFieldParameters;
     vector<size_t> aColumnHeights;
@@ -55,7 +55,7 @@ protected:
 
     void putFigure(const Figure& figure, size_t pos);        // generate next possible field states this way
 
-    void fillRemoveMask(unsigned char* mask, bool& changed);
+    bool markRemovable(unsigned char* mask);
     void compact();
     void removeColors();                    // remove all 3 in line of same color and move blocks above down
     void calculateUtility();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
@@ -64,4 +64,7 @@ protected:
     void printMask(unsigned char* mask);
 
     void calculateFieldConstants();
+
+    const unsigned char EMPTY_CELL = 0;
+    const unsigned char REMOVABLE_SIZE = 3;
 };

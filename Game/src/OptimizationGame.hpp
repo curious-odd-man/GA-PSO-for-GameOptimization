@@ -8,22 +8,25 @@ class OptimizationGame : public Game
 {
 public:
     OptimizationGame(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, size_t colorsCount);
-    OptimizationGame(UtilityEvaluator* evaluator)
-            : Game(evaluator)
-    {
-    }
+    OptimizationGame(UtilityEvaluator* evaluator);
 
-    OptimizationGame()
-    {
-    }
+    OptimizationGame();
 
     virtual ~OptimizationGame()
     {
     }
 
+    size_t play(size_t gamesCount = DEFAULT_GAMES_COUNT);
+
 protected:
 
 private:
-    virtual void activityBeforeTurn();
+
+    static const size_t DEFAULT_GAMES_COUNT;
+
+    virtual void activityBeforeTurn()
+    {
+        return;
+    }
 };
 

@@ -28,9 +28,6 @@ public:
 
     virtual double evaluate(const vector<double>& params) const
     {
-        if (params.size() != aMultipliers.size())
-            raise (SIGABRT);
-
         double utility = 0;
         for (size_t i = 0; i < aMultipliers.size(); ++i)
             utility += aMultipliers[i] * params[i];

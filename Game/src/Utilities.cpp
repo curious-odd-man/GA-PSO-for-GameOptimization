@@ -22,8 +22,8 @@ ostream& operator<<(ostream& os, const Figure& f)
 ostream& operator<<(ostream& os, const Field& f)
 {
     std::cout.setf(std::ios_base::dec, std::ios_base::basefield);
-    os << "Field " << f.aWidth << "x" << f.aHeight << " size " << f.aSize;
-    for (size_t i = 0; i < f.aSize; ++i)
+    os << "Field " << f.aWidth << "x" << f.aHeight << " size " << f.aFieldSize;
+    for (size_t i = 0; i < f.aFieldSize; ++i)
     {
         if (i % f.aWidth == 0)
             os << endl;
@@ -92,7 +92,7 @@ bool key_pressed(int* code)
     return isPressed;
 }
 
-void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount)
+void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount, size_t gameCount)
 {
     cout << DELIMITER;
     cout << "Solution test started..." << endl;
@@ -102,7 +102,7 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
     for (size_t i = 0; i < count; ++i)
     {
         OptimizationGame g(&testObject, width, height, figureSize, colorsCount);
-        future_results.push_back(async(&OptimizationGame::play, g, nullptr));
+        future_results.push_back(async(&OptimizationGame::play, g, gameCount));
     }
 
     vector<size_t> results;
