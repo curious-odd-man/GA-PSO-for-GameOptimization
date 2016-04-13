@@ -77,7 +77,25 @@ int main(int argc, char** argv)
         }
     }
 
-    PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-    p.optimize();
-    p.print();
+    {
+    	PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+    	p.optimize(-1);
+    	p.print();
+    }
+
+    {
+		PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+		p.optimize(0);
+		p.print();
+	}
+    {
+		PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+		p.optimize(1);
+		p.print();
+	}
+    {
+		PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+		p.optimize(13);
+		p.print();
+	}
 }

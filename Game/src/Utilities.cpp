@@ -94,6 +94,8 @@ bool key_pressed(int* code)
 
 void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount, size_t gameCount)
 {
+	if (count == 0)
+		return;
     cout << DELIMITER;
     cout << "Solution test started..." << endl;
     Chronometer::TimePoint testStart = Chronometer::now();

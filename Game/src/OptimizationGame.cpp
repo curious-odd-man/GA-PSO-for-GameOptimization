@@ -1,6 +1,6 @@
 #include "Common.hpp"
 
-const size_t DEFAULT_GAMES_COUNT = 10;
+const size_t OptimizationGame::DEFAULT_GAMES_COUNT = 10;
 
 OptimizationGame::OptimizationGame(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize,
                                    size_t colorsCount)

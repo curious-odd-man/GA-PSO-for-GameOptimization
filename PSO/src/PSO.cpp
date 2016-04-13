@@ -2,6 +2,7 @@
 #include <future>
 #include "Common.hpp"
 #include "PSO.hpp"
+#include "Test.hpp"
 
 PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
          size_t fieldHeight, size_t figureSize, size_t colorsCount)
@@ -43,7 +44,7 @@ PSO::~PSO()
     }
 }
 
-void PSO::optimize()
+void PSO::optimize(int test)
 {
     auto compare_particles = [](const pso_game_t& a, const pso_game_t& b) -> bool
     {
@@ -56,8 +57,11 @@ void PSO::optimize()
     out.open("dump.log");
     out << "ListPlot[{";
 
+    cout << test << endl;
+
     do
     {
+#if 0
         // Calculate fitness value
         for (size_t i = 0; i < aGames.size(); ++i)
         {
@@ -66,6 +70,10 @@ void PSO::optimize()
         }
 
         // find best particle
+#else
+        for (size_t i = 0; i < aGames.size(); ++i)
+        	aGames[i].evaluator->setUtility(test_game::getUtility(aGames[i].evaluator->getMultipliers(), test));
+#endif
         aPbest = *(max_element(aGames.begin(), aGames.end(), compare_particles)->evaluator);
         if (aGbest < aPbest)
             aGbest = aPbest;    // update global best
@@ -115,7 +123,7 @@ void PSO::optimize()
     out << "}]" << endl;
     out.close();
 
-    testSolution(aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
+    testSolution(aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount, 1);
 }
 
 void PSO::print()

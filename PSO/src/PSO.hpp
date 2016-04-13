@@ -15,7 +15,7 @@ public:
         size_t fieldHeight, size_t figureSize, size_t colorsCount);
     ~PSO();
 
-    void optimize();
+    void optimize(int test);
     void print();
 
 private:
