@@ -38,6 +38,15 @@ Debug/
 # Eclipse project files
 **/.cproject
 **/.project
+*.sdf
+*.sln
+*.suo
+*.psess
+*.vcxproj
+*.vcxproj.user
+*.vcxproj.filters
+*.vsp
+*.stackdump
 
 
 
