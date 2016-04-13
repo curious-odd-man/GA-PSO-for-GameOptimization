@@ -106,7 +106,7 @@ void Field::putFigure(const Figure& figure, size_t pos)
     const unsigned char* figureData = figure.getData();
     unsigned char* figureStart = aField + pos;
     const unsigned char* figureEnd = figureStart - aWidth * figure.getSize();
-    for (unsigned char* cellPtr = figureStart; cellPtr < figureEnd; cellPtr -= aWidth)
+    for (unsigned char* cellPtr = figureStart; cellPtr > figureEnd; cellPtr -= aWidth)
         *cellPtr = *figureData++;
     removeColors();
 }

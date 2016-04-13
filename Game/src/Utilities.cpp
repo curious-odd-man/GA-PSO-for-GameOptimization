@@ -1,7 +1,12 @@
+#ifndef _WIN32
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
+#else
+#include <conio.h>
+#endif
+
 #include <thread>
 #include <future>
 
@@ -70,6 +75,7 @@ ostream& operator<<(ostream& os, const UtilityEvaluator& u)
 
 bool key_pressed(int* code)
 {
+#ifndef _WIN32
     bool isPressed = false;
     struct timeval tv;
     fd_set rdfs;
@@ -90,6 +96,16 @@ bool key_pressed(int* code)
     }
 
     return isPressed;
+#else
+    bool pressed = false;
+    while (_kbhit())
+    {
+        *code = _getch();
+        pressed = true;
+    }
+
+    return pressed;
+#endif
 }
 
 void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount, size_t gameCount)

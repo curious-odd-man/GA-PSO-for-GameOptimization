@@ -29,9 +29,9 @@ void printHelp()
 
 int main(int argc, char** argv)
 {
-    size_t swarmSize = 10;
-    size_t iterations = 10;
-    size_t numberOfSolutionTests = 100;
+    size_t swarmSize = 2;
+    size_t iterations = 2;
+    size_t numberOfSolutionTests = 0;
     size_t fieldWidth = 7;
     size_t fieldHeight = 14;
     size_t figureSize = 3;
@@ -83,6 +83,7 @@ int main(int argc, char** argv)
     	p.print();
     }
 
+#if 0
     {
 		PSO p(swarmSize, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
 		p.optimize(0);
@@ -98,4 +99,5 @@ int main(int argc, char** argv)
 		p.optimize(13);
 		p.print();
 	}
+#endif
 }

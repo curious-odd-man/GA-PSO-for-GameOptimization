@@ -57,11 +57,9 @@ void PSO::optimize(int test)
     out.open("dump.log");
     out << "ListPlot[{";
 
-    cout << test << endl;
-
     do
     {
-#if 0
+#if 1
         // Calculate fitness value
         for (size_t i = 0; i < aGames.size(); ++i)
         {

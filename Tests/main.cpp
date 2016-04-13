@@ -508,8 +508,8 @@ int main(int argc, char** argv)
     testField();
     cout << "all ended" << endl << " Test game " << endl;
     MyEvaluator e(6);
-    //DemonstrationGame dg(&e, 7, 14, 3, 7);
-    //dg.play();
+    DemonstrationGame dg(&e, 7, 14, 3, 7);
+    dg.play();
     cout << "game ended " << endl;
     cin.get();
 }
