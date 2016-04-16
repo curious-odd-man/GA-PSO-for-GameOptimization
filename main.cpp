@@ -97,17 +97,18 @@ int main(int argc, char** argv)
     if (algorithm == "PSO" || algorithm == "BOTH")
     {
         PSO p($, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        p.test();
-        //p.optimize();
-        //p.print();
+        //p.test();
+        p.optimize();
+        p.print();
+        p.testSolution();
     }
 
     if (algorithm == "GA" || algorithm == "BOTH")
     {
         Population<double> p($, iterations);
-        p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
-        //p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        //cout << p << endl;
+        //p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
+        p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+        cout << p << endl;
 
     }
 }

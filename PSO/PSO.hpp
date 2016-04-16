@@ -18,6 +18,7 @@ public:
     void test();
     void optimize();
     void print();
+    void testSolution();
 
 private:
     typedef struct

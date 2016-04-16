@@ -105,7 +105,6 @@ void PSO::optimize ()
 
     do
     {
-#if 1
         // Calculate fitness value
         for (size_t i = 0; i < aGames.size (); ++i)
         {
@@ -113,11 +112,6 @@ void PSO::optimize ()
             g.game->play ();
         }
 
-        // find best particle
-#else
-        for (size_t i = 0; i < aGames.size(); ++i)
-        aGames[i].evaluator->setUtility(test_game::getUtility(aGames[i].evaluator->getMultipliers(), test));
-#endif
         aPbest = *(max_element (aGames.begin (), aGames.end (), compare_particles)->evaluator);
         if (aGbest < aPbest)
             aGbest = aPbest;    // update global best
@@ -166,8 +160,11 @@ void PSO::optimize ()
 
     out << "}]" << endl;
     out.close ();
+}
 
-    testSolution (aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount, 1);
+void PSO::testSolution()
+{
+    ::testSolution(aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount, 1);
 }
 
 void PSO::print ()
