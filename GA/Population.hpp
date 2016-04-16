@@ -1,29 +1,55 @@
 #pragma once
 #include "Common.hpp"
 
+#include "Test.hpp"
 #include "Individual.hpp"
 #include "OptimizationGame.hpp"
-
-const size_t DEFAULT_POPULATION_DENSITY = 50;
-const size_t DEFAULT_GENERATIONS = 50;
 
 template<typename GeneType>
     class Population
     {
     public:
-        Population ()
-                : Population (DEFAULT_POPULATION_DENSITY, DEFAULT_GENERATIONS)
-        {
-        }
         Population (size_t populationsDensity, size_t generations)
                 : aPopulationDensity (populationsDensity), aGenerations (generations), aPopulation (aPopulationDensity)
         {
         }
 
-        /* LIVE */
-        void live ()
+        void test (size_t fieldWidth, size_t fieldHeight, size_t figureSize, size_t colorsCount)
         {
-            OptimizationGame game;
+            OptimizationGame game (nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
+
+            int test[] =
+                { -1, 0, 1, 13 };
+
+            for (int j = 0; j < 4; ++j)
+            {
+                aPopulation.clear();
+                aPopulation = vector<Individual<GeneType>>(aPopulationDensity);
+                for (size_t i = 0; i < 100; ++i)
+                {
+                    for (auto& individual : aPopulation)
+                        individual.setUtility (test_game::getUtility (individual.getMultipliers (), test[j]));
+
+                    if (i == aGenerations - 1)
+                        break;
+
+                    evolve ();
+                }
+
+                vector<size_t> results;
+                for (auto individual : aPopulation)
+                    results.emplace_back (individual.getUtility ());
+
+                cout << "Test " << test[j] << " " << *max_element (results.begin (), results.end ()) << endl;
+
+            }
+        }
+
+        /* LIVE */
+        void live (size_t numberOfSolutionTests, size_t fieldWidth, size_t fieldHeight, size_t figureSize,
+                   size_t colorsCount)
+        {
+            OptimizationGame game (nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
             ofstream out;
             out.open ("Plot.log");
@@ -32,12 +58,17 @@ template<typename GeneType>
             for (size_t i = 0; i < aGenerations; ++i)
             {
                 for (auto& individual : aPopulation)
-                    game.play (&individual);
+                {
+                    game.setEvaluator (&individual);
+                    game.play ();
+                }
 
-                const Individual<GeneType>& best = *max_element(aPopulation.begin(), aPopulation.end(), [](const Individual<GeneType>& a, const Individual<GeneType>& b) -> bool
-                                {
-                                    return a.getUtility() < b.getUtility();
-                                });
+                const Individual<GeneType>& best = *max_element (
+                        aPopulation.begin (), aPopulation.end (),
+                        [](const Individual<GeneType>& a, const Individual<GeneType>& b) -> bool
+                        {
+                            return a.getUtility() < b.getUtility();
+                        });
 
                 out << "{ " << i << ", " << best.getUtility () << " }";
 

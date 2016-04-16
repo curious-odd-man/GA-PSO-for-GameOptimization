@@ -8,16 +8,6 @@ OptimizationGame::OptimizationGame(UtilityEvaluator* evaluator, size_t width, si
 {
 }
 
-OptimizationGame::OptimizationGame(UtilityEvaluator* evaluator)
-        : Game(evaluator)
-{
-}
-
-OptimizationGame::OptimizationGame()
-        : OptimizationGame(nullptr)
-{
-}
-
 size_t OptimizationGame::play(size_t gamesCount)
 {
     vector<size_t> game_scores;

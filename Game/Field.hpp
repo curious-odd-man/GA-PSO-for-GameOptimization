@@ -23,7 +23,7 @@ public:
 
     void reset();
 
-    void setEvaluator(UtilityEvaluator* evaluator)
+    inline void setEvaluator(UtilityEvaluator* evaluator)
     {
         aUtilityEvaluator = evaluator;
     }

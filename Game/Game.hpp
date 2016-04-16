@@ -4,8 +4,6 @@ class Game
 {
 public:
     Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, size_t colorsCount);
-    Game(UtilityEvaluator* evaluator);
-    Game();
 
     virtual ~Game()
     {
@@ -16,6 +14,7 @@ public:
     inline void setEvaluator(UtilityEvaluator* evaluator)
     {
         aUtilityEvaluator = evaluator;
+        aField.setEvaluator(evaluator);
     }
 
 protected:
@@ -36,9 +35,4 @@ protected:
     }
 
     friend ostream& operator<<(ostream& os, const Game& g);
-
-    const size_t DEFAULT_FIELD_WIDTH = 7;
-    const size_t DEFAULT_FIELD_HEIGHT = 14;
-    const size_t DEFAULT_FIGURE_SIZE = 3;
-    const size_t DEFAULT_COLORS_COUNT = 7;
 };

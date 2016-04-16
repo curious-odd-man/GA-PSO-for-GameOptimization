@@ -499,7 +499,7 @@ void testField()
 }
 
 
-int main(int argc, char** argv)
+void test()
 {
     srand((unsigned int)time(NULL));      // note this need to be called once for a program
 

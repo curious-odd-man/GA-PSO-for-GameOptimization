@@ -13,6 +13,7 @@ using namespace std;
 #include <numeric>
 #include <fstream>
 #include <csignal>
+#include <climits>
 
 #include "UtilityEvaluator.hpp"
 #include "Field.hpp"

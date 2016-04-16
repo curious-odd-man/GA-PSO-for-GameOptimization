@@ -44,3 +44,16 @@ void PsoParticle::move(const UtilityEvaluator & gbest, const UtilityEvaluator & 
             aMultipliers[i] = -1.0;
     }
 }
+
+ostream& operator<<(ostream& os, const PsoParticle& u)
+{
+    os << "PSOUtilityEvaluator: " << endl << "\tMultipliers: ";
+    for (auto m : u.aMultipliers)
+        os << m << " ";
+    os << endl << "\tVector: ";
+    for (auto m : u.aVelocity)
+        os << m << " ";
+    os << endl;
+    os << "\tGained score: " << u.aUtility << endl;
+    return os;
+}
