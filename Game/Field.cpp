@@ -131,11 +131,11 @@ bool Field::markRemovable(unsigned char* mask)
                         {
                             const int endIndex = didx * REMOVABLE_SIZE;
                             for (int i = 0; i != endIndex; i += didx)
-                                *(ptr_in_mask + i) = *(cellPtr + i);
+                            *(ptr_in_mask + i) = *(cellPtr + i);
                             changed = true;
                         }
                         else if (colorRepeats > REMOVABLE_SIZE)
-                            *ptr_in_mask = *cellPtr;
+                        *ptr_in_mask = *cellPtr;
                         else if (colorRepeats > 1)
                         {
                             ++aTwoCellsCount;
@@ -325,7 +325,7 @@ void Field::calculateUtility()
     for (auto columnHeight : aColumnHeights)
     {
         columnHeightsSum += columnHeight;
-        if (lastColumnHeight != (size_t)-1)
+        if (lastColumnHeight != (size_t) - 1)
             avgColumnDiff += abs((int) (lastColumnHeight - columnHeight));
         lastColumnHeight = columnHeight;
     }

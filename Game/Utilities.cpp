@@ -108,14 +108,15 @@ bool key_pressed(int* code)
 #endif
 }
 
-void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, unsigned char colorsCount, size_t gameCount)
+void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
+                  unsigned char colorsCount, size_t gameCount)
 {
-	if (count == 0)
-		return;
+    if (count == 0)
+        return;
     cout << DELIMITER;
     cout << "Solution test started..." << endl;
     Chronometer::TimePoint testStart = Chronometer::now();
-    vector<future<size_t>> future_results;
+    vector < future < size_t >> future_results;
 
     for (size_t i = 0; i < count; ++i)
     {
@@ -123,7 +124,7 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
         future_results.push_back(async(&OptimizationGame::play, g, gameCount));
     }
 
-    vector<size_t> results;
+    vector < size_t > results;
     for (auto& r : future_results)
         results.push_back(r.get());
 
