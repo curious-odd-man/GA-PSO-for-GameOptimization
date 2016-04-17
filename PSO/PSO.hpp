@@ -12,7 +12,7 @@ class PSO
 {
 public:
     PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-        size_t fieldHeight, size_t figureSize, size_t colorsCount);
+        size_t fieldHeight, size_t figureSize, unsigned char colorsCount);
     ~PSO();
 
     void test();
@@ -38,7 +38,7 @@ private:
     size_t aFieldWidth;
     size_t aFieldHeight;
     size_t aFigureSize;
-    size_t aColorsCount;
+    unsigned char aColorsCount;
     // TODO: maybe add count of elements in line to remove?
 
     Chronometer::TimePoint aOptimizationStart;

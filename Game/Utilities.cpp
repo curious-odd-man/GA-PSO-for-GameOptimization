@@ -108,7 +108,7 @@ bool key_pressed(int* code)
 #endif
 }
 
-void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, size_t colorsCount, size_t gameCount)
+void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize, unsigned char colorsCount, size_t gameCount)
 {
 	if (count == 0)
 		return;

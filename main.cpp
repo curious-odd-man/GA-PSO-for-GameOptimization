@@ -6,7 +6,7 @@
 
 // Algorithm defaults
 const size_t DEFAULT_ITERATION_COUNT = 50; // Lecturer advise
-const size_t DEFAULT_$_COUNT = 50;
+const size_t DEFAULT_ITERATION_STRENGTH = 50;
 const size_t DEFAULT_SOLUTION_TESTS_COUNT = 50;
 // Game defaults
 const size_t DEFAULT_FIELD_WIDTH = 7;
@@ -21,7 +21,7 @@ void printHelp()
     cout << "Algorithm settings:" << endl;
     cout << "\t-a S: choose algorithm (GA, PSO, BOTH by default)" << endl;
     cout << "\t-i N: set number of iterations [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_COUNT << " by default" << endl;
-    cout << "\t-? N: set ? size [1.. " << ULLONG_MAX << "] " << DEFAULT_$_COUNT << " by default" << endl;
+    cout << "\t-? N: set interation strength [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_STRENGTH << " by default" << endl;
     cout << "\t-t N: set number of solution tests [1.. " << ULLONG_MAX << "]" << DEFAULT_SOLUTION_TESTS_COUNT << " by default" << endl;
     cout << "Game settings:" << endl;
     cout << "\t-w N: set field width [1.. " << ULLONG_MAX << "] " << DEFAULT_FIELD_WIDTH << " by default)" << endl;
@@ -37,12 +37,12 @@ int main(int argc, char** argv)
     /* Set up DEFAULTS parameters */
     string algorithm("BOTH");
     size_t iterations = DEFAULT_ITERATION_COUNT;
-    size_t $ = DEFAULT_$_COUNT;
+    size_t strength = DEFAULT_ITERATION_STRENGTH;
     size_t numberOfSolutionTests = DEFAULT_SOLUTION_TESTS_COUNT;
     size_t fieldWidth = DEFAULT_FIELD_WIDTH;
     size_t fieldHeight = DEFAULT_FIELD_HEIGHT;
     size_t figureSize = DEFAULT_FIGURE_SIZE;
-    size_t colorsCount = DEFAULT_COLORS_COUNT;
+    unsigned char colorsCount = DEFAULT_COLORS_COUNT;
 
 
 
@@ -84,7 +84,7 @@ int main(int argc, char** argv)
                 value >> iterations;
                 break;
             case 's':
-                value >> $;
+                value >> strength;
                 break;
             case 't':
                 value >> numberOfSolutionTests;
@@ -96,19 +96,18 @@ int main(int argc, char** argv)
 
     if (algorithm == "PSO" || algorithm == "BOTH")
     {
-        PSO p($, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        //p.test();
-        p.optimize();
-        p.print();
-        p.testSolution();
+        PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+        p.test();
+        //p.optimize();
+        //p.print();
+        //p.testSolution();
     }
 
     if (algorithm == "GA" || algorithm == "BOTH")
     {
-        Population<double> p($, iterations);
-        //p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
-        p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        cout << p << endl;
-
+        Population<double> p(strength, iterations);
+        p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
+        //p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+        //cout << p << endl;
     }
 }

@@ -4,6 +4,7 @@
 #include "Test.hpp"
 #include "Individual.hpp"
 #include "OptimizationGame.hpp"
+#include "ScientificData.hpp"
 
 template<typename GeneType>
     class Population
@@ -14,7 +15,7 @@ template<typename GeneType>
         {
         }
 
-        void test (size_t fieldWidth, size_t fieldHeight, size_t figureSize, size_t colorsCount)
+        void test (size_t fieldWidth, size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
         {
             OptimizationGame game (nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
@@ -23,12 +24,15 @@ template<typename GeneType>
 
             for (int j = 0; j < 4; ++j)
             {
+                ScientificData log(string("GA_test") + to_string(j) + ".log");
                 aPopulation.clear();
                 aPopulation = vector<Individual<GeneType>>(aPopulationDensity);
                 for (size_t i = 0; i < 100; ++i)
                 {
                     for (auto& individual : aPopulation)
-                        individual.setUtility (test_game::getUtility (individual.getMultipliers (), test[j]));
+                        individual.setUtility(test_game::getUtility(individual.getMultipliers(), test[j]));
+
+                    log.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
 
                     if (i == aGenerations - 1)
                         break;
@@ -39,15 +43,16 @@ template<typename GeneType>
                 vector<size_t> results;
                 for (auto individual : aPopulation)
                     results.emplace_back (individual.getUtility ());
-
-                cout << "Test " << test[j] << " " << *max_element (results.begin (), results.end ()) << endl;
-
+                
+                cout << "Test " << test[j] << " " << *max_element(results.begin(), results.end()) << endl;
+                
+                log.createCharts();
             }
         }
 
         /* LIVE */
         void live (size_t numberOfSolutionTests, size_t fieldWidth, size_t fieldHeight, size_t figureSize,
-                   size_t colorsCount)
+            unsigned char colorsCount)
         {
             OptimizationGame game (nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
@@ -125,7 +130,7 @@ template<typename GeneType>
     void Population<GeneType>::evolve ()
     {
         setEvolutionRoulette (
-                accumulate (aPopulation.begin (), aPopulation.end (), 0,
+                accumulate (aPopulation.begin (), aPopulation.end (), (size_t)0,
                             [](const size_t& sum, const Individual<GeneType>& individual)
                             {   return sum + individual.getUtility();}));
 
@@ -143,7 +148,6 @@ template<typename GeneType>
 
         aPopulation.clear ();
         aPopulation.assign (newGeneration.begin (), newGeneration.end ());
-        //aPopulation = newGeneration;
     }
 
 /* PRINT */
@@ -164,7 +168,7 @@ template<typename GeneType>
     void Population<GeneType>::setEvolutionRoulette (size_t wholeUtility)
     {
         sectors = uniform_int_distribution < size_t > (0, wholeUtility);
-        roulette = default_random_engine (time (0) + wholeUtility);
+        roulette = default_random_engine ((unsigned)(time (0) + wholeUtility));
     }
 
 template<typename GeneType>

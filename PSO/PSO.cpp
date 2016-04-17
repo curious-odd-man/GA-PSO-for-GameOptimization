@@ -3,9 +3,10 @@
 #include "Common.hpp"
 #include "PSO.hpp"
 #include "Test.hpp"
+#include "ScientificData.hpp"
 
 PSO::PSO (size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-          size_t fieldHeight, size_t figureSize, size_t colorsCount)
+          size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
         : aSwarmSize (numberOfParticles), aIterationCount (numberOfIterations), aNumberOfFinalTests (
                 numberOfFinalTests), aFieldWidth (fieldWidth), aFieldHeight (fieldHeight), aFigureSize (figureSize), aColorsCount (
                 colorsCount)
@@ -57,6 +58,7 @@ void PSO::test ()
 
     for (int j = 0; j < 4; ++j)
     {
+        ScientificData log(string("PSO_test") + to_string(j) + ".log");
         vector<pso_game_t> games;
         for (auto& g : aGames)
             games.push_back (
@@ -74,6 +76,11 @@ void PSO::test ()
             PsoParticle pbest = *(max_element (games.begin (), games.end (), compare_particles)->evaluator);
             if (gbest < pbest)
                 gbest = pbest;    // update global best
+            vector<UtilityEvaluator> allEvaluators;
+            for (size_t i = 0; i < games.size(); ++i)
+                allEvaluators.push_back(*games[i].evaluator);
+
+            log.addStatisticalData(allEvaluators);
 
             // move particles
             for (auto g : games)
@@ -85,6 +92,7 @@ void PSO::test ()
             delete p.game;
             delete p.evaluator;
         }
+        log.createCharts();
     }
 
 

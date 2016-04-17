@@ -3,7 +3,7 @@
 const size_t OptimizationGame::DEFAULT_GAMES_COUNT = 3;
 
 OptimizationGame::OptimizationGame(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize,
-                                   size_t colorsCount)
+    unsigned char colorsCount)
         : Game(evaluator, width, height, figureSize, colorsCount)
 {
 }

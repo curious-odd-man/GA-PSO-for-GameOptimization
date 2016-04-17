@@ -1,7 +1,7 @@
 #include "Common.hpp"
 
 DemonstrationGame::DemonstrationGame(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize,
-                                     size_t colorsCount)
+    unsigned char colorsCount)
         : Game(evaluator, width, height, figureSize, colorsCount)
 {
 }

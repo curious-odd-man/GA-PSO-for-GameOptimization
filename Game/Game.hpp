@@ -3,7 +3,7 @@
 class Game
 {
 public:
-    Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, size_t colorsCount);
+    Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, unsigned char colorsCount);
 
     virtual ~Game()
     {
@@ -25,7 +25,7 @@ protected:
     size_t aScore;              // game score
 
     size_t aFigureSize;
-    size_t aColorsCount;
+    unsigned char aColorsCount;
 
     virtual void activityBeforeTurn() = 0;
 

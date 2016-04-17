@@ -72,23 +72,23 @@ template <typename GeneType>
 double Chromosome<GeneType>::getRandom(double)
 {
 	static uniform_real_distribution<double> unif(0, 1); // TODO: maybe they should be static too ?
-	static default_random_engine re(time(0));
+	static default_random_engine re((unsigned)time(0));
 	return unif(re);
 }
 
 template <typename GeneType>
 int Chromosome<GeneType>::getMutationRandom()
 {
-	static uniform_int_distribution<int> unif(0, aGeneCount); // TODO: maybe they should be static too ?
-	static default_random_engine re(time(0));
+	static uniform_int_distribution<int> unif(0, (int)aGeneCount); // TODO: maybe they should be static too ?
+	static default_random_engine re((unsigned)time(0));
 	return unif(re);
 }
 
 template <typename GeneType>
 int Chromosome<GeneType>::getCrossoverRandom()
 {
-	static uniform_int_distribution<int> unif(1, aGeneCount - 1); // TODO: maybe they should be static too ?
-	static default_random_engine re(time(0));
+	static uniform_int_distribution<int> unif(1, (int)aGeneCount - 1); // TODO: maybe they should be static too ?
+	static default_random_engine re((unsigned)time(0));
 	return unif(re);
 }
 

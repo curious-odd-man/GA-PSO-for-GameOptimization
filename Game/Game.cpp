@@ -1,6 +1,6 @@
 #include "Common.hpp"
 
-Game::Game (UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, size_t colorsCount)
+Game::Game (UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, unsigned char colorsCount)
         : aCurrentFigure (nullptr), aField (width, height, evaluator), aUtilityEvaluator (evaluator), aScore (0), aFigureSize (
                 figureSize), aColorsCount (colorsCount)
 {

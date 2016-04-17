@@ -35,7 +35,7 @@ Release/
 Debug/
 **/.settings/
 
-# Eclipse project files
+# Eclipse/VS project files
 **/.cproject
 **/.project
 *.sdf
@@ -47,6 +47,9 @@ Debug/
 *.vcxproj.filters
 *.vsp
 *.stackdump
+*.tlog
+*.*db
+*.ilk
 
 
 

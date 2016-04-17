@@ -6,69 +6,65 @@ class ScientificData
 {
 public:
 	ScientificData(string name) : aName(name) {};
-	virtual ~ScientificData();
+    virtual ~ScientificData() {};
 
-	inline void addStatisticalData(const UtilityEvaluator& evaluator)
-	{
-		aUtilities.emplace_back(evaluator.getUtility());
-		const vector<double>& multipliers = evaluator.getMultipliers();
-		if (aBestMultipliers.size() < multipliers.size())
-			aBestMultipliers.resize(multipliers.size(), vector<double>());
-		for (size_t i = 0; i < multipliers.size(); ++i)
-			aBestMultipliers[i].emplace_back(multipliers[i]);
-	}
+    inline void addStatisticalData(const vector<UtilityEvaluator>& evaluators)
+    {
+        aUtilitieEvaluators.emplace_back(evaluators.size());
+        for (auto evaluator : evaluators)
+            aUtilitieEvaluators.back().emplace_back(evaluator);
+    }
 
-	inline void addStatisticalData(const vector<UtilityEvaluator>& allEvaluators)
-	{
-		aAllMultipliers.emplace_back(vector<vector<double>>());
-		for (auto pisja : allEvaluators)
-			aAllMultipliers.back().emplace_back(pisja.getMultipliers());
-	}
+    void evaluate_data()
+    {
+        for (auto& evaluators : aUtilitieEvaluators)
+        {
+            sort(evaluators.begin(), evaluators.end(), [](const UtilityEvaluator& first, const UtilityEvaluator& second) { return first.getUtility() < second.getUtility(); });
+            aBestUtilities.push_back(evaluators.back().getUtility());
+            const vector<double>& multipliers = evaluators.back().getMultipliers();
+            aBestMultipliers.resize(multipliers.size());
+            for (size_t i = 0; i < aBestMultipliers.size(); ++i)
+                aBestMultipliers[i].emplace_back(multipliers[i]);
+            a2ndBestUtilities.push_back(evaluators[evaluators.size() - 2].getUtility());
+        }
+    }
 
 	void createCharts()
 	{
+        evaluate_data();
 		ofstream out;
 		out.open(aName.c_str());
 		// Utilities
-		out << "ListPlot[{";
-		for (size_t i = 0; i < aUtilities.size(); ++i)
-		{
-			for (auto u : aUtilities[i])
-			{
-				out << "{ " << i << ", " << u << " }";
-				if (i != aUtilities.size() - 1)
-					out << ", ";
-			}
-		}
-		out << "}]" << endl << endl;
+		out << "Show[ListPlot[{";
+		for (size_t i = 0; i < aBestUtilities.size(); ++i)
+		    out << "{ " << i << ", " << aBestUtilities[i] << " }" << (i != aBestUtilities.size() - 1 ? ", " : "");
+        out << "}]" << endl << ", ListPlot[{";
+
+        for (size_t i = 0; i < a2ndBestUtilities.size(); ++i)
+            out << "{ " << i << ", " << a2ndBestUtilities[i] << " }" << (i != a2ndBestUtilities.size() - 1 ? ", " : "");
+        out << "}]]" << endl << "ListPlot[{";
 
 		// BestMultipliers
-		// TODO: each multiplier with its own color
-		out << "ListPlot[{";
-		for (size_t i = 0; i < aBestMultipliers.size(); ++i)
+		for (size_t j = 0; j < aBestMultipliers.size(); ++j)
 		{
-			for (auto u : aBestMultipliers[i])
-			{
-				out << "{ " << i << ", " << u << " }";
-				if (i != aBestMultipliers.size() - 1)
-					out << ", ";
-			}
+            out << "{";
+			for (size_t i = 0; i < aBestMultipliers[j].size(); ++i)
+				out << "{ " << i << ", " << aBestMultipliers[j][i] << " }" << (i != aBestMultipliers[j].size() - 1 ? ", " : "");
+            out << "}" << (j != aBestMultipliers.size() - 1 ? ", " : "");
 		}
-		out << "}]" << endl << endl;
-
-		// All multipliers
-		out << "ListPlot[{";
-		out << "}]" << endl << endl;
-
-
+        out << "}, PlotLegends -> {";
+        for (size_t j = 0; j < aBestMultipliers.size(); ++j)
+            out << j << (j != aBestMultipliers.size() - 1 ? ", " : "");
+        out << "}]" << endl;
 
 		out.close();
 	}
 
 private:
-	vector<vector<size_t>> aUtilities;
-	vector<vector<double>> aBestMultipliers;
-	vector<vector<vector<double>>> aAllMultipliers;
+	vector<vector<UtilityEvaluator>> aUtilitieEvaluators;
+    vector<size_t> aBestUtilities;
+    vector<size_t> a2ndBestUtilities;
+    vector<vector<double>> aBestMultipliers;
 
 	string aName;
 };
