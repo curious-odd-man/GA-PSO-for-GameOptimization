@@ -6,7 +6,7 @@ class ScientificData
 {
 public:
     ScientificData(string name)
-            : aName(name)
+            : aName(string("LOGS/") + name)
     {
     }
 
@@ -23,13 +23,16 @@ public:
 
     void evaluate_data()
     {
+        size_t globalBest = 0;
         for (auto& evaluators : aUtilitieEvaluators)
         {
             sort(evaluators.begin(), evaluators.end(), [](const UtilityEvaluator& first, const UtilityEvaluator& second)
             {   return first.getUtility() < second.getUtility();});
 
-            aBestUtilities.push_back(evaluators.back().getUtility());
-            a2ndBestUtilities.push_back(evaluators[evaluators.size() - 2].getUtility());
+            if (globalBest < evaluators.back().getUtility())
+                globalBest = evaluators.back().getUtility();
+            aLocalBestUtilities.push_back(evaluators.back().getUtility());
+            aGlobalBestUtilities.push_back(globalBest);
             aAllUtilities.emplace_back();
             for (auto& evaluator : evaluators)
                 aAllUtilities.back().emplace_back(evaluator.getUtility());
@@ -59,8 +62,8 @@ public:
         ofstream twoBestUtilities;
         twoBestUtilities.open(aName + "_twoBestUtilities.log");
         // Best Utilities
-        for (size_t i = 0; i < aBestUtilities.size(); ++i)
-            twoBestUtilities << i << " " << aBestUtilities[i] << endl << i << " " <<  a2ndBestUtilities[i] << endl;
+        for (size_t i = 0; i < aLocalBestUtilities.size(); ++i)
+            twoBestUtilities << i << " " << aLocalBestUtilities[i] << endl << i << " " <<  aGlobalBestUtilities[i] << endl;
         twoBestUtilities.close();
 
 
@@ -79,8 +82,8 @@ public:
 
 private:
     vector<vector<UtilityEvaluator>> aUtilitieEvaluators;
-    vector<size_t> aBestUtilities;
-    vector<size_t> a2ndBestUtilities;
+    vector<size_t> aLocalBestUtilities;
+    vector<size_t> aGlobalBestUtilities;
     vector<vector<size_t>> aAllUtilities;
     vector<vector<double>> aBestMultipliers;
 
