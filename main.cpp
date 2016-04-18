@@ -98,16 +98,16 @@ int main(int argc, char** argv)
     {
         PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
         p.test();
-        //p.optimize();
-        //p.print();
-        //p.testSolution();
+        p.optimize();
+        p.print();
+        p.testSolution();
     }
 
     if (algorithm == "GA" || algorithm == "BOTH")
     {
         Population<double> p(strength, iterations);
         p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
-        //p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        //cout << p << endl;
+        p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+        cout << p << endl;
     }
 }

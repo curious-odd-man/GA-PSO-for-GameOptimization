@@ -24,7 +24,7 @@ public:
 
         for (int j = 0; j < 4; ++j)
         {
-            ScientificData log(string("GA_test") + to_string(j) + ".log");
+            ScientificData log(string("GA_test") + to_string(j));
             aPopulation.clear();
             aPopulation = vector < Individual < GeneType >> (aPopulationDensity);
             for (size_t i = 0; i < 100; ++i)

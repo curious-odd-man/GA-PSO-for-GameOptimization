@@ -16,7 +16,7 @@ public:
 
     inline void addStatisticalData(const vector<UtilityEvaluator>& evaluators)
     {
-        aUtilitieEvaluators.emplace_back(evaluators.size());
+        aUtilitieEvaluators.emplace_back();
         for (auto evaluator : evaluators)
             aUtilitieEvaluators.back().emplace_back(evaluator);
     }
@@ -27,51 +27,61 @@ public:
         {
             sort(evaluators.begin(), evaluators.end(), [](const UtilityEvaluator& first, const UtilityEvaluator& second)
             {   return first.getUtility() < second.getUtility();});
+
             aBestUtilities.push_back(evaluators.back().getUtility());
+            a2ndBestUtilities.push_back(evaluators[evaluators.size() - 2].getUtility());
+            aAllUtilities.emplace_back();
+            for (auto& evaluator : evaluators)
+                aAllUtilities.back().emplace_back(evaluator.getUtility());
+
             const vector<double>& multipliers = evaluators.back().getMultipliers();
             aBestMultipliers.resize(multipliers.size());
             for (size_t i = 0; i < aBestMultipliers.size(); ++i)
                 aBestMultipliers[i].emplace_back(multipliers[i]);
-            a2ndBestUtilities.push_back(evaluators[evaluators.size() - 2].getUtility());
         }
     }
 
     void createCharts()
     {
         evaluate_data();
-        ofstream out;
-        out.open(aName.c_str());
-        // Utilities
-        out << "Show[ListPlot[{";
+
+        ofstream allUtilities;
+        allUtilities.open(aName + "_allUtilities.log");
+
+        // AllUtilities
+        for (size_t j = 0; j < aAllUtilities.size(); ++j)
+            for (size_t i = 0; i < aAllUtilities[j].size(); ++i)
+                allUtilities << j << " " << i << " " << aAllUtilities[j][i] << endl;
+        allUtilities.close();
+
+
+
+        ofstream twoBestUtilities;
+        twoBestUtilities.open(aName + "_twoBestUtilities.log");
+        // Best Utilities
         for (size_t i = 0; i < aBestUtilities.size(); ++i)
-            out << "{ " << i << ", " << aBestUtilities[i] << " }" << (i != aBestUtilities.size() - 1 ? ", " : "");
-        out << "}]" << endl << ", ListPlot[{";
+            twoBestUtilities << i << " " << aBestUtilities[i] << endl << i << " " <<  a2ndBestUtilities[i] << endl;
+        twoBestUtilities.close();
 
-        for (size_t i = 0; i < a2ndBestUtilities.size(); ++i)
-            out << "{ " << i << ", " << a2ndBestUtilities[i] << " }" << (i != a2ndBestUtilities.size() - 1 ? ", " : "");
-        out << "}]]" << endl << "ListPlot[{";
 
+
+        ofstream bestMultipliers;
+        bestMultipliers.open(aName + "_bestMultipliers.log");
         // BestMultipliers
         for (size_t j = 0; j < aBestMultipliers.size(); ++j)
         {
-            out << "{";
             for (size_t i = 0; i < aBestMultipliers[j].size(); ++i)
-                out << "{ " << i << ", " << aBestMultipliers[j][i] << " }"
-                        << (i != aBestMultipliers[j].size() - 1 ? ", " : "");
-            out << "}" << (j != aBestMultipliers.size() - 1 ? ", " : "");
+                bestMultipliers << i << " " << aBestMultipliers[j][i] << endl;
         }
-        out << "}, PlotLegends -> {";
-        for (size_t j = 0; j < aBestMultipliers.size(); ++j)
-            out << j << (j != aBestMultipliers.size() - 1 ? ", " : "");
-        out << "}]" << endl;
 
-        out.close();
+        bestMultipliers.close();
     }
 
 private:
     vector<vector<UtilityEvaluator>> aUtilitieEvaluators;
     vector<size_t> aBestUtilities;
     vector<size_t> a2ndBestUtilities;
+    vector<vector<size_t>> aAllUtilities;
     vector<vector<double>> aBestMultipliers;
 
     string aName;

@@ -5,6 +5,7 @@ using namespace std;
 #include <vector>
 #include "PsoParticle.hpp"
 #include "Chronometer.hpp"
+#include "ScientificData.hpp"
 
 class OptimizationGame;
 
@@ -39,6 +40,7 @@ private:
     size_t aFieldHeight;
     size_t aFigureSize;
     unsigned char aColorsCount;
+    ScientificData aScientificData;
     // TODO: maybe add count of elements in line to remove?
 
     Chronometer::TimePoint aOptimizationStart;

@@ -6,9 +6,9 @@
 #include "ScientificData.hpp"
 
 PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-         size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
-        : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
-                fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount)
+    size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
+    : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
+        fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData("PSO")
 {
     srand((unsigned int) time(NULL));
     cout << DELIMITER;
@@ -57,7 +57,7 @@ void PSO::test()
 
     for (int j = 0; j < 4; ++j)
     {
-        ScientificData log(string("PSO_test") + to_string(j) + ".log");
+        ScientificData log(string("PSO_test") + to_string(j));
         vector<pso_game_t> games;
         for (auto& g : aGames)
             games.push_back(
@@ -105,9 +105,6 @@ void PSO::optimize()
 
     aOptimizationStart = Chronometer::now();
 
-    ofstream out;
-    out.open("dump.log");
-    out << "ListPlot[{";
 
     do
     {
@@ -122,9 +119,11 @@ void PSO::optimize()
         if (aGbest < aPbest)
             aGbest = aPbest;    // update global best
 
-        out << "{ " << aIterationCount << ", " << aGbest.getUtility() << " }";
-        if (aIterationCount != 1)
-            out << ", ";
+        vector<UtilityEvaluator> allEvaluators;
+        for (size_t i = 0; i < aGames.size(); ++i)
+            allEvaluators.push_back(*aGames[i].evaluator);
+
+        aScientificData.addStatisticalData(allEvaluators);
 
         // TODO: this should be moved into g->play();
         int c = 0;
@@ -163,9 +162,6 @@ void PSO::optimize()
     } while (--aIterationCount > 0);
 
     aOptimizationEnd = Chronometer::now();
-
-    out << "}]" << endl;
-    out.close();
 }
 
 void PSO::testSolution()
@@ -177,6 +173,8 @@ void PSO::print()
 {
     cout << DELIMITER;
     cout << "Optimization took " << Chronometer::duration_seconds(aOptimizationStart, aOptimizationEnd) << "s" << endl;
-    cout << aGbest << endl;
+    cout << aGbest << endl << "creating charts now..." << endl;
+    aScientificData.createCharts();
+    cout << "creating charts done!" << endl;
 }
 
