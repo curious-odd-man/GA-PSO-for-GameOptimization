@@ -3,7 +3,6 @@
 #include "PSO.hpp"
 #include "GA.hpp"
 
-
 // Algorithm defaults
 const size_t DEFAULT_ITERATION_COUNT = 50; // Lecturer advise
 const size_t DEFAULT_ITERATION_STRENGTH = 50;
@@ -14,23 +13,24 @@ const size_t DEFAULT_FIELD_HEIGHT = 14;
 const size_t DEFAULT_FIGURE_SIZE = 3;
 const size_t DEFAULT_COLORS_COUNT = 7;
 
-
-
 void printHelp()
 {
     cout << "Algorithm settings:" << endl;
     cout << "\t-a S: choose algorithm (GA, PSO, BOTH by default)" << endl;
-    cout << "\t-i N: set number of iterations [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_COUNT << " by default" << endl;
-    cout << "\t-? N: set interation strength [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_STRENGTH << " by default" << endl;
-    cout << "\t-t N: set number of solution tests [1.. " << ULLONG_MAX << "]" << DEFAULT_SOLUTION_TESTS_COUNT << " by default" << endl;
+    cout << "\t-i N: set number of iterations [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_COUNT << " by default"
+            << endl;
+    cout << "\t-? N: set iteration strength [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_STRENGTH << " by default"
+            << endl;
+    cout << "\t-t N: set number of solution tests [1.. " << ULLONG_MAX << "]" << DEFAULT_SOLUTION_TESTS_COUNT
+            << " by default" << endl;
     cout << "Game settings:" << endl;
-    cout << "\t-w N: set field width [1.. " << ULLONG_MAX << "] " << DEFAULT_FIELD_WIDTH << " by default)" << endl;
-    cout << "\t-h N: set field height [1.. " << ULLONG_MAX << "] " << DEFAULT_FIELD_HEIGHT << " by default)" << endl;
-    cout << "\t-f N: set figure size [1.. " << ULLONG_MAX << "] " << DEFAULT_FIGURE_SIZE << " by default)" << endl;
-    cout << "\t-c N: set count of colors [1.. " << ULLONG_MAX << "] " << DEFAULT_COLORS_COUNT << " by default)" << endl;
+    cout << "\t-w N: set field width [1.. " << ULLONG_MAX << "] " << DEFAULT_FIELD_WIDTH << " by default" << endl;
+    cout << "\t-h N: set field height [1.. " << ULLONG_MAX << "] " << DEFAULT_FIELD_HEIGHT << " by default" << endl;
+    cout << "\t-f N: set figure size [1.. " << ULLONG_MAX << "] " << DEFAULT_FIGURE_SIZE << " by default" << endl;
+    cout << "\t-c N: set count of colors [1.. " << ULLONG_MAX << "] " << DEFAULT_COLORS_COUNT << " by default" << endl;
+    cout << "Debug settings:" << endl;
+    cout << "\t-d B: set debug on/off [true.. false] 0 by default" << endl;
 }
-
-
 
 int main(int argc, char** argv)
 {
@@ -43,8 +43,7 @@ int main(int argc, char** argv)
     size_t fieldHeight = DEFAULT_FIELD_HEIGHT;
     size_t figureSize = DEFAULT_FIGURE_SIZE;
     unsigned char colorsCount = DEFAULT_COLORS_COUNT;
-
-
+    bool debug = false;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -89,6 +88,9 @@ int main(int argc, char** argv)
             case 't':
                 value >> numberOfSolutionTests;
                 break;
+            case 'd':
+                value >> boolalpha >> debug;
+                break;
             default:
                 break;
         }
@@ -106,8 +108,10 @@ int main(int argc, char** argv)
     if (algorithm == "GA" || algorithm == "BOTH")
     {
         Population<double> p(strength, iterations);
-        p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
-        p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        cout << p << endl;
+
+        if (debug)
+            p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
+        else
+            p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
     }
 }
