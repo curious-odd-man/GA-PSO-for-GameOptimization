@@ -11,7 +11,7 @@ class Population
 {
 public:
     Population(size_t populationsDensity, size_t generations)
-            : aPopulationDensity(populationsDensity), aGenerations(generations), aPopulation(aPopulationDensity)
+            : aPopulationDensity(populationsDensity + 1), aGenerations(generations), aPopulation(aPopulationDensity)
     {
     }
 
@@ -26,13 +26,14 @@ public:
         {
             ScientificData log(string("GA_test") + to_string(j));
             aPopulation.clear();
-            aPopulation = vector < Individual < GeneType >> (aPopulationDensity);
-            for (size_t i = 0; i < 100; ++i)
+            aPopulation = vector<Individual<GeneType>>(aPopulationDensity);
+
+            for (size_t i = 0; i < aGenerations; ++i)
             {
                 for (auto& individual : aPopulation)
                     individual.setUtility(test_game::getUtility(individual.getMultipliers(), test[j]));
 
-                log.addStatisticalData(vector < UtilityEvaluator > (aPopulation.begin(), aPopulation.end()));
+                log.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
 
                 if (i == aGenerations - 1)
                     break;
@@ -40,7 +41,7 @@ public:
                 evolve();
             }
 
-            vector < size_t > results;
+            vector<size_t> results;
             for (auto individual : aPopulation)
                 results.emplace_back(individual.getUtility());
 
@@ -54,11 +55,9 @@ public:
     void live(size_t numberOfSolutionTests, size_t fieldWidth, size_t fieldHeight, size_t figureSize,
               unsigned char colorsCount)
     {
-        OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
+        ScientificData science("GA");
 
-        ofstream out;
-        out.open("Plot.log");
-        out << "ListPlot[{";
+        OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
         for (size_t i = 0; i < aGenerations; ++i)
         {
@@ -68,27 +67,15 @@ public:
                 game.play();
             }
 
-            const Individual<GeneType>& best = *max_element(
-                    aPopulation.begin(), aPopulation.end(),
-                    [](const Individual<GeneType>& a, const Individual<GeneType>& b) -> bool
-                    {
-                        return a.getUtility() < b.getUtility();
-                    });
-
-            out << "{ " << i << ", " << best.getUtility() << " }";
+            science.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
 
             if (i == aGenerations - 1)
                 break;
 
-            out << ", ";
-
             evolve();
         }
 
-        out << "}]" << endl;
-        out.close();
-#if 1
-        vector < size_t > results;
+        vector<size_t> results;
         for (auto individual : aPopulation)
             results.emplace_back(individual.getUtility());
         cout << "test games:" << endl;
@@ -97,7 +84,6 @@ public:
         cout << "\t avg:"
                 << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
                 << endl;
-#endif
     }
 
     /* EVOLVE */
@@ -136,6 +122,11 @@ void Population<GeneType>::evolve()
 
     vector<Individual<GeneType>> newGeneration;
 
+    Individual<GeneType>& theBest = *max_element(
+            aPopulation.begin(), aPopulation.end(),
+            [](const Individual<GeneType>& first, const Individual<GeneType>& second)
+            {   return first.getUtility() < second.getUtility();});
+
     for (size_t i = 0; i < aPopulationDensity / 2; ++i)
     {
         Individual<GeneType>& lucky1 = getLucky();
@@ -145,6 +136,8 @@ void Population<GeneType>::evolve()
         newGeneration.emplace_back(childs.first);
         newGeneration.emplace_back(childs.second);
     }
+
+    newGeneration.emplace_back(theBest);
 
     aPopulation.clear();
     aPopulation.assign(newGeneration.begin(), newGeneration.end());

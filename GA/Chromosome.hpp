@@ -1,9 +1,6 @@
 #pragma once
 #include "Common.hpp"
-
 #include "Gene.hpp"
-
-const double MUTATION_PROBABILITY = 0.05;
 
 template<typename GeneType>
 class Chromosome
@@ -64,40 +61,23 @@ private:
     size_t aGeneCount;
     Gene<GeneType>* aGenes;
 
-    double getRandom(double);
-    int getMutationRandom();
-    int getCrossoverRandom();
+    /* Randomizer */
+    size_t getCrossoverRandom();
 };
 
-/* Private methods */
+/* PRIVATE */
 
 /* Randomizer */
 
 template<typename GeneType>
-double Chromosome<GeneType>::getRandom(double)
-{
-    static uniform_real_distribution<double> unif(0, 1); // TODO: maybe they should be static too ?
-    static default_random_engine re((unsigned) time(0));
-    return unif(re);
-}
-
-template<typename GeneType>
-int Chromosome<GeneType>::getMutationRandom()
-{
-    static uniform_int_distribution<int> unif(0, (int) aGeneCount); // TODO: maybe they should be static too ?
-    static default_random_engine re((unsigned) time(0));
-    return unif(re);
-}
-
-template<typename GeneType>
-int Chromosome<GeneType>::getCrossoverRandom()
+size_t Chromosome<GeneType>::getCrossoverRandom()
 {
     static uniform_int_distribution<int> unif(1, (int) aGeneCount - 1); // TODO: maybe they should be static too ?
     static default_random_engine re((unsigned) time(0));
-    return unif(re);
+    return (size_t)unif(re);
 }
 
-/* Public methods */
+/* PUBLIC */
 
 template<typename GeneType>
 pair<Chromosome<GeneType>, Chromosome<GeneType>> Chromosome<GeneType>::operator+(const Chromosome<GeneType>& other)
@@ -153,11 +133,9 @@ Chromosome<GeneType>& Chromosome<GeneType>::operator=(Chromosome<GeneType> && ot
 template<typename GeneType>
 Chromosome<GeneType>& Chromosome<GeneType>::operator++()
 {
-    if (getRandom((double) 0) < MUTATION_PROBABILITY)
-    {
-        int a = getMutationRandom();
-        aGenes[a]++;
-    }
+    for (size_t i = 0; i < aGeneCount; ++i)
+        ++(aGenes[i]);
+
     return *this;
 }
 

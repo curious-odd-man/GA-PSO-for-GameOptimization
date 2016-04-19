@@ -5,59 +5,85 @@ template<typename GeneType>
 class Gene
 {
 public:
-    Gene(GeneType value, GeneType minValue, GeneType maxValue)
-            : aValue(value)
-    {
-        if (aMinMaxDefined)
-            return;
-        aMinValue = minValue;
-        aMaxValue = maxValue;
-        aMinMaxDefined = true;
-    }
-    ;
-
     Gene()
-            : Gene(getRandom(), GeneType(0), GeneType(0))
+            : aMinValue(-1), aMaxValue(1), aValue(getRandomValue())
     {
     }
-    ;
 
-    GeneType getValue()
+    /* Mutation */
+    Gene<GeneType>& operator++();
+
+    /* Clone */
+    Gene<GeneType>& operator=(const Gene<GeneType>& other);
+
+    GeneType getValue() const
     {
         return aValue;
     }
 
-    Gene<GeneType>& operator++();
-    Gene<GeneType> operator++(int);
-
-    Gene<GeneType>& operator=(const Gene<GeneType>& other);
-
-    static GeneType getRandom();
-
+    /* Print */
     template<class GeneType2>
     friend ostream& operator<<(ostream& os, const Gene<GeneType2>& object);
 
 protected:
 private:
+    GeneType aMinValue;
+    GeneType aMaxValue;
     GeneType aValue;
-    static GeneType aMinValue;
-    static GeneType aMaxValue;
-    static bool aMinMaxDefined;
+
+    static const double MUTATION_PROBABILITY;
+    static const double MUTATION_RESUS;
+
+    /* Randomizer */
+    GeneType getRandomValue();
+    double getMutationResus();
+    double getMutationProbability();
 };
 
-template<typename GeneType>
-bool Gene<GeneType>::aMinMaxDefined = true;
+/* PRIVATE */
 
 template<typename GeneType>
-GeneType Gene<GeneType>::aMinValue = -1.0;
+const double Gene<GeneType>::MUTATION_PROBABILITY = 0.01;
+template<typename GeneType>
+const double Gene<GeneType>::MUTATION_RESUS = 0.5;
+
+/* Randomizer */
 
 template<typename GeneType>
-GeneType Gene<GeneType>::aMaxValue = +1.0;
+GeneType Gene<GeneType>::getRandomValue()
+{
+    static uniform_real_distribution<double> unif(aMinValue, aMaxValue);
+    static default_random_engine re((unsigned) time(0));
+    return unif(re);
+}
+
+template<typename GeneType>
+double Gene<GeneType>::getMutationResus()
+{
+    static uniform_real_distribution<double> unif(0, 1);
+    static default_random_engine re((unsigned) time(0));
+    return unif(re);
+}
+
+template<typename GeneType>
+double Gene<GeneType>::getMutationProbability()
+{
+    static uniform_real_distribution<double> unif(0, 1);
+    static default_random_engine re((unsigned) time(0));
+    return unif(re);
+}
+
+/* PUBLIC */
+
+/* Mutation */
 
 template<typename GeneType>
 Gene<GeneType>& Gene<GeneType>::operator++()
 {
-    aValue += getRandom() / 3; // FIXME: No magic numbers
+    if (getMutationProbability() > MUTATION_PROBABILITY)
+        return *this;
+
+    aValue = (getMutationResus() > MUTATION_RESUS ? 1 : -1) * aValue * 0.1; // FIXME Magic numbers
 
     aValue = aValue < aMinValue ? aMinValue : aValue;
     aValue = aValue > aMaxValue ? aMaxValue : aValue;
@@ -65,28 +91,18 @@ Gene<GeneType>& Gene<GeneType>::operator++()
     return *this;
 }
 
-template<typename GeneType>
-Gene<GeneType> Gene<GeneType>::operator++(int)
-{
-    Gene<GeneType> tmp(*this);
-    operator++();
-    return tmp;
-}
+/* Clone */
 
 template<typename GeneType>
 Gene<GeneType>& Gene<GeneType>::operator=(const Gene<GeneType>& other)
 {
+    aMinValue = other.aMinValue;
+    aMaxValue = other.aMaxValue;
     aValue = other.aValue;
     return *this;
 }
 
-template<typename GeneType>
-GeneType Gene<GeneType>::getRandom()
-{
-    static uniform_real_distribution<GeneType> unif(aMinValue, aMaxValue); // TODO: maybe they should be static too ?
-    static default_random_engine re((unsigned) time(0));
-    return unif(re);
-}
+/* Print */
 
 template<class GeneType>
 ostream& operator<<(ostream& os, const Gene<GeneType>& object)
