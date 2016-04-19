@@ -84,6 +84,8 @@ public:
         cout << "\t avg:"
                 << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
                 << endl;
+
+        science.createCharts();
     }
 
     /* EVOLVE */
