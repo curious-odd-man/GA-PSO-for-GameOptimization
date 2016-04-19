@@ -1,6 +1,8 @@
 #include <Common.hpp>
 #include "PsoParticle.hpp"
 
+const double INERTIA = 5;
+
 PsoParticle::PsoParticle(size_t countOfParams, double c1, double c2)
         : UtilityEvaluator(countOfParams), aC1(c1), aC2(c2)
 {
@@ -23,7 +25,7 @@ void PsoParticle::move(const UtilityEvaluator & gbest, const UtilityEvaluator & 
 
     for (size_t i = 0; i < aMultipliers.size(); ++i)
     {
-        aVelocity[i] += aC1 * getRand() * (gbest.getMultipliers()[i] - aMultipliers[i])
+        aVelocity[i] = aVelocity[i] * INERTIA + aC1 * getRand() * (gbest.getMultipliers()[i] - aMultipliers[i])
                 + aC2 * getRand() * (pbest.getMultipliers()[i] - aMultipliers[i]);
         sumOfSquares += aVelocity[i] * aVelocity[i];
     }

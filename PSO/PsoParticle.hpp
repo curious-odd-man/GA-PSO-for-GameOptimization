@@ -25,5 +25,4 @@ private:
     {
         return (double) rand() / RAND_MAX;
     }
-
 };
