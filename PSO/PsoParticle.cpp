@@ -1,7 +1,7 @@
 #include <Common.hpp>
 #include "PsoParticle.hpp"
 
-const double INERTIA = 5;
+const double INERTIA = 1.2;
 
 PsoParticle::PsoParticle(size_t countOfParams, double c1, double c2)
         : UtilityEvaluator(countOfParams), aC1(c1), aC2(c2)
@@ -21,24 +21,24 @@ PsoParticle::PsoParticle(const vector<double>& init, double c1, double c2)
 void PsoParticle::move(const UtilityEvaluator & gbest, const UtilityEvaluator & pbest)
 {
     aUtility = 0;
-    double sumOfSquares = 0;
+    bool reduce = false;
+    double reduction = 1;
 
     for (size_t i = 0; i < aMultipliers.size(); ++i)
     {
         aVelocity[i] = aVelocity[i] * INERTIA + aC1 * getRand() * (gbest.getMultipliers()[i] - aMultipliers[i])
                 + aC2 * getRand() * (pbest.getMultipliers()[i] - aMultipliers[i]);
-        sumOfSquares += aVelocity[i] * aVelocity[i];
+        if (aVelocity[i] > 0.1)
+        {
+            reduction = min(reduction, 0.1 / aVelocity[i]);
+            reduce = true;
+        }
     }
-
-    double vectorReductionMultiplier = 1;
-    bool reduce = sumOfSquares > 0.01;
-    if (reduce)   // if length of a vector is greater than 0.1, reduce all vector components by vectorReductionMultilier
-        vectorReductionMultiplier = 0.1 / sqrt(sumOfSquares);
 
     for (size_t i = 0; i < aMultipliers.size(); ++i)
     {
         if (reduce)
-            aVelocity[i] *= vectorReductionMultiplier;
+            aVelocity[i] *= reduction;
         aMultipliers[i] += aVelocity[i];
         if (aMultipliers[i] > 1.0)
             aMultipliers[i] = 1.0;
