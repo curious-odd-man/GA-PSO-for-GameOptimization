@@ -28,9 +28,9 @@ void PsoParticle::move(const UtilityEvaluator & gbest, const UtilityEvaluator & 
     {
         aVelocity[i] = aVelocity[i] * INERTIA + aC1 * getRand() * (gbest.getMultipliers()[i] - aMultipliers[i])
                 + aC2 * getRand() * (pbest.getMultipliers()[i] - aMultipliers[i]);
-        if (aVelocity[i] > 0.1)
+        if (aVelocity[i] > 0.1 || aVelocity[i] < -0.1)
         {
-            reduction = min(reduction, 0.1 / aVelocity[i]);
+            reduction = min(reduction, 0.1 / fabs(aVelocity[i]));
             reduce = true;
         }
     }

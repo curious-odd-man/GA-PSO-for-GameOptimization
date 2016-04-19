@@ -99,10 +99,14 @@ int main(int argc, char** argv)
     if (algorithm == "PSO" || algorithm == "BOTH")
     {
         PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        p.test();
-        p.optimize();
-        p.print();
-        p.testSolution();
+        if (debug)
+            p.test();
+        else
+        {
+            p.optimize();
+            p.print();
+            p.testSolution();
+        }
     }
 
     if (algorithm == "GA" || algorithm == "BOTH")
