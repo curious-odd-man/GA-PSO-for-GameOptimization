@@ -10,12 +10,15 @@ template<typename GeneType>
 class Population
 {
 public:
-    Population(size_t populationsDensity, size_t generations)
-            : aPopulationDensity(populationsDensity + 1), aGenerations(generations), aPopulation(aPopulationDensity)
+    Population(size_t geneCount, GeneType minValue, GeneType maxValue, size_t populationsDensity, size_t generations)
+            : aPopulationDensity(populationsDensity + 1 /* for the Best */), aGenerations(generations)
     {
+        for (size_t i = 0; i < aPopulationDensity; ++i)
+            aPopulation.emplace_back(Individual<GeneType>(geneCount, minValue, maxValue));
     }
 
-    void test(size_t fieldWidth, size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
+    void test(size_t geneCount, GeneType minValue, GeneType maxValue, size_t fieldWidth, size_t fieldHeight,
+              size_t figureSize, unsigned char colorsCount)
     {
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
@@ -26,7 +29,7 @@ public:
         {
             ScientificData log(string("GA_test") + to_string(j));
             aPopulation.clear();
-            aPopulation = vector<Individual<GeneType>>(aPopulationDensity);
+            aPopulation = vector<Individual<GeneType>>(aPopulationDensity, Individual<GeneType>(geneCount, minValue, maxValue));
 
             for (size_t i = 0; i < aGenerations; ++i)
             {
@@ -46,6 +49,7 @@ public:
                 results.emplace_back(individual.getUtility());
 
             cout << "Test " << test[j] << " " << *max_element(results.begin(), results.end()) << endl;
+            cout << aPopulation.back() << endl;
 
             log.createCharts();
         }

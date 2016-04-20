@@ -6,7 +6,12 @@ class Gene
 {
 public:
     Gene()
-            : aMinValue(-1), aMaxValue(1), aValue(getRandomValue())
+            : aMinValue(0), aMaxValue(0), aValue(0)
+    {
+    	/* FIXME, only needed at Crossover to create empty genes, that later will be assigned to Crossover result */
+    }
+
+    Gene(GeneType minValue, GeneType maxValue) : aMinValue(minValue), aMaxValue(maxValue), aValue(getRandomValue())
     {
     }
 
@@ -16,14 +21,15 @@ public:
     /* Clone */
     Gene<GeneType>& operator=(const Gene<GeneType>& other);
 
+    /* Print */
+    template<class GeneType2>
+    friend ostream& operator<<(ostream& os, const Gene<GeneType2>& object);
+
+    /* Optional */
     GeneType getValue() const
     {
         return aValue;
     }
-
-    /* Print */
-    template<class GeneType2>
-    friend ostream& operator<<(ostream& os, const Gene<GeneType2>& object);
 
 protected:
 private:

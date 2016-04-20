@@ -4,21 +4,16 @@
 #include "Chromosome.hpp"
 #include "UtilityEvaluator.hpp"
 
-const int DEFAULT_GENE_COUNT = 6;
-
 template<typename GeneType>
 class Individual : public UtilityEvaluator
 {
 public:
-    Individual()
-            : Individual(DEFAULT_GENE_COUNT, -1, 1)
-    {
-    }
     Individual(size_t geneCount, GeneType minValue, GeneType maxValue)
-            : aGenome(geneCount)
+            : aGenome(geneCount, minValue, maxValue)
     {
         aMultipliers = aGenome.getValues();
     }
+
     Individual(const Chromosome<GeneType>& genome)
             : aGenome(genome)
     {
@@ -42,7 +37,7 @@ public:
 protected:
 
 private:
-    Chromosome<double> aGenome;
+    Chromosome<GeneType> aGenome;
 
 };
 
