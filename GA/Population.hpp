@@ -29,7 +29,8 @@ public:
         {
             ScientificData log(string("GA_test") + to_string(j));
             aPopulation.clear();
-            aPopulation = vector<Individual<GeneType>>(aPopulationDensity, Individual<GeneType>(geneCount, minValue, maxValue));
+            for (size_t i = 0; i < aPopulationDensity; ++i)
+                aPopulation.emplace_back(Individual<GeneType>(geneCount, minValue, maxValue));
 
             for (size_t i = 0; i < aGenerations; ++i)
             {
@@ -49,7 +50,7 @@ public:
                 results.emplace_back(individual.getUtility());
 
             cout << "Test " << test[j] << " " << *max_element(results.begin(), results.end()) << endl;
-            cout << aPopulation.back() << endl;
+            //cout << aPopulation.back() << endl;
 
             log.createCharts();
         }
