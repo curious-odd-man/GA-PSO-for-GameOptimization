@@ -1,7 +1,12 @@
+#include <iomanip>
 #include "Common.hpp"
 
 #include "PSO.hpp"
 #include "GA.hpp"
+
+
+
+//#define TEST
 
 // Algorithm defaults
 const size_t DEFAULT_ITERATION_COUNT = 50; // Lecturer advise
@@ -95,27 +100,62 @@ int main(int argc, char** argv)
                 break;
         }
     }
-
-    if (algorithm == "PSO" || algorithm == "BOTH")
+#ifdef TEST
+    typedef struct
     {
-        PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
-        if (debug)
-            p.test();
-        else
+        int idx;
+        string algo;
+        size_t score;
+        vector<double> solution;
+    } test_struct;
+
+    vector<test_struct> tests;
+
+    for (int i = 0; i < 20; ++i)
+#endif
+    {
+
+        if (algorithm == "PSO" || algorithm == "BOTH")
         {
-            p.optimize();
-            p.print();
-            p.testSolution();
+            PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+            if (debug)
+                p.test();
+            else
+            {
+                p.optimize();
+                p.print();
+                p.testSolution();
+#ifdef TEST
+                tests.push_back({i, "PSO", p.getScore(), p.getSolution()});
+#endif
+            }
+        }
+
+        if (algorithm == "GA" || algorithm == "BOTH")
+        {
+            Population<double> p(strength, iterations);
+
+            if (debug)
+                p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
+            else
+            {
+                p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+#ifdef TEST
+                tests.push_back({ i, "GA", p.getScore(), p.getSolution() });
+#endif
+            }
         }
     }
-
-    if (algorithm == "GA" || algorithm == "BOTH")
+#ifdef TEST
+    ofstream out;
+    out.open("solution_coef_comp.log");
+    for (auto& t : tests)
     {
-        Population<double> p(strength, iterations);
-
-        if (debug)
-            p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
-        else
-            p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+        out << setw(3) << t.idx << " " << setw(5) << t.algo << ": " << setw(5) << t.score << " ";
+        for (auto k : t.solution)
+            out << setw(12) << k << " ";
+        out << endl;
     }
+    out.close();
+#endif
 }

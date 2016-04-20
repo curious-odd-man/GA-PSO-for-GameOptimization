@@ -34,6 +34,7 @@ public:
     }
 
 protected:
+
     unsigned char* aField;
     size_t aWidth;
     size_t aHeight;

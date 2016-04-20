@@ -290,10 +290,16 @@ void Field::removeColors()
     aRemoved = 0;
 
     // find all "3 of same color in line" and mark for removal
+//    cout << "FIELD STATE BEFORE REMOVE:" << endl << *this << endl;
     while (markRemovable(removeMask))
     {
         for (size_t i = 0; i < aFieldSize; ++i)
         {
+#ifdef TEST_PARAMS
+            //if (i % aWidth == 0)
+                //cout << endl;
+            //cout << +removeMask[i] << ' ';
+#endif
             if (removeMask[i] != EMPTY_CELL)
             {
                 ++aRemoved;
@@ -301,6 +307,9 @@ void Field::removeColors()
             }
         }
         compact();
+#ifdef TEST_PARAMS
+  //      cout << "FIELD STATE AFTER REMOVE" << endl << *this << endl;
+#endif
     }
 
     // recalculate column heights
@@ -338,7 +347,12 @@ void Field::calculateUtility()
                 (double) aTwoCellsCount,                                       // Count of 2 cells with one color in row
                 (double) aTwoCellsOnTop       // Count of previous cells that are on top (can be remove with next turn)
             });
+
     aUtility = aUtilityEvaluator->evaluate(aFieldParameters);
+#ifdef TEST_PARAMS
+    cout << "FIELD AND CALCULATED PARAMETERS" << endl;
+    cout << *this << endl;
+#endif
 }
 
 void Field::printMask(unsigned char* mask)

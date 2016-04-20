@@ -75,6 +75,12 @@ public:
             evolve();
         }
 
+        aSolution = *max_element(aPopulation.begin(), aPopulation.end(), [](const Individual<GeneType>& first, const Individual<GeneType>& second) 
+        {
+            return first.getUtility() < second.getUtility();
+        });
+
+
         vector<size_t> results;
         for (auto individual : aPopulation)
             results.emplace_back(individual.getUtility());
@@ -95,12 +101,16 @@ public:
     template<class _GeneType>
     friend ostream& operator<<(ostream& os, const Population<_GeneType>& object);
 
+    size_t getScore() { return aSolution.getUtility(); }
+    const vector<GeneType>& getSolution() { return aSolution.getMultipliers(); }
+
 protected:
 
 private:
     size_t aPopulationDensity;
     size_t aGenerations;
 
+    Individual<GeneType> aSolution;
     vector<Individual<GeneType>> aPopulation;
 
     /* Evolution roulette */

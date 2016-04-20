@@ -12,6 +12,12 @@ size_t Game::play()
     aField.reset();
     aNextStates.clear();
 
+#ifdef TEST_PARAMS
+    cout << DELIMITER << endl;
+    cout << DELIMITER << endl;
+    cout << "NEW GAME STARTED" << endl;
+#endif
+
     while (true)
     {
         aCurrentFigure = new Figure(aFigureSize, aColorsCount);
