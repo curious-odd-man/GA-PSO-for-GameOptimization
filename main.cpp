@@ -9,9 +9,14 @@
 //#define TEST
 
 // Algorithm defaults
-const size_t DEFAULT_ITERATION_COUNT = 50; // Lecturer advise
+const size_t DEFAULT_ITERATION_COUNT = 50;
 const size_t DEFAULT_ITERATION_STRENGTH = 50;
 const size_t DEFAULT_SOLUTION_TESTS_COUNT = 50;
+
+const size_t DEFAULT_COEFFICIENT_COUNT = 6;             // FIXME: args?
+const double DEFAULT_MINIMAL_COEFFICIENT_VALUE = -1.0;  // FIXME: args?
+const double DEFAULT_MAXIMAL_COEFFICIENT_VALUE = 1.0;   // FIXME: args?
+
 // Game defaults
 const size_t DEFAULT_FIELD_WIDTH = 7;
 const size_t DEFAULT_FIELD_HEIGHT = 14;
@@ -24,7 +29,7 @@ void printHelp()
     cout << "\t-a S: choose algorithm (GA, PSO, BOTH by default)" << endl;
     cout << "\t-i N: set number of iterations [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_COUNT << " by default"
             << endl;
-    cout << "\t-? N: set iteration strength [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_STRENGTH << " by default"
+    cout << "\t-s N: set iteration strength [1.. " << ULLONG_MAX << "] " << DEFAULT_ITERATION_STRENGTH << " by default"
             << endl;
     cout << "\t-t N: set number of solution tests [1.. " << ULLONG_MAX << "]" << DEFAULT_SOLUTION_TESTS_COUNT
             << " by default" << endl;
@@ -49,6 +54,9 @@ int main(int argc, char** argv)
     size_t figureSize = DEFAULT_FIGURE_SIZE;
     unsigned char colorsCount = DEFAULT_COLORS_COUNT;
     bool debug = false;
+    size_t coefficientCount = DEFAULT_COEFFICIENT_COUNT;
+    double coefficientMin = DEFAULT_MINIMAL_COEFFICIENT_VALUE;
+    double coefficientMax = DEFAULT_MAXIMAL_COEFFICIENT_VALUE;
 
     for (int i = 1; i < argc; ++i)
     {
@@ -72,17 +80,17 @@ int main(int argc, char** argv)
             case 'a':
                 value >> algorithm;
                 break;
-            case 'w':
-                value >> fieldWidth;
+            case 'c':
+                value >> colorsCount;
                 break;
-            case 'h':
-                value >> fieldHeight;
+            case 'd':
+                value >> boolalpha >> debug;
                 break;
             case 'f':
                 value >> figureSize;
                 break;
-            case 'c':
-                value >> colorsCount;
+            case 'h':
+                value >> fieldHeight;
                 break;
             case 'i':
                 value >> iterations;
@@ -93,8 +101,8 @@ int main(int argc, char** argv)
             case 't':
                 value >> numberOfSolutionTests;
                 break;
-            case 'd':
-                value >> boolalpha >> debug;
+            case 'w':
+                value >> fieldWidth;
                 break;
             default:
                 break;
@@ -133,10 +141,10 @@ int main(int argc, char** argv)
 
         if (algorithm == "GA" || algorithm == "BOTH")
         {
-            Population<double> p(strength, iterations);
+            Population<double> p(coefficientCount, coefficientMin, coefficientMax, strength, iterations);
 
             if (debug)
-                p.test(fieldWidth, fieldHeight, figureSize, colorsCount);
+                p.test(coefficientCount, coefficientMin, coefficientMax, fieldWidth, fieldHeight, figureSize, colorsCount);
             else
             {
                 p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);

@@ -63,8 +63,6 @@ void PSO::test()
             games.push_back(
                 { new PsoParticle(*g.evaluator), new OptimizationGame(*g.game) });
         PsoParticle gbest;
-        int test[] =
-            { -1, 0, 1, 13 };
         size_t iterations = 100;
 
         do

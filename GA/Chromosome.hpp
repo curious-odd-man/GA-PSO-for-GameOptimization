@@ -6,39 +6,34 @@ template<typename GeneType>
 class Chromosome
 {
 public:
-    Chromosome(size_t geneCount)
-            : aGeneCount(geneCount), aGenes(new Gene<GeneType> [aGeneCount]())
+    Chromosome(size_t geneCount, GeneType minValue, GeneType maxValue)
+            : aGeneCount(geneCount)
     {
+        for (size_t i = 0; i < aGeneCount; ++i)
+            aGenes.emplace_back(Gene<GeneType>(minValue, maxValue));
     }
 
-    Chromosome(size_t geneCount, Gene<GeneType>* genes)
+    Chromosome(size_t geneCount, vector<Gene<GeneType>>& genes)
             : aGeneCount(geneCount), aGenes(genes)
     {
     }
 
+    /* Move */
     Chromosome(Chromosome&& other)
-            : aGeneCount(other.aGeneCount), aGenes(other.aGenes)
+            : aGeneCount(other.aGeneCount), aGenes(move(other.aGenes))
     {
-        other.aGenes = nullptr;
     }
 
+    /* Clone */
     Chromosome(const Chromosome& other)
             : aGeneCount(other.aGeneCount)
     {
-        aGenes = new Gene<GeneType> [aGeneCount]();
-
-        for (size_t i = 0; i < aGeneCount; ++i)
-            aGenes[i] = other.aGenes[i];
-    }
-
-    ~Chromosome()
-    {
-        delete[] aGenes;
+        aGenes.clear();
+        aGenes.assign(other.aGenes.begin(), other.aGenes.end());
     }
 
     /* Mutation */
     Chromosome<GeneType>& operator++();
-    Chromosome<GeneType> operator++(int);
 
     /* Crossover */
     pair<Chromosome<GeneType>, Chromosome<GeneType>> operator+(const Chromosome<GeneType>& other);
@@ -46,20 +41,17 @@ public:
     /* Clone */
     Chromosome<GeneType>& operator=(const Chromosome<GeneType>& other);
 
-    /* Move */
-    Chromosome<GeneType>& operator=(Chromosome<GeneType> && other);
-
     /* Print */
     template<class GeneType2>
     friend ostream& operator<<(ostream& os, const Chromosome<GeneType2>& object);
 
-    /**/
+    /* Optional */
     vector<GeneType> getValues();
 
 protected:
 private:
     size_t aGeneCount;
-    Gene<GeneType>* aGenes;
+    vector<Gene<GeneType>> aGenes;
 
     /* Randomizer */
     size_t getCrossoverRandom();
@@ -79,11 +71,13 @@ size_t Chromosome<GeneType>::getCrossoverRandom()
 
 /* PUBLIC */
 
+/* Crossover */
+
 template<typename GeneType>
 pair<Chromosome<GeneType>, Chromosome<GeneType>> Chromosome<GeneType>::operator+(const Chromosome<GeneType>& other)
 {
-    Gene<GeneType>* genes1 = new Gene<GeneType> [aGeneCount]();
-    Gene<GeneType>* genes2 = new Gene<GeneType> [aGeneCount]();
+    vector<Gene<GeneType>> genes1(aGeneCount);
+    vector<Gene<GeneType>> genes2(aGeneCount);
 
     size_t algorithm = getCrossoverRandom();
 
@@ -108,22 +102,8 @@ Chromosome<GeneType>& Chromosome<GeneType>::operator=(const Chromosome<GeneType>
 {
     aGeneCount = other.aGeneCount;
 
-    delete[] aGenes;
-    aGenes = new Gene<GeneType> [aGeneCount]();
-
-    for (size_t i = 0; i < aGeneCount; ++i)
-        aGenes[i] = other.aGenes[i];
-
-    return *this;
-}
-
-template<typename GeneType>
-Chromosome<GeneType>& Chromosome<GeneType>::operator=(Chromosome<GeneType> && other)
-{
-    aGeneCount = other.aGeneCount;
-    aGenes = other.aGenes;
-
-    other.aGenes = nullptr;
+    aGenes.clear();
+    aGenes.assign(other.aGenes.begin(), other.aGenes.end());
 
     return *this;
 }
@@ -137,14 +117,6 @@ Chromosome<GeneType>& Chromosome<GeneType>::operator++()
         ++(aGenes[i]);
 
     return *this;
-}
-
-template<typename GeneType>
-Chromosome<GeneType> Chromosome<GeneType>::operator++(int)
-{
-    Chromosome<GeneType> tmp(*this);
-    operator++();
-    return tmp;
 }
 
 /* Print */
