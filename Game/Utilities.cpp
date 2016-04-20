@@ -115,12 +115,15 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
     Chronometer::TimePoint testStart = Chronometer::now();
     vector < future < size_t >> future_results;
 
-    vector<OptimizationGame> games(count, OptimizationGame(&testObject, width, height, figureSize, colorsCount));
+    vector<OptimizationGame> games;
+    vector<UtilityEvaluator> evaluators(count, testObject);
+    for (size_t i = 0; i < count; ++i)
+        games.emplace_back(&evaluators[i], width, height, figureSize, colorsCount);
 
     for (size_t i = 0; i < count; ++i)
         future_results.push_back(async(&OptimizationGame::play, games[i], gameCount));
 
-    vector < size_t > results;
+    vector<size_t> results;
     for (auto& r : future_results)
         results.push_back(r.get());
 
