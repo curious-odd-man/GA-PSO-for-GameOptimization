@@ -21,6 +21,9 @@ size_t Game::play()
     while (true)
     {
         aCurrentFigure = new Figure(aFigureSize, aColorsCount);
+#ifdef TEST_PARAMS
+        cout << DELIMITER << "New turn!" << endl << "current field is " << aField << endl;
+#endif
         aField.getNextStates(*aCurrentFigure, aNextStates);
 
         activityBeforeTurn();

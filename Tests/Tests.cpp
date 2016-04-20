@@ -236,7 +236,7 @@ public:
 
         compact();
         memmove(tmp, aField, aFieldSize);
-        removeColors();
+        removeColors(3);
         do_test(memcmp(tmp, aField, aFieldSize) == 0, "Remove: no changes");
 
         const unsigned char tests[] =
@@ -280,7 +280,7 @@ public:
         {
             memmove(aField, tests + (i * aFieldSize), aFieldSize);
             //cout << *this;
-            removeColors();
+            removeColors(3);
             //cout << *this;
             stringstream ss;
             ss << "removeColors test #" << i;

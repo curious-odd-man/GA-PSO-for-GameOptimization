@@ -2,6 +2,13 @@
 
 using namespace std;
 
+//#define TEST_PARAMS
+//#define TEST
+
+#ifndef _DEBUG
+#define USE_PARALEL_OPTIMIZATION
+#endif
+
 #include <vector>
 #include <cstdlib>
 #include <iostream>
@@ -14,6 +21,8 @@ using namespace std;
 #include <fstream>
 #include <csignal>
 #include <climits>
+#include <thread>
+#include <future>
 
 #include "UtilityEvaluator.hpp"
 #include "Field.hpp"

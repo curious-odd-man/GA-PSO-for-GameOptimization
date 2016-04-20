@@ -58,8 +58,8 @@ protected:
 
     bool markRemovable(unsigned char* mask);
     void compact();
-    void removeColors();                    // remove all 3 in line of same color and move blocks above down
-    void calculateUtility();                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
+    void removeColors(size_t figureSize);                    // remove all 3 in line of same color and move blocks above down
+    void calculateUtility(size_t figureSize);                // analize field and fill aUtility by using aUtilityEvaluator.evaluate();
 
     friend ostream& operator<<(ostream& os, const Field& f);
     void printMask(unsigned char* mask);

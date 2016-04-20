@@ -7,9 +7,6 @@
 #include <conio.h>
 #endif
 
-#include <thread>
-#include <future>
-
 #include "Common.hpp"
 #include "Chronometer.hpp"
 
@@ -40,7 +37,7 @@ ostream& operator<<(ostream& os, const Field& f)
             << f.aTwoCellsOnTop << " aUtility: " << f.aUtility << endl;
     if (f.aFieldParameters.size())
         os << "Max column height: " << f.aFieldParameters[1] << " Average Column Height " << f.aFieldParameters[2]
-                << " Column Difference " << f.aFieldParameters[3] << endl;
+                << " Column Difference " << f.aFieldParameters[3] << " Places for figure " << f.aFieldParameters[6] << endl;
     else
         os << "aFieldParameters are empty" << endl;
     os << "column heights: ";
@@ -118,11 +115,10 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
     Chronometer::TimePoint testStart = Chronometer::now();
     vector < future < size_t >> future_results;
 
+    vector<OptimizationGame> games(count, OptimizationGame(&testObject, width, height, figureSize, colorsCount));
+
     for (size_t i = 0; i < count; ++i)
-    {
-        OptimizationGame g(&testObject, width, height, figureSize, colorsCount);
-        future_results.push_back(async(&OptimizationGame::play, g, gameCount));
-    }
+        future_results.push_back(async(&OptimizationGame::play, games[i], gameCount));
 
     vector < size_t > results;
     for (auto& r : future_results)
@@ -131,6 +127,7 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
     Chronometer::TimePoint testEnd = Chronometer::now();
 
     cout << "test games:" << endl;
+    cout << testObject << endl;
     cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
     cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
     cout << "\t avg:"

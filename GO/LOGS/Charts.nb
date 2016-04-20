@@ -10,14 +10,16 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     10387,        247]
-NotebookOptionsPosition[      9993,        229]
-NotebookOutlinePosition[     10338,        244]
-CellTagsIndexPosition[     10295,        241]
+NotebookDataLength[     11322,        275]
+NotebookOptionsPosition[     10855,        254]
+NotebookOutlinePosition[     11200,        269]
+CellTagsIndexPosition[     11157,        266]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
 Notebook[{
+
+Cell[CellGroupData[{
 Cell[BoxData[
  RowBox[{"\[IndentingNewLine]", 
   RowBox[{
@@ -25,6 +27,9 @@ Cell[BoxData[
     RowBox[{"algorithms", " ", "=", " ", 
      RowBox[{"{", 
       RowBox[{"\"\<PSO\>\"", ",", " ", "\"\<GA\>\""}], "}"}]}], ";"}], 
+   "\[IndentingNewLine]", 
+   RowBox[{
+    RowBox[{"COUNTOFPARAMS", " ", "=", " ", "7"}], ";"}], 
    "\[IndentingNewLine]", "\[IndentingNewLine]", 
    RowBox[{"Table", "[", "\[IndentingNewLine]", 
     RowBox[{
@@ -86,11 +91,14 @@ Cell[BoxData[
          RowBox[{"Partition", "[", 
           RowBox[{"in", ",", " ", 
            RowBox[{
-            RowBox[{"Length", "[", "in", "]"}], "/", "6"}]}], "]"}], ",", 
+            RowBox[{"Length", "[", "in", "]"}], "/", "COUNTOFPARAMS"}]}], 
+          "]"}], ",", 
          RowBox[{"PlotLegends", "\[Rule]", 
-          RowBox[{"{", 
-           RowBox[{"0", ",", "1", ",", "2", ",", "3", ",", "4", ",", "5"}], 
-           "}"}]}], ",", " ", 
+          RowBox[{"Table", "[", 
+           RowBox[{
+            RowBox[{"i", "-", "1"}], ",", " ", 
+            RowBox[{"{", 
+             RowBox[{"i", ",", "COUNTOFPARAMS"}], "}"}]}], "]"}]}], ",", " ", 
          RowBox[{"PlotRange", "\[Rule]", " ", "All"}], ",", 
          RowBox[{"PlotLabel", "\[Rule]", 
           RowBox[{"StringJoin", "[", 
@@ -123,7 +131,16 @@ Cell[BoxData[
    3.669962491624134*^9}, {3.6699625442161417`*^9, 3.669962548221357*^9}, {
    3.669962933447343*^9, 3.6699629408089695`*^9}, {3.6699630353784523`*^9, 
    3.669963038330676*^9}, {3.669963074836286*^9, 3.6699631920681*^9}, {
-   3.670046829051385*^9, 3.6700468342534046`*^9}}],
+   3.670046829051385*^9, 3.6700468342534046`*^9}, 3.670152289954127*^9, {
+   3.670153313040745*^9, 3.6701533173172026`*^9}, {3.6701542286294446`*^9, 
+   3.6701542925342875`*^9}}],
+
+Cell[BoxData[
+ RowBox[{"{", 
+  RowBox[{"Null", ",", "Null"}], "}"}]], "Output",
+ CellChangeTimes->{3.670154317668889*^9, 3.670155160723534*^9, 
+  3.6701594869293036`*^9, 3.6701608960110793`*^9}]
+}, Open  ]],
 
 Cell[BoxData[""], "Input",
  CellChangeTimes->{3.669963093773097*^9}],
@@ -132,14 +149,17 @@ Cell[CellGroupData[{
 
 Cell[BoxData[{
  RowBox[{
+  RowBox[{"algorithms", " ", "=", " ", 
+   RowBox[{"{", 
+    RowBox[{
+    "\"\<PSO_test0\>\"", ",", " ", "\"\<PSO_test1\>\"", ",", " ", 
+     "\"\<PSO_test2\>\"", ",", " ", "\"\<PSO_test3\>\"", ",", " ", 
+     "\"\<GA_test0\>\"", ",", " ", "\"\<GA_test1\>\"", ",", 
+     "\"\<GA_test2\>\"", ",", " ", "\"\<GA_test3\>\""}], "}"}]}], 
+  ";"}], "\[IndentingNewLine]", 
+ RowBox[{
   RowBox[{
-   RowBox[{"algorithms", " ", "=", " ", 
-    RowBox[{"{", 
-     RowBox[{
-     "\"\<PSO_test0\>\"", ",", " ", "\"\<PSO_test1\>\"", ",", " ", 
-      "\"\<PSO_test2\>\"", ",", " ", "\"\<PSO_test3\>\"", ",", " ", 
-      "\"\<GA_test0\>\"", ",", " ", "\"\<GA_test1\>\"", ",", 
-      "\"\<GA_test2\>\"", ",", " ", "\"\<GA_test3\>\""}], "}"}]}], ";"}], 
+   RowBox[{"COUNTOFPARAMS", " ", "=", " ", "7"}], ";"}], 
   "\[IndentingNewLine]"}], "\[IndentingNewLine]", 
  RowBox[{
   RowBox[{"Table", "[", "\[IndentingNewLine]", 
@@ -201,11 +221,14 @@ Cell[BoxData[{
         RowBox[{"Partition", "[", 
          RowBox[{"in", ",", " ", 
           RowBox[{
-           RowBox[{"Length", "[", "in", "]"}], "/", "6"}]}], "]"}], ",", 
+           RowBox[{"Length", "[", "in", "]"}], "/", "COUNTOFPARAMS"}]}], 
+         "]"}], ",", 
         RowBox[{"PlotLegends", "\[Rule]", 
-         RowBox[{"{", 
-          RowBox[{"0", ",", "1", ",", "2", ",", "3", ",", "4", ",", "5"}], 
-          "}"}]}], ",", " ", 
+         RowBox[{"Table", "[", 
+          RowBox[{
+           RowBox[{"i", "-", "1"}], ",", " ", 
+           RowBox[{"{", 
+            RowBox[{"i", ",", "COUNTOFPARAMS"}], "}"}]}], "]"}]}], ",", " ", 
         RowBox[{"PlotRange", "\[Rule]", " ", "All"}], ",", 
         RowBox[{"PlotLabel", "\[Rule]", 
          RowBox[{"StringJoin", "[", 
@@ -214,7 +237,9 @@ Cell[BoxData[{
     RowBox[{"{", 
      RowBox[{"i", ",", " ", "algorithms"}], "}"}]}], "]"}], " "}]}], "Input",
  CellChangeTimes->{{3.6699632307847605`*^9, 3.669963269155986*^9}, {
-  3.670046849568297*^9, 3.670046855736163*^9}}],
+   3.670046849568297*^9, 3.670046855736163*^9}, 3.670152293106674*^9, {
+   3.6701541404920874`*^9, 3.6701541454902506`*^9}, {3.670154305141055*^9, 
+   3.670154314833714*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -243,11 +268,14 @@ CellTagsIndex->{}
 *)
 (*NotebookFileOutline
 Notebook[{
-Cell[558, 20, 5280, 105, 392, "Input"],
-Cell[5841, 127, 68, 1, 31, "Input"],
 Cell[CellGroupData[{
-Cell[5934, 132, 3621, 84, 372, "Input"],
-Cell[9558, 218, 419, 8, 31, "Output"]
+Cell[580, 22, 5603, 113, 412, "Input"],
+Cell[6186, 137, 194, 4, 31, "Output"]
+}, Open  ]],
+Cell[6395, 144, 68, 1, 31, "Input"],
+Cell[CellGroupData[{
+Cell[6488, 149, 3929, 92, 392, "Input"],
+Cell[10420, 243, 419, 8, 31, "Output"]
 }, Open  ]]
 }
 ]

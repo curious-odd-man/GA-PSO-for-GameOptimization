@@ -6,14 +6,12 @@
 
 
 
-//#define TEST
-
 // Algorithm defaults
 const size_t DEFAULT_ITERATION_COUNT = 50;
 const size_t DEFAULT_ITERATION_STRENGTH = 50;
 const size_t DEFAULT_SOLUTION_TESTS_COUNT = 50;
 
-const size_t DEFAULT_COEFFICIENT_COUNT = 6;             // FIXME: args?
+const size_t DEFAULT_COEFFICIENT_COUNT = 7;             // FIXME: args?
 const double DEFAULT_MINIMAL_COEFFICIENT_VALUE = -1.0;  // FIXME: args?
 const double DEFAULT_MAXIMAL_COEFFICIENT_VALUE = 1.0;   // FIXME: args?
 
@@ -125,7 +123,7 @@ int main(int argc, char** argv)
 
         if (algorithm == "PSO" || algorithm == "BOTH")
         {
-            PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
+            PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, coefficientCount);
             if (debug)
                 p.test();
             else

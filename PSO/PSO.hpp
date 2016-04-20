@@ -13,7 +13,7 @@ class PSO
 {
 public:
     PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-        size_t fieldHeight, size_t figureSize, unsigned char colorsCount);
+        size_t fieldHeight, size_t figureSize, unsigned char colorsCount, size_t paramsCount);
     ~PSO();
 
     void test();
@@ -44,11 +44,7 @@ private:
     size_t aFigureSize;
     unsigned char aColorsCount;
     ScientificData aScientificData;
-    // TODO: maybe add count of elements in line to remove?
 
     Chronometer::TimePoint aOptimizationStart;
     Chronometer::TimePoint aOptimizationEnd;
-
-    const size_t PARAM_COUNT = 6;
-
 };

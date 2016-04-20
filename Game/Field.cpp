@@ -108,7 +108,13 @@ void Field::putFigure(const Figure& figure, size_t pos)
     const unsigned char* figureEnd = figureStart - aWidth * figure.getSize();
     for (unsigned char* cellPtr = figureStart; cellPtr > figureEnd; cellPtr -= aWidth)
         *cellPtr = *figureData++;
-    removeColors();
+#ifdef TEST_PARAMS
+    cout << DELIMITER << "Field before removing colors (NOTE! Parameters are invalid!!)" << endl << *this;
+#endif
+    removeColors(figure.getSize());
+#ifdef TEST_PARAMS
+    cout << "Field with recalculated params " << endl << *this << DELIMITER << endl;
+#endif
 }
 
 bool Field::markRemovable(unsigned char* mask)
@@ -116,6 +122,10 @@ bool Field::markRemovable(unsigned char* mask)
     bool changed = false;
     unsigned char lastColor = EMPTY_CELL;
     unsigned char colorRepeats = 0;
+
+#ifdef TEST_PARAMS_TWO_IN_LINE
+    cout << "Mark removable called" << endl;
+#endif
 
     // Test and mark for deletion
     auto testAndMark =
@@ -138,6 +148,12 @@ bool Field::markRemovable(unsigned char* mask)
                         *ptr_in_mask = *cellPtr;
                         else if (colorRepeats > 1)
                         {
+#ifdef TEST_PARAMS_TWO_IN_LINE
+                            const size_t offset = cellPtr - aField;
+                            const size_t x = offset % aWidth;
+                            const size_t y = offset / aWidth;
+                            cout << "two of one color: " << x << " " << y << endl;
+#endif
                             ++aTwoCellsCount;
                             if (::in_range(aField, aFieldRightBottomCorner, cellPtr + didx * 2) && *(cellPtr + didx * 2) == 0)
                             ++aTwoCellsOnTop;
@@ -162,6 +178,10 @@ bool Field::markRemovable(unsigned char* mask)
     aTwoCellsOnTop = 0;
     memset(mask, EMPTY_CELL, aFieldSize);
 
+#ifdef TEST_PARAMS_TWO_IN_LINE
+    cout << " Horizontal search " << endl;
+#endif
+
     // for each line
     for (unsigned char * lineStart = aField; lineStart < aFieldEnd; lineStart += aWidth)
     {
@@ -172,6 +192,10 @@ bool Field::markRemovable(unsigned char* mask)
         for (unsigned char* cellPtr = lineStart; cellPtr < lineEnd; ++cellPtr)
             testAndMark(cellPtr, -1);
     }
+
+#ifdef TEST_PARAMS_TWO_IN_LINE
+    cout << " Vertical search " << endl;
+#endif
 
     // for each column
     for (unsigned char* columnPtr = aFieldRightBottomCorner; columnPtr >= aFieldLeftBottomCorner; --columnPtr)
@@ -197,6 +221,10 @@ bool Field::markRemovable(unsigned char* mask)
     unsigned char* startPtr = aFieldEnd - REMOVABLE_SIZE * aWidth;
     unsigned char* endPtr = aFieldSecondLine - REMOVABLE_SIZE + 1;
     unsigned char* diagEndPtr = aFieldEnd - aWidth + REMOVABLE_SIZE - 1;
+
+#ifdef TEST_PARAMS_TWO_IN_LINE
+    cout << " ul-dr search " << endl;
+#endif
 
     for (unsigned char * cellPtr = startPtr; cellPtr != endPtr;)
     {
@@ -234,6 +262,10 @@ bool Field::markRemovable(unsigned char* mask)
     startPtr = aField + REMOVABLE_SIZE - 1;
     endPtr = aFieldLeftBottomCorner - 1;
     diagEndPtr = aFieldSecondLine + aWidth;
+
+#ifdef TEST_PARAMS_TWO_IN_LINE
+    cout << " ur-dl search " << endl;
+#endif
 
     for (unsigned char* ptr = startPtr; ptr != endPtr;)
     {
@@ -284,22 +316,16 @@ void Field::compact()
     }
 }
 
-void Field::removeColors()
+void Field::removeColors(size_t figureSize)
 {
     unsigned char* removeMask = new unsigned char[aFieldSize];
     aRemoved = 0;
 
     // find all "3 of same color in line" and mark for removal
-//    cout << "FIELD STATE BEFORE REMOVE:" << endl << *this << endl;
     while (markRemovable(removeMask))
     {
         for (size_t i = 0; i < aFieldSize; ++i)
         {
-#ifdef TEST_PARAMS
-            //if (i % aWidth == 0)
-                //cout << endl;
-            //cout << +removeMask[i] << ' ';
-#endif
             if (removeMask[i] != EMPTY_CELL)
             {
                 ++aRemoved;
@@ -307,9 +333,6 @@ void Field::removeColors()
             }
         }
         compact();
-#ifdef TEST_PARAMS
-  //      cout << "FIELD STATE AFTER REMOVE" << endl << *this << endl;
-#endif
     }
 
     // recalculate column heights
@@ -321,22 +344,25 @@ void Field::removeColors()
             ++aColumnHeights[columnIdx];
     }
 
-    calculateUtility();
+    calculateUtility(figureSize);
 
     delete[] removeMask;
 }
 
-void Field::calculateUtility()
+void Field::calculateUtility(size_t figureSize)
 {
     size_t columnHeightsSum = 0;
     size_t lastColumnHeight = -1;
     size_t avgColumnDiff = 0;
+    size_t placesForFigure = 0;
     for (auto columnHeight : aColumnHeights)
     {
         columnHeightsSum += columnHeight;
         if (lastColumnHeight != (size_t) - 1)
             avgColumnDiff += abs((int) (lastColumnHeight - columnHeight));
         lastColumnHeight = columnHeight;
+        if (columnHeight <= aHeight - figureSize)
+            ++placesForFigure;
     }
 
     aFieldParameters.assign(
@@ -345,14 +371,11 @@ void Field::calculateUtility()
                 (double) columnHeightsSum / aWidth,                                     // average column height
                 (double) avgColumnDiff,                                                // column difference absolute sum
                 (double) aTwoCellsCount,                                       // Count of 2 cells with one color in row
-                (double) aTwoCellsOnTop       // Count of previous cells that are on top (can be remove with next turn)
+                (double) aTwoCellsOnTop,       // Count of previous cells that are on top (can be remove with next turn)
+                (double) placesForFigure      // number of next states
             });
 
     aUtility = aUtilityEvaluator->evaluate(aFieldParameters);
-#ifdef TEST_PARAMS
-    cout << "FIELD AND CALCULATED PARAMETERS" << endl;
-    cout << *this << endl;
-#endif
 }
 
 void Field::printMask(unsigned char* mask)

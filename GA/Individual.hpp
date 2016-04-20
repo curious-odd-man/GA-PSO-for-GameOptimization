@@ -56,5 +56,6 @@ template<typename GeneType>
 Individual<GeneType>& Individual<GeneType>::operator=(const Individual& other)
 {
     aGenome = other.aGenome;
+    aUtility = other.aUtility;
     return *this;
 }

@@ -6,7 +6,7 @@
 #include "ScientificData.hpp"
 
 PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-    size_t fieldHeight, size_t figureSize, unsigned char colorsCount)
+    size_t fieldHeight, size_t figureSize, unsigned char colorsCount, size_t countOfParams)
     : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
         fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData("PSO")
 {
@@ -25,9 +25,9 @@ PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFin
     // PSO initialization
     for (size_t i = 0; i < aSwarmSize; ++i)
     {
-        vector<double> init =
-            { distribution(generator), distribution(generator), distribution(generator), distribution(generator),
-                    distribution(generator), distribution(generator) };
+        vector<double> init;
+        for (size_t j = 0; j < countOfParams; ++j)
+            init.emplace_back(distribution(generator));
 
         // TODO: change when game is reusable
         PsoParticle * p = new PsoParticle(init);
@@ -107,11 +107,17 @@ void PSO::optimize()
     do
     {
         // Calculate fitness value
+#ifdef USE_PARALEL_OPTIMIZATION
+        vector<future<size_t>> future_results;
         for (size_t i = 0; i < aGames.size(); ++i)
-        {
-            pso_game_t& g = aGames[i];
-            g.game->play();
-        }
+            future_results.push_back(async(&OptimizationGame::play, aGames[i].game, OptimizationGame::DEFAULT_GAMES_COUNT));
+
+        for (auto& r : future_results)
+            r.get();
+#else
+        for (size_t i = 0; i < aGames.size(); ++i)
+            aGames[i].game->play();
+#endif
 
         aPbest = *(max_element(aGames.begin(), aGames.end(), compare_particles)->evaluator);
         if (aGbest < aPbest)

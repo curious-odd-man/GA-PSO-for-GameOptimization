@@ -11,10 +11,10 @@ class Population
 {
 public:
     Population(size_t geneCount, GeneType minValue, GeneType maxValue, size_t populationsDensity, size_t generations)
-            : aPopulationDensity(populationsDensity + 1 /* for the Best */), aGenerations(generations)
+            : aPopulationDensity(populationsDensity + 1 /* for the Best */), aGenerations(generations), aSolution(geneCount, minValue, maxValue)
     {
         for (size_t i = 0; i < aPopulationDensity; ++i)
-            aPopulation.emplace_back(Individual<GeneType>(geneCount, minValue, maxValue));
+            aPopulation.emplace_back(geneCount, minValue, maxValue);
     }
 
     void test(size_t geneCount, GeneType minValue, GeneType maxValue, size_t fieldWidth, size_t fieldHeight,
@@ -61,16 +61,31 @@ public:
               unsigned char colorsCount)
     {
         ScientificData science("GA");
-
+#ifdef USE_PARALEL_OPTIMIZATION
+        vector<OptimizationGame> games(aPopulation.size(), OptimizationGame(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount));
+#else
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
+#endif
 
         for (size_t i = 0; i < aGenerations; ++i)
         {
+#ifdef USE_PARALEL_OPTIMIZATION
+            vector<future<size_t>> future_results;
+            for (size_t j = 0; j < aPopulation.size(); ++j)
+            {
+                games[j].setEvaluator(&aPopulation[j]);
+                future_results.push_back(async(&OptimizationGame::play, games[j], OptimizationGame::DEFAULT_GAMES_COUNT));
+            }
+
+            for (auto& r : future_results)
+                r.get();
+#else
             for (auto& individual : aPopulation)
             {
                 game.setEvaluator(&individual);
                 game.play();
             }
+#endif
 
             science.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
 
