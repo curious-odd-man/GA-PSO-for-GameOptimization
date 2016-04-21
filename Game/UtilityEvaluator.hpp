@@ -26,6 +26,13 @@ public:
     {
     }
 
+    inline UtilityEvaluator& operator=(const UtilityEvaluator& other)
+    {
+        aUtility = other.aUtility;
+        aMultipliers.assign(other.aMultipliers.begin(), other.aMultipliers.end());
+        return *this;
+    }
+
     virtual double evaluate(const vector<double>& params) const
     {
         double utility = 0;
