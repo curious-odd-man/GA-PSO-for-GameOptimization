@@ -106,6 +106,17 @@ int main(int argc, char** argv)
                 break;
         }
     }
+
+    cout << DELIMITER;
+    cout << "Optimization parameters set: " << endl;
+    cout << "\tAlgorithm: " << (algorithm == "BOTH" ? "GA and PSO" : algorithm) << endl;
+    cout << "\t\t with " << iterations << " iterations of " << strength << " strength" << endl;
+    cout << "\tField parameters: " << endl;
+    cout << "\t\t Width " << fieldWidth << "; Height " << fieldHeight << "; Colors count " << +colorsCount << endl;
+    cout << "\tFigure size is " << figureSize << endl;
+    cout << "Solution will be tested on " << numberOfSolutionTests << " games" << endl;
+    cout << DELIMITER;
+
 #ifdef TEST
     typedef struct
     {
@@ -132,6 +143,7 @@ int main(int argc, char** argv)
                 p.print();
                 p.testSolution();
 #ifdef TEST
+                cout << "PSO iteration " << i << endl;
                 tests.push_back({i, "PSO", p.getScore(), p.getSolution()});
 #endif
             }
@@ -147,6 +159,7 @@ int main(int argc, char** argv)
             {
                 p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
 #ifdef TEST
+                cout << "GA iteration " << i << endl;
                 tests.push_back({ i, "GA", p.getScore(), p.getSolution() });
 #endif
             }

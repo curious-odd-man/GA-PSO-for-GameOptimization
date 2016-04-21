@@ -105,16 +105,16 @@ bool key_pressed(int* code)
 #endif
 }
 
-void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
+void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
                   unsigned char colorsCount, size_t gameCount)
 {
     if (count == 0)
         return;
     cout << DELIMITER;
-    cout << "Solution test started..." << endl;
+    cout << "Solution test started for " << algo << "..." << endl;
+
     Chronometer::TimePoint testStart = Chronometer::now();
     vector < future < size_t >> future_results;
-
     vector<OptimizationGame> games;
     vector<UtilityEvaluator> evaluators(count, testObject);
     for (size_t i = 0; i < count; ++i)
@@ -128,7 +128,6 @@ void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size
         results.push_back(r.get());
 
     Chronometer::TimePoint testEnd = Chronometer::now();
-
     cout << "test games:" << endl;
     cout << testObject << endl;
     cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;

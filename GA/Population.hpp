@@ -60,12 +60,14 @@ public:
     void live(size_t numberOfSolutionTests, size_t fieldWidth, size_t fieldHeight, size_t figureSize,
               unsigned char colorsCount)
     {
+        cout << DELIMITER << "GA optimization started..." << endl;
         ScientificData science("GA");
 #ifdef USE_PARALEL_OPTIMIZATION
         vector<OptimizationGame> games(aPopulation.size(), OptimizationGame(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount));
 #else
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 #endif
+        Chronometer::TimePoint optimizationStart = Chronometer::now();
 
         for (size_t i = 0; i < aGenerations; ++i)
         {
@@ -100,16 +102,8 @@ public:
             return first.getUtility() < second.getUtility();
         });
 
-
-        vector<size_t> results;
-        for (auto individual : aPopulation)
-            results.emplace_back(individual.getUtility());
-        cout << "test games:" << endl;
-        cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
-        cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
-        cout << "\t avg:"
-                << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
-                << endl;
+        cout << "GA optimization ended in " << Chronometer::duration_seconds(optimizationStart, Chronometer::now()) << endl;
+        ::testSolution("GA", aSolution, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, 1);
 
         science.createCharts();
     }

@@ -11,14 +11,7 @@ PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFin
         fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData("PSO")
 {
     srand((unsigned int) time(NULL));
-    cout << DELIMITER;
-    cout << "PSO otimization created with " << aSwarmSize << " particles and " << aIterationCount << " iterations"
-            << endl;
-    cout << "\t Field width is " << aFieldWidth << ", field height is " << aFieldHeight << endl;
-    cout << "\t Figure size is " << aFigureSize << endl;
-    cout << "\t " << aColorsCount << " diffrent colors" << endl;
-    cout << "\t Solution will be tested on " << aNumberOfFinalTests << " games." << endl;
-
+    
     default_random_engine generator;
     uniform_real_distribution<double> distribution(-1.0, 1.0);
 
@@ -170,7 +163,7 @@ void PSO::optimize()
 
 void PSO::testSolution()
 {
-    ::testSolution(aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount, 1);
+    ::testSolution("PSO", aGbest, aNumberOfFinalTests, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount, 1);
 }
 
 void PSO::print()

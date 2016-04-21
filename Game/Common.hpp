@@ -3,7 +3,7 @@
 using namespace std;
 
 //#define TEST_PARAMS
-//#define TEST
+#define TEST
 
 #ifndef _DEBUG
 #define USE_PARALEL_OPTIMIZATION
@@ -41,5 +41,5 @@ bool in_range(T const& s, TT const& e, TTT const& v)
 
 bool key_pressed(int* code);
 
-void testSolution(UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
+void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
                   unsigned char colorsCount, size_t gameCount);

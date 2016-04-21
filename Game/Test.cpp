@@ -11,7 +11,7 @@ size_t test_game::getUtility(const vector<double>& multipliers, int hz)
             sum = 1000 + 0 - sum;
             break;
         case 0:
-            sum = 1000 + 600 - fabs(sum);
+            sum = 1000 + 700 - fabs(sum);
             break;
         case 1:
             sum = 1000 + 0 + sum;
