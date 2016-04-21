@@ -53,10 +53,7 @@ public:
 
     inline bool operator<(const UtilityEvaluator& other)
     {
-        if (aUtility < other.aUtility)
-            return true;
-        else
-            return false;
+        return aUtility < other.aUtility;
     }
 
     inline const vector<double>& getMultipliers() const

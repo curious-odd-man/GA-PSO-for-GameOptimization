@@ -17,13 +17,21 @@ public:
         aField.setEvaluator(evaluator);
     }
 
+    void dumpFiguresHistory(string name);
+
+    inline bool operator<(const Game& other)
+    {
+        return aScore < other.aScore;
+    }
+
 protected:
-    Figure* aCurrentFigure;
     Field aField;      // current game field state, references a value in a aNextStates;
     vector<Field> aNextStates;      // list of possible next field states with calculated utility;
     UtilityEvaluator* aUtilityEvaluator;
     size_t aScore;              // game score
+    vector<Figure> aFiguresHistory;
 
+    
     size_t aFigureSize;
     unsigned char aColorsCount;
 

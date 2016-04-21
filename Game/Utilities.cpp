@@ -12,8 +12,7 @@
 
 ostream& operator<<(ostream& os, const Figure& f)
 {
-    os << "Figure@0x" << hex << &f << "; size: " << f.aSize << " countOfColors: " << (size_t) f.aColorsCount
-            << "; colors: ";
+    os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
         os << hex << (size_t) f.aData[i] << " ";
 
@@ -50,13 +49,8 @@ ostream& operator<<(ostream& os, const Field& f)
 ostream& operator<<(ostream& os, const Game& g)
 {
     os << "Game: Score " << g.aScore << endl;
-    if (g.aCurrentFigure)
-    {
-        os << "Figure: ";
-        for (size_t i = 0; i < g.aCurrentFigure->getSize(); ++i)
-            os << +(g.aCurrentFigure->getData()[i]) << " ";
-        os << endl << g.aField;
-    }
+    if (g.aFiguresHistory.size())
+        os << g.aFiguresHistory.back() << endl << g.aField;
     return os;
 }
 
@@ -127,13 +121,22 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
     for (auto& r : future_results)
         results.push_back(r.get());
 
+    size_t worst = *min_element(results.begin(), results.end());
+    size_t best = *max_element(results.begin(), results.end());
+
     Chronometer::TimePoint testEnd = Chronometer::now();
     cout << "test games:" << endl;
     cout << testObject << endl;
-    cout << "\t min:" << *min_element(results.begin(), results.end()) << endl;
-    cout << "\t max:" << *max_element(results.begin(), results.end()) << endl;
+    cout << "\t min:" << worst << endl;
+    cout << "\t max:" << best << endl;
     cout << "\t avg:"
             << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
             << endl;
     cout << "\t duration: " << Chronometer::duration_seconds(testStart, testEnd) << "s" << endl;
+
+    if (best - worst > 70000)
+    {
+        cout << "Alert!! Epic difference!!" << endl;
+        min_element(games.begin(), games.end())->dumpFiguresHistory("figures" + to_string(best - worst) + ".log");
+    }
 }
