@@ -37,7 +37,10 @@ void printHelp()
     cout << "\t-f N: set figure size [1.. " << ULLONG_MAX << "] " << DEFAULT_FIGURE_SIZE << " by default" << endl;
     cout << "\t-c N: set count of colors [1.. " << ULLONG_MAX << "] " << DEFAULT_COLORS_COUNT << " by default" << endl;
     cout << "Debug settings:" << endl;
-    cout << "\t-d B: set debug on/off [true.. false] 0 by default" << endl;
+    cout << "\t-d B: set debug on/off [true.. false] false by default" << endl;
+    cout << "\t-v B: play single DemonstrationGame on/off [true.. false] false by default" << endl;
+    cout << "\t\t UtilityEvaluator multipliers will be taken from 'multipliers.dat', if exist, else generated randomly" << endl;
+    cout << "\t\t List of figures will be taken from 'figures.dat', if exist, else generated randomly" << endl;
 }
 
 int main(int argc, char** argv)
@@ -52,6 +55,7 @@ int main(int argc, char** argv)
     size_t figureSize = DEFAULT_FIGURE_SIZE;
     unsigned char colorsCount = DEFAULT_COLORS_COUNT;
     bool debug = false;
+    bool visualGame = false;
     size_t coefficientCount = DEFAULT_COEFFICIENT_COUNT;
     double coefficientMin = DEFAULT_MINIMAL_COEFFICIENT_VALUE;
     double coefficientMax = DEFAULT_MAXIMAL_COEFFICIENT_VALUE;
@@ -102,20 +106,26 @@ int main(int argc, char** argv)
             case 'w':
                 value >> fieldWidth;
                 break;
+            case 'v':
+                value >> boolalpha >> visualGame;
+                break;
             default:
                 break;
         }
     }
 
-    cout << DELIMITER;
-    cout << "Optimization parameters set: " << endl;
-    cout << "\tAlgorithm: " << (algorithm == "BOTH" ? "GA and PSO" : algorithm) << endl;
-    cout << "\t\t with " << iterations << " iterations of " << strength << " strength" << endl;
-    cout << "\tField parameters: " << endl;
-    cout << "\t\t Width " << fieldWidth << "; Height " << fieldHeight << "; Colors count " << +colorsCount << endl;
-    cout << "\tFigure size is " << figureSize << endl;
-    cout << "Solution will be tested on " << numberOfSolutionTests << " games" << endl;
-    cout << DELIMITER;
+    if (!visualGame)
+    {
+        cout << DELIMITER;
+        cout << "Optimization parameters set: " << endl;
+        cout << "\tAlgorithm: " << (algorithm == "BOTH" ? "GA and PSO" : algorithm) << endl;
+        cout << "\t\t with " << iterations << " iterations of " << strength << " strength" << endl;
+        cout << "\tField parameters: " << endl;
+        cout << "\t\t Width " << fieldWidth << "; Height " << fieldHeight << "; Colors count " << +colorsCount << endl;
+        cout << "\tFigure size is " << figureSize << endl;
+        cout << "Solution will be tested on " << numberOfSolutionTests << " games" << endl;
+        cout << DELIMITER;
+    }
 
 #ifdef TEST
     typedef struct
@@ -131,6 +141,24 @@ int main(int argc, char** argv)
     for (int i = 0; i < 20; ++i)
 #endif
     {
+        if (visualGame)
+        {
+            ifstream in;
+            in.open("multipliers.dat");
+            UtilityEvaluator& evaluator = in.is_open() ? UtilityEvaluator(in) : UtilityEvaluator(DEFAULT_COEFFICIENT_COUNT);
+            in.close();
+
+            DemonstrationGame dg(&evaluator, fieldWidth, fieldHeight, figureSize, colorsCount);
+            ifstream figin;
+            figin.open("figures.dat");
+            if (figin.is_open())
+                dg.setFiguresForGame(figin);
+            figin.close();
+
+            dg.play();
+
+            return 0;
+        }
 
         if (algorithm == "PSO" || algorithm == "BOTH")
         {

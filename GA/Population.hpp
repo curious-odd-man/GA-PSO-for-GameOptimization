@@ -76,7 +76,7 @@ public:
             for (size_t j = 0; j < aPopulation.size(); ++j)
             {
                 games[j].setEvaluator(&aPopulation[j]);
-                future_results.push_back(async(&OptimizationGame::play, games[j], OptimizationGame::DEFAULT_GAMES_COUNT));
+                future_results.push_back(async(&OptimizationGame::play, &games[j], OptimizationGame::DEFAULT_GAMES_COUNT));
             }
 
             for (auto& r : future_results)

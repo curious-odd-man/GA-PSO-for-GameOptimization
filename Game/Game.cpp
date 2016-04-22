@@ -1,4 +1,5 @@
 #include "Common.hpp"
+#include <iterator>
 
 Game::Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, unsigned char colorsCount)
         : aField(width, height, evaluator), aUtilityEvaluator(evaluator), aScore(0), aFigureSize(
@@ -13,6 +14,10 @@ size_t Game::play()
     aNextStates.clear();
     aFiguresHistory.clear();
 
+    // reverse order of figures for game, - taken figure will be removed from vector
+    if (aFiguresForGame.size())
+        reverse(aFiguresForGame.begin(), aFiguresForGame.end());
+
 #ifdef TEST_PARAMS
     cout << DELIMITER << endl;
     cout << DELIMITER << endl;
@@ -21,7 +26,14 @@ size_t Game::play()
 
     while (true)
     {
-        aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
+        if (aFiguresForGame.empty())
+            aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
+        else
+        {
+            aFiguresHistory.emplace_back(aFiguresForGame.back());
+            aFiguresForGame.pop_back();
+        }
+
 #ifdef TEST_PARAMS
         cout << DELIMITER << "New turn!" << endl << "current field is " << aField << endl;
 #endif
@@ -33,6 +45,7 @@ size_t Game::play()
 
         aField = *max_element(aNextStates.begin(), aNextStates.end());
         aScore += aField.getRemoved();
+        aScoreHistory.emplace_back(aScore);
     }
 
     return aScore;
@@ -43,8 +56,30 @@ void Game::dumpFiguresHistory(string name)
 {
     ofstream out;
     out.open(name);
+    out << *aUtilityEvaluator << endl;
     for (auto& fig : aFiguresHistory)
         out << fig << endl;
+
+    out << "score history" << endl;
+    for (auto& score : aScoreHistory)
+        out << score << endl;
     out.close();
+}
+
+void Game::setFiguresForGame(istream& in)
+{
+    while (in)
+    {
+        unsigned char figureBytes[256] = { 0 };
+        for (size_t i = 0; i < aFigureSize; ++i)
+        {
+            in >> figureBytes[i];
+            figureBytes[i] -= '0';
+        }
+
+        aFiguresForGame.emplace_back(aFigureSize, aColorsCount, figureBytes);
+    }
+
+    aFiguresForGame.pop_back();     // last is invalid
 }
 

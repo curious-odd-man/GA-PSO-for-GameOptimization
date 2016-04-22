@@ -12,6 +12,17 @@ public:
     {
     }
 
+    UtilityEvaluator(istream& in) 
+        : aUtility(0)
+    {
+        while (in)
+        {
+            aMultipliers.emplace_back(0.0);
+            in >> aMultipliers.back();
+        }
+        aMultipliers.pop_back();        // last element is invalid
+    }
+
     UtilityEvaluator(const vector<double>& init)
             : aMultipliers(init), aUtility(0)
     {

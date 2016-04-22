@@ -20,9 +20,16 @@ public:
 
     friend ostream& operator<<(ostream& os, const Figure& f);
 
+    inline void swap(Figure& other);
+
 private:
     size_t aSize;
     unsigned char aColorsCount;
     unsigned char *aData;
 };
+
+namespace std
+{
+    void swap(Figure& first, Figure& second);
+}
 

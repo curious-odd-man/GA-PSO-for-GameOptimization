@@ -15,8 +15,6 @@ ostream& operator<<(ostream& os, const Figure& f)
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
         os << hex << (size_t) f.aData[i] << " ";
-
-    os << endl;
     return os;
 }
 
@@ -32,13 +30,20 @@ ostream& operator<<(ostream& os, const Field& f)
     }
     os << endl;
 
-    os << "Params. aRemoved: " << f.aRemoved << " aTwoCellsCount: " << f.aTwoCellsCount << " aTwoCellsOnTop: "
-            << f.aTwoCellsOnTop << " aUtility: " << f.aUtility << endl;
     if (f.aFieldParameters.size())
-        os << "Max column height: " << f.aFieldParameters[1] << " Average Column Height " << f.aFieldParameters[2]
-                << " Column Difference " << f.aFieldParameters[3] << " Places for figure " << f.aFieldParameters[6] << endl;
+    {
+        os << "Params:" << endl;
+        os << "\tRemoved:                        " << f.aFieldParameters[0] << endl;
+        os << "\tMax column height:              " << f.aFieldParameters[1] << endl;
+        os << "\tAverage column height:          " << f.aFieldParameters[2] << endl;
+        os << "\tColumn difference:              " << f.aFieldParameters[3] << endl;
+        os << "\ttwo cells of same color:        " << f.aFieldParameters[4] << endl;
+        os << "\ttwo cells of same color on top: " << f.aFieldParameters[5] << endl;
+        os << "\tPlaces for new figure:          " << f.aFieldParameters[6] << endl;
+    }
     else
         os << "aFieldParameters are empty" << endl;
+        
     os << "column heights: ";
     for (auto ch : f.aColumnHeights)
         os << ch << " ";
@@ -115,7 +120,7 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
         games.emplace_back(&evaluators[i], width, height, figureSize, colorsCount);
 
     for (size_t i = 0; i < count; ++i)
-        future_results.push_back(async(&OptimizationGame::play, games[i], gameCount));
+        future_results.push_back(async(&OptimizationGame::play, &games[i], gameCount));
 
     vector<size_t> results;
     for (auto& r : future_results)
@@ -134,7 +139,7 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
             << endl;
     cout << "\t duration: " << Chronometer::duration_seconds(testStart, testEnd) << "s" << endl;
 
-    if (best - worst > 70000)
+    if (best - worst > 40000)
     {
         cout << "Alert!! Epic difference!!" << endl;
         min_element(games.begin(), games.end())->dumpFiguresHistory("figures" + to_string(best - worst) + ".log");

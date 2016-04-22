@@ -3,7 +3,7 @@
 Figure::Figure(size_t figureSize, unsigned char colorsCount, const unsigned char * data)
         : aSize(figureSize), aColorsCount(colorsCount)
 {
-    aData = new unsigned char[(aSize << 1) - 1];       // reserve n + n - 1
+    aData = new unsigned char[aSize + aSize - 1];       // reserve n + n - 1
     if (data)
         memmove(aData, data, aSize);
     else
@@ -18,8 +18,8 @@ Figure::Figure(const Figure& f)
 {
     aSize = f.aSize;
     aColorsCount = f.aColorsCount;
-    aData = new unsigned char[(aSize << 1) - 1];
-    memmove(aData, f.aData, (aSize << 1) - 1);
+    aData = new unsigned char[aSize + aSize - 1];
+    memmove(aData, f.aData, aSize + aSize - 1);
 }
 
 Figure::~Figure()
@@ -56,4 +56,17 @@ size_t Figure::getSize() const
 const unsigned char * Figure::getData() const
 {
     return aData;
+}
+
+inline void Figure::swap(Figure & other)
+{
+    // Suppose swapping same figures - only data is different
+    unsigned char * tmp = other.aData;
+    other.aData = aData;
+    aData = tmp;
+}
+
+void std::swap(Figure & first, Figure & second)
+{
+    first.swap(second);
 }

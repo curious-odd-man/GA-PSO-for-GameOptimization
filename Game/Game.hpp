@@ -24,13 +24,16 @@ public:
         return aScore < other.aScore;
     }
 
+    void setFiguresForGame(istream& in);
+
 protected:
     Field aField;      // current game field state, references a value in a aNextStates;
     vector<Field> aNextStates;      // list of possible next field states with calculated utility;
     UtilityEvaluator* aUtilityEvaluator;
     size_t aScore;              // game score
     vector<Figure> aFiguresHistory;
-
+    vector<size_t> aScoreHistory;
+    vector<Figure> aFiguresForGame;
     
     size_t aFigureSize;
     unsigned char aColorsCount;
