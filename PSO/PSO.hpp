@@ -21,8 +21,12 @@ public:
     void print();
     void testSolution();
 
-    size_t getScore() { return aGbest.getUtility(); }
-    const vector<double>& getSolution() { return aGbest.getMultipliers(); }
+#ifdef TEST
+    size_t getScore()
+    {   return aGbest.getUtility();}
+    const vector<double>& getSolution()
+    {   return aGbest.getMultipliers();}
+#endif
 
 private:
     typedef struct

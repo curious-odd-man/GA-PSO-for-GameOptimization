@@ -12,8 +12,8 @@ public:
     {
     }
 
-    UtilityEvaluator(istream& in) 
-        : aUtility(0)
+    UtilityEvaluator(istream& in)
+            : aUtility(0)
     {
         while (in)
         {
@@ -29,7 +29,7 @@ public:
     }
 
     UtilityEvaluator(size_t countOfParams)
-            : aMultipliers(countOfParams, (double) rand() / RAND_MAX * 2 - 1), aUtility(0)
+            : aMultipliers(countOfParams, (double)rand() / RAND_MAX * 2 - 1), aUtility(0)
     {
     }
 

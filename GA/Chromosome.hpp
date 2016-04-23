@@ -64,8 +64,8 @@ private:
 template<typename GeneType>
 size_t Chromosome<GeneType>::getCrossoverRandom()
 {
-    static uniform_int_distribution<int> unif(1, (int) aGeneCount - 1); // TODO: maybe they should be static too ?
-    static default_random_engine re((unsigned) time(0));
+    static uniform_int_distribution<int> unif(1, (int)aGeneCount - 1); // TODO: maybe they should be static too ?
+    static default_random_engine re((unsigned)time(0));
     return (size_t)unif(re);
 }
 

@@ -14,7 +14,7 @@ ostream& operator<<(ostream& os, const Figure& f)
 {
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
-        os << hex << (size_t) f.aData[i] << " ";
+        os << hex << (size_t)f.aData[i] << " ";
     return os;
 }
 
@@ -30,8 +30,7 @@ ostream& operator<<(ostream& os, const Field& f)
             os << ". ";
         else
             os << string("\033[") << to_string(f.aField[i] + 30) << "m"     // set color
-                << to_string(f.aField[i]) 
-            << "\033[0m" << ' ';                                            // reset color
+                    << to_string(f.aField[i]) << "\033[0m" << ' ';                                        // reset color
     }
     os << endl;
 
@@ -48,7 +47,7 @@ ostream& operator<<(ostream& os, const Field& f)
     }
     else
         os << "aFieldParameters are empty" << endl;
-        
+
     os << "column heights: ";
     for (auto ch : f.aColumnHeights)
         os << ch << " ";
@@ -122,8 +121,8 @@ bool key_pressed(int* code)
 #endif
 }
 
-void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
-                  unsigned char colorsCount, size_t gameCount)
+void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height,
+                  size_t figureSize, unsigned char colorsCount, size_t gameCount)
 {
     if (count == 0)
         return;
@@ -140,7 +139,7 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
     for (size_t i = 0; i < count; ++i)
         future_results.push_back(async(&OptimizationGame::play, &games[i], gameCount));
 
-    vector<size_t> results;
+    vector < size_t > results;
     for (auto& r : future_results)
         results.push_back(r.get());
 
@@ -153,8 +152,7 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
     cout << "\t min:" << worst << endl;
     cout << "\t max:" << best << endl;
     cout << "\t avg:"
-            << ((double) accumulate(results.begin(), results.end(), (size_t) 0, plus<size_t>()) / results.size())
-            << endl;
+            << ((double)accumulate(results.begin(), results.end(), (size_t)0, plus<size_t>()) / results.size()) << endl;
     cout << "\t duration: " << Chronometer::duration_seconds(testStart, testEnd) << "s" << endl;
 
     if (best - worst > 40000)

@@ -11,7 +11,8 @@ class Population
 {
 public:
     Population(size_t geneCount, GeneType minValue, GeneType maxValue, size_t populationsDensity, size_t generations)
-            : aPopulationDensity(populationsDensity + 1 /* for the Best */), aGenerations(generations), aSolution(geneCount, minValue, maxValue)
+            : aPopulationDensity(populationsDensity + 1 /* for the Best */), aGenerations(generations), aSolution(
+                    geneCount, minValue, maxValue)
     {
         for (size_t i = 0; i < aPopulationDensity; ++i)
             aPopulation.emplace_back(geneCount, minValue, maxValue);
@@ -37,7 +38,7 @@ public:
                 for (auto& individual : aPopulation)
                     individual.setUtility(test_game::getUtility(individual.getMultipliers(), test[j]));
 
-                log.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
+                log.addStatisticalData(vector < UtilityEvaluator > (aPopulation.begin(), aPopulation.end()));
 
                 if (i == aGenerations - 1)
                     break;
@@ -45,7 +46,7 @@ public:
                 evolve();
             }
 
-            vector<size_t> results;
+            vector < size_t > results;
             for (auto individual : aPopulation)
                 results.emplace_back(individual.getUtility());
 
@@ -63,7 +64,8 @@ public:
         cout << DELIMITER << "GA optimization started..." << endl;
         ScientificData science("GA");
 #ifdef USE_PARALEL_OPTIMIZATION
-        vector<OptimizationGame> games(aPopulation.size(), OptimizationGame(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount));
+        vector<OptimizationGame> games(aPopulation.size(),
+                                       OptimizationGame(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount));
 #else
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 #endif
@@ -72,11 +74,12 @@ public:
         for (size_t i = 0; i < aGenerations; ++i)
         {
 #ifdef USE_PARALEL_OPTIMIZATION
-            vector<future<size_t>> future_results;
+            vector < future < size_t >> future_results;
             for (size_t j = 0; j < aPopulation.size(); ++j)
             {
                 games[j].setEvaluator(&aPopulation[j]);
-                future_results.push_back(async(&OptimizationGame::play, &games[j], OptimizationGame::DEFAULT_GAMES_COUNT));
+                future_results.push_back(
+                        async(&OptimizationGame::play, &games[j], OptimizationGame::DEFAULT_GAMES_COUNT));
             }
 
             for (auto& r : future_results)
@@ -89,7 +92,7 @@ public:
             }
 #endif
 
-            science.addStatisticalData(vector<UtilityEvaluator>(aPopulation.begin(), aPopulation.end()));
+            science.addStatisticalData(vector < UtilityEvaluator > (aPopulation.begin(), aPopulation.end()));
 
             if (i == aGenerations - 1)
                 break;
@@ -97,12 +100,14 @@ public:
             evolve();
         }
 
-        aSolution = *max_element(aPopulation.begin(), aPopulation.end(), [](const Individual<GeneType>& first, const Individual<GeneType>& second) 
-        {
-            return first.getUtility() < second.getUtility();
-        });
+        aSolution = *max_element(aPopulation.begin(), aPopulation.end(),
+                                 [](const Individual<GeneType>& first, const Individual<GeneType>& second)
+                                 {
+                                     return first.getUtility() < second.getUtility();
+                                 });
 
-        cout << "GA optimization ended in " << Chronometer::duration_seconds(optimizationStart, Chronometer::now()) << endl;
+        cout << "GA optimization ended in " << Chronometer::duration_seconds(optimizationStart, Chronometer::now())
+                << endl;
         ::testSolution("GA", aSolution, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, 1);
 
         science.createCharts();
@@ -115,8 +120,14 @@ public:
     template<class _GeneType>
     friend ostream& operator<<(ostream& os, const Population<_GeneType>& object);
 
-    size_t getScore() { return aSolution.getUtility(); }
-    const vector<GeneType>& getSolution() { return aSolution.getMultipliers(); }
+    size_t getScore()
+    {
+        return aSolution.getUtility();
+    }
+    const vector<GeneType>& getSolution()
+    {
+        return aSolution.getMultipliers();
+    }
 
 protected:
 
@@ -142,7 +153,7 @@ template<typename GeneType>
 void Population<GeneType>::evolve()
 {
     setEvolutionRoulette(
-            accumulate(aPopulation.begin(), aPopulation.end(), (size_t) 0,
+            accumulate(aPopulation.begin(), aPopulation.end(), (size_t)0,
                        [](const size_t& sum, const Individual<GeneType>& individual)
                        {   return sum + individual.getUtility();}));
 
@@ -158,7 +169,7 @@ void Population<GeneType>::evolve()
         Individual<GeneType>& lucky1 = getLucky();
         Individual<GeneType>& lucky2 = getLucky();
 
-        pair<Individual<GeneType>, Individual<GeneType>> childs = lucky1 + lucky2;
+        pair<Individual<GeneType> , Individual<GeneType>> childs = lucky1 + lucky2;
         newGeneration.emplace_back(childs.first);
         newGeneration.emplace_back(childs.second);
     }
@@ -187,7 +198,7 @@ template<typename GeneType>
 void Population<GeneType>::setEvolutionRoulette(size_t wholeUtility)
 {
     sectors = uniform_int_distribution < size_t > (0, wholeUtility);
-    roulette = default_random_engine((unsigned) (time(0) + wholeUtility));
+    roulette = default_random_engine((unsigned)(time(0) + wholeUtility));
 }
 
 template<typename GeneType>

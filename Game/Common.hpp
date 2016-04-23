@@ -6,7 +6,10 @@ using namespace std;
 //#define TEST
 
 #ifndef _DEBUG
-#define USE_PARALEL_OPTIMIZATION
+#   define USE_PARALEL_OPTIMIZATION
+
+#   include <thread>
+#   include <future>
 #endif
 
 #include <vector>
@@ -21,8 +24,6 @@ using namespace std;
 #include <fstream>
 #include <csignal>
 #include <climits>
-#include <thread>
-#include <future>
 
 #include "UtilityEvaluator.hpp"
 #include "Field.hpp"
@@ -41,5 +42,5 @@ bool in_range(T const& s, TT const& e, TTT const& v)
 
 bool key_pressed(int* code);
 
-void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height, size_t figureSize,
-                  unsigned char colorsCount, size_t gameCount);
+void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_t width, size_t height,
+                  size_t figureSize, unsigned char colorsCount, size_t gameCount);

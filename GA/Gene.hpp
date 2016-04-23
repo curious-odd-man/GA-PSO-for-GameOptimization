@@ -8,10 +8,11 @@ public:
     Gene()
             : aMinValue(0), aMaxValue(0), aValue(0)
     {
-    	/* FIXME, only needed at Crossover to create empty genes, that later will be assigned to Crossover result */
+        /* FIXME, only needed at Crossover to create empty genes, that later will be assigned to Crossover result */
     }
 
-    Gene(GeneType minValue, GeneType maxValue) : aMinValue(minValue), aMaxValue(maxValue), aValue(getRandomValue())
+    Gene(GeneType minValue, GeneType maxValue)
+            : aMinValue(minValue), aMaxValue(maxValue), aValue(getRandomValue())
     {
     }
 
@@ -59,7 +60,7 @@ template<typename GeneType>
 GeneType Gene<GeneType>::getRandomValue()
 {
     static uniform_real_distribution<double> unif(aMinValue, aMaxValue);
-    static default_random_engine re((unsigned) time(0));
+    static default_random_engine re((unsigned)time(0));
     return unif(re);
 }
 
@@ -67,7 +68,7 @@ template<typename GeneType>
 double Gene<GeneType>::getMutationResus()
 {
     static uniform_real_distribution<double> unif(0, 1);
-    static default_random_engine re((unsigned) time(0));
+    static default_random_engine re((unsigned)time(0));
     return unif(re);
 }
 
@@ -75,7 +76,7 @@ template<typename GeneType>
 double Gene<GeneType>::getMutationProbability()
 {
     static uniform_real_distribution<double> unif(0, 1);
-    static default_random_engine re((unsigned) time(0));
+    static default_random_engine re((unsigned)time(0));
     return unif(re);
 }
 

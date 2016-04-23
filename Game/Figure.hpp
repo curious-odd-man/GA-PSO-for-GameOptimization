@@ -7,8 +7,6 @@ public:
     Figure(const Figure& f);
     ~Figure();
 
-    // iterator simulation
-
     const unsigned char * begin();
     const unsigned char * end();
 

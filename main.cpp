@@ -4,8 +4,6 @@
 #include "PSO.hpp"
 #include "GA.hpp"
 
-
-
 // Algorithm defaults
 const size_t DEFAULT_ITERATION_COUNT = 50;
 const size_t DEFAULT_ITERATION_STRENGTH = 50;
@@ -39,7 +37,8 @@ void printHelp()
     cout << "Debug settings:" << endl;
     cout << "\t-d B: set debug on/off [true.. false] false by default" << endl;
     cout << "\t-v B: play single DemonstrationGame on/off [true.. false] false by default" << endl;
-    cout << "\t\t UtilityEvaluator multipliers will be taken from 'multipliers.dat', if exist, else generated randomly" << endl;
+    cout << "\t\t UtilityEvaluator multipliers will be taken from 'multipliers.dat', if exist, else generated randomly"
+            << endl;
     cout << "\t\t List of figures will be taken from 'figures.dat', if exist, else generated randomly" << endl;
 }
 
@@ -134,7 +133,7 @@ int main(int argc, char** argv)
         string algo;
         size_t score;
         vector<double> solution;
-    } test_struct;
+    }test_struct;
 
     vector<test_struct> tests;
 
@@ -145,7 +144,8 @@ int main(int argc, char** argv)
         {
             ifstream in;
             in.open("multipliers.dat");
-            UtilityEvaluator& evaluator = in.is_open() ? UtilityEvaluator(in) : UtilityEvaluator(DEFAULT_COEFFICIENT_COUNT);
+            UtilityEvaluator& evaluator =
+                    in.is_open() ? UtilityEvaluator(in) : UtilityEvaluator(DEFAULT_COEFFICIENT_COUNT);
             in.close();
 
             DemonstrationGame dg(&evaluator, fieldWidth, fieldHeight, figureSize, colorsCount);
@@ -162,7 +162,8 @@ int main(int argc, char** argv)
 
         if (algorithm == "PSO" || algorithm == "BOTH")
         {
-            PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, coefficientCount);
+            PSO p(strength, iterations, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount,
+                  coefficientCount);
             if (debug)
                 p.test();
             else
@@ -172,7 +173,8 @@ int main(int argc, char** argv)
                 p.testSolution();
 #ifdef TEST
                 cout << "PSO iteration " << i << endl;
-                tests.push_back({i, "PSO", p.getScore(), p.getSolution()});
+                tests.push_back(
+                        {   i, "PSO", p.getScore(), p.getSolution()});
 #endif
             }
         }
@@ -182,13 +184,15 @@ int main(int argc, char** argv)
             Population<double> p(coefficientCount, coefficientMin, coefficientMax, strength, iterations);
 
             if (debug)
-                p.test(coefficientCount, coefficientMin, coefficientMax, fieldWidth, fieldHeight, figureSize, colorsCount);
+                p.test(coefficientCount, coefficientMin, coefficientMax, fieldWidth, fieldHeight, figureSize,
+                       colorsCount);
             else
             {
                 p.live(numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount);
 #ifdef TEST
                 cout << "GA iteration " << i << endl;
-                tests.push_back({ i, "GA", p.getScore(), p.getSolution() });
+                tests.push_back(
+                        {   i, "GA", p.getScore(), p.getSolution()});
 #endif
             }
         }
@@ -200,7 +204,7 @@ int main(int argc, char** argv)
     {
         out << setw(3) << t.idx << " " << setw(5) << t.algo << ": " << setw(5) << t.score << " ";
         for (auto k : t.solution)
-            out << setw(12) << k << " ";
+        out << setw(12) << k << " ";
         out << endl;
     }
     out.close();

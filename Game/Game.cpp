@@ -2,8 +2,8 @@
 #include <iterator>
 
 Game::Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figureSize, unsigned char colorsCount)
-        : aField(width, height, evaluator), aUtilityEvaluator(evaluator), aScore(0), aFigureSize(
-                figureSize), aColorsCount(colorsCount)
+        : aField(width, height, evaluator), aUtilityEvaluator(evaluator), aScore(0), aFigureSize(figureSize), aColorsCount(
+                colorsCount)
 {
 }
 
@@ -12,7 +12,7 @@ size_t Game::play()
     auto addFigure = [&]()
     {
         if (aFiguresForGame.empty())
-            aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
+        aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
         else
         {
             aFiguresHistory.emplace_back(aFiguresForGame.back());
@@ -52,7 +52,6 @@ size_t Game::play()
 
         aField = *max_element(aNextStates.begin(), aNextStates.end());
         aScore += aField.getRemoved();
-        aScoreHistory.emplace_back(aScore);
     }
 
     return aScore;
@@ -66,10 +65,6 @@ void Game::dumpFiguresHistory(string name)
     out << *aUtilityEvaluator << endl;
     for (auto& fig : aFiguresHistory)
         out << fig << endl;
-
-    out << "score history" << endl;
-    for (auto& score : aScoreHistory)
-        out << score << endl;
     out.close();
 }
 
@@ -77,7 +72,8 @@ void Game::setFiguresForGame(istream& in)
 {
     while (in)
     {
-        unsigned char figureBytes[256] = { 0 };
+        unsigned char figureBytes[256] =
+            { 0 };
         for (size_t i = 0; i < aFigureSize; ++i)
         {
             in >> figureBytes[i];

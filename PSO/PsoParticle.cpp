@@ -8,7 +8,7 @@ PsoParticle::PsoParticle(const vector<double>& init, double c1, double c2)
 {
     size_t countOfParams = init.size();
     while (countOfParams-- > 0)
-        aVelocity.push_back((double) rand() / RAND_MAX * 0.1 - 0.05);
+        aVelocity.push_back((double)rand() / RAND_MAX * 0.1 - 0.05);
 }
 
 void PsoParticle::move(const UtilityEvaluator & gbest, const UtilityEvaluator & pbest)

@@ -32,9 +32,8 @@ protected:
     UtilityEvaluator* aUtilityEvaluator;
     size_t aScore;              // game score
     vector<Figure> aFiguresHistory;
-    vector<size_t> aScoreHistory;
     vector<Figure> aFiguresForGame;
-    
+
     size_t aFigureSize;
     unsigned char aColorsCount;
 

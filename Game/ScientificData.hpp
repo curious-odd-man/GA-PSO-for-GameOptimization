@@ -57,16 +57,13 @@ public:
                 allUtilities << j << " " << i << " " << aAllUtilities[j][i] << endl;
         allUtilities.close();
 
-
-
         ofstream twoBestUtilities;
         twoBestUtilities.open(aName + "_twoBestUtilities.log");
         // Best Utilities
         for (size_t i = 0; i < aLocalBestUtilities.size(); ++i)
-            twoBestUtilities << i << " " << aLocalBestUtilities[i] << endl << i << " " <<  aGlobalBestUtilities[i] << endl;
+            twoBestUtilities << i << " " << aLocalBestUtilities[i] << endl << i << " " << aGlobalBestUtilities[i]
+                    << endl;
         twoBestUtilities.close();
-
-
 
         ofstream bestMultipliers;
         bestMultipliers.open(aName + "_bestMultipliers.log");

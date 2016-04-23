@@ -22,6 +22,6 @@ private:
 
     inline double getRand()
     {
-        return (double) rand() / RAND_MAX;
+        return (double)rand() / RAND_MAX;
     }
 };

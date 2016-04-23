@@ -14,7 +14,10 @@ size_t DemonstrationGame::play()
 {
     cout << "Demonstration game launched:" << endl;
     cout << *aUtilityEvaluator;
-    cout << (aFiguresForGame.empty() ? "Figures will be generated on the fly" : "With " + to_string(aFiguresForGame.size()) + " pre-defined figures") << endl;
+    cout
+            << (aFiguresForGame.empty() ?
+                    "Figures will be generated on the fly" :
+                    "With " + to_string(aFiguresForGame.size()) + " pre-defined figures") << endl;
 
     Game::play();
     return aScore;
@@ -33,26 +36,26 @@ void DemonstrationGame::activityBeforeTurn()
         cin.ignore();
         switch (ch)
         {
-        case 'l':
-            printAllStatesUtilities();
-            cin.get();
-            break;
+            case 'l':
+                printAllStatesUtilities();
+                cin.get();
+                break;
 
-        case 's':
-            printAllStateOneByOne();
-            break;
+            case 's':
+                printAllStateOneByOne();
+                break;
 
-        case 'p':
-            cout << "Enter turn index: ";
-            cin >> aStopIdx;
-            return;
-            break;
+            case 'p':
+                cout << "Enter turn index: ";
+                cin >> aStopIdx;
+                return;
+                break;
 
-        default:
-            return;
-            break;
+            default:
+                return;
+                break;
         }
-    }  while (true);
+    } while (true);
 }
 
 void DemonstrationGame::printAllStatesUtilities()

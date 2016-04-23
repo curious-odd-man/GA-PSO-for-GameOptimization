@@ -1,17 +1,16 @@
-#include <thread>
-#include <future>
 #include "Common.hpp"
 #include "PSO.hpp"
 #include "Test.hpp"
 #include "ScientificData.hpp"
 
 PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFinalTests, size_t fieldWidth,
-    size_t fieldHeight, size_t figureSize, unsigned char colorsCount, size_t countOfParams)
-    : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
-        fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData("PSO")
+         size_t fieldHeight, size_t figureSize, unsigned char colorsCount, size_t countOfParams)
+        : aSwarmSize(numberOfParticles), aIterationCount(numberOfIterations), aNumberOfFinalTests(numberOfFinalTests), aFieldWidth(
+                fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData(
+                "PSO")
 {
-    srand((unsigned int) time(NULL));
-    
+    srand((unsigned int)time(NULL));
+
     default_random_engine generator;
     uniform_real_distribution<double> distribution(-1.0, 1.0);
 
@@ -46,7 +45,7 @@ void PSO::test()
     };
 
     int test[] =
-        { -1, 0, 1, 13, 66};
+        { -1, 0, 1, 13, 66 };
 
     for (int j = 0; j < 5; ++j)
     {
@@ -96,20 +95,20 @@ void PSO::optimize()
 
     aOptimizationStart = Chronometer::now();
 
-
     do
     {
         // Calculate fitness value
 #ifdef USE_PARALEL_OPTIMIZATION
-        vector<future<size_t>> future_results;
+        vector < future < size_t >> future_results;
         for (size_t i = 0; i < aGames.size(); ++i)
-            future_results.push_back(async(&OptimizationGame::play, aGames[i].game, OptimizationGame::DEFAULT_GAMES_COUNT));
+            future_results.push_back(
+                    async(&OptimizationGame::play, aGames[i].game, OptimizationGame::DEFAULT_GAMES_COUNT));
 
         for (auto& r : future_results)
             r.get();
 #else
         for (size_t i = 0; i < aGames.size(); ++i)
-            aGames[i].game->play();
+        aGames[i].game->play();
 #endif
 
         aPbest = *(max_element(aGames.begin(), aGames.end(), compare_particles)->evaluator);

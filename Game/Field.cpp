@@ -123,13 +123,14 @@ bool Field::markRemovable(unsigned char* mask)
 #ifdef TEST_PARAMS_TWO_IN_LINE
     cout << "Mark removable called" << endl;
 #endif
-    auto isReachable = [this](const unsigned char* start) -> bool
-    {
-        for (const unsigned char* cellPtr = start + aWidth; cellPtr <= start + REMOVABLE_SIZE * aWidth; cellPtr += aWidth)
-            if (cellPtr > aFieldRightBottomCorner || *cellPtr != EMPTY_CELL)
+    auto isReachable =
+            [this](const unsigned char* start) -> bool
+            {
+                for (const unsigned char* cellPtr = start + aWidth; cellPtr <= start + REMOVABLE_SIZE * aWidth; cellPtr += aWidth)
+                if (cellPtr > aFieldRightBottomCorner || *cellPtr != EMPTY_CELL)
                 return true;
-        return false;
-    };
+                return false;
+            };
 
     // Test and mark for deletion
     auto testAndMark =
@@ -153,34 +154,34 @@ bool Field::markRemovable(unsigned char* mask)
                         else if (colorRepeats > 1)
                         {
 #ifdef TEST_PARAMS_TWO_IN_LINE
-                            const size_t offset = cellPtr - aField;
-                            const size_t x = offset % aWidth;
-                            const size_t y = offset / aWidth;
-                            cout << "two of one color: " << x << " " << y << endl;
+            const size_t offset = cellPtr - aField;
+            const size_t x = offset % aWidth;
+            const size_t y = offset / aWidth;
+            cout << "two of one color: " << x << " " << y << endl;
 #endif
-                            const unsigned char* preCell = start - didx;
-                            const unsigned char* postCell = start + didx * 2;
+            const unsigned char* preCell = start - didx;
+            const unsigned char* postCell = start + didx * 2;
 
-                            if (::in_range(aField, aFieldRightBottomCorner, postCell) && *postCell == EMPTY_CELL && isReachable(postCell))
-                                ++aTwoCellsOnTop;
-                            else if (::in_range(aField, aFieldRightBottomCorner, preCell) && *preCell == EMPTY_CELL && isReachable(preCell))
-                                ++aTwoCellsOnTop;
-                            else
-                                ++aTwoCellsCount;
-                        }
-                    }
-                    else
-                    {
-                        colorRepeats = 1;
-                        lastColor = *start;
-                    }
-                }
-                else
-                {
-                    lastColor = EMPTY_CELL;
-                    colorRepeats = 0;
-                }
-            };
+            if (::in_range(aField, aFieldRightBottomCorner, postCell) && *postCell == EMPTY_CELL && isReachable(postCell))
+            ++aTwoCellsOnTop;
+            else if (::in_range(aField, aFieldRightBottomCorner, preCell) && *preCell == EMPTY_CELL && isReachable(preCell))
+            ++aTwoCellsOnTop;
+            else
+            ++aTwoCellsCount;
+        }
+    }
+    else
+    {
+        colorRepeats = 1;
+        lastColor = *start;
+    }
+}
+else
+{
+    lastColor = EMPTY_CELL;
+    colorRepeats = 0;
+}
+}   ;
 
     aTwoCellsCount = 0;
     aTwoCellsOnTop = 0;
@@ -212,7 +213,7 @@ bool Field::markRemovable(unsigned char* mask)
         colorRepeats = 0;
         // for each cell in column
         for (unsigned char* start = columnPtr; start >= aField; start -= aWidth)
-            testAndMark(start, (int) aWidth);
+            testAndMark(start, (int)aWidth);
     }
 
     if (aWidth < REMOVABLE_SIZE || aHeight < REMOVABLE_SIZE)  // can 3 in line be on diagonale?
@@ -236,7 +237,7 @@ bool Field::markRemovable(unsigned char* mask)
 
     for (unsigned char * start = startPtr; start != endPtr;)
     {
-        testAndMark(start, -((int) aWidth + 1));
+        testAndMark(start, -((int)aWidth + 1));
 
         if (start != diagEndPtr)
             start += aWidth + 1;
@@ -277,7 +278,7 @@ bool Field::markRemovable(unsigned char* mask)
 
     for (unsigned char* ptr = startPtr; ptr != endPtr;)
     {
-        testAndMark(ptr, -((int) aWidth - 1));
+        testAndMark(ptr, -((int)aWidth - 1));
 
         if (ptr != diagEndPtr)
             ptr += aWidth - 1;
@@ -367,20 +368,20 @@ void Field::calculateUtility(size_t figureSize)
     {
         columnHeightsSum += columnHeight;
         if (lastColumnHeight != (size_t) - 1)
-            avgColumnDiff += abs((int) (lastColumnHeight - columnHeight));
+            avgColumnDiff += abs((int)(lastColumnHeight - columnHeight));
         lastColumnHeight = columnHeight;
         if (columnHeight <= aHeight - figureSize)
             ++placesForFigure;
     }
 
     aFieldParameters.assign(
-        { (double) aRemoved,                                                            // count of removed cells
-                (double) *max_element(aColumnHeights.begin(), aColumnHeights.end()),    // max column height
-                (double) columnHeightsSum / aWidth,                                     // average column height
-                (double) avgColumnDiff,                                                 // column difference absolute sum
-                (double) aTwoCellsCount,                                                // Count of 2 cells with one color in row
-                (double) aTwoCellsOnTop,       // Count of previous cells that are on top (can be remove with next turn)
-                (double) placesForFigure      // number of next states
+        { (double)aRemoved,                                                            // count of removed cells
+                (double)*max_element(aColumnHeights.begin(), aColumnHeights.end()),    // max column height
+                (double)columnHeightsSum / aWidth,                                     // average column height
+                (double)avgColumnDiff,                                                 // column difference absolute sum
+                (double)aTwoCellsCount,                                        // Count of 2 cells with one color in row
+                (double)aTwoCellsOnTop,       // Count of previous cells that are on top (can be remove with next turn)
+                (double)placesForFigure      // number of next states
             });
 
     aUtility = aUtilityEvaluator->evaluate(aFieldParameters);
