@@ -144,7 +144,7 @@ int main(int argc, char** argv)
         {
             ifstream in;
             in.open("multipliers.dat");
-            UtilityEvaluator& evaluator =
+            UtilityEvaluator evaluator =
                     in.is_open() ? UtilityEvaluator(in) : UtilityEvaluator(DEFAULT_COEFFICIENT_COUNT);
             in.close();
 
