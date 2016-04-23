@@ -16,7 +16,7 @@ public:
 
     /* OPERATORS */
     Field& operator=(const Field &);
-    bool operator<(const Field& f);
+    bool operator<(const Field& f) const;
 
     /* METHODS */
     vector<Field>& getNextStates(const Figure& figure, vector<Field>& res) const;
@@ -28,9 +28,14 @@ public:
         aUtilityEvaluator = evaluator;
     }
 
-    size_t getRemoved() const
+    inline size_t getRemoved() const
     {
         return aRemoved;
+    }
+
+    inline double getUtility() const
+    {
+        return aUtility;
     }
 
 protected:

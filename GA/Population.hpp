@@ -23,9 +23,9 @@ public:
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 
         int test[] =
-            { -1, 0, 1, 13 };
+            { -1, 0, 1, 13, 66 };
 
-        for (int j = 0; j < 4; ++j)
+        for (int j = 0; j < 5; ++j)
         {
             ScientificData log(string("GA_test") + to_string(j));
             aPopulation.clear();
@@ -50,7 +50,7 @@ public:
                 results.emplace_back(individual.getUtility());
 
             cout << "Test " << test[j] << " " << *max_element(results.begin(), results.end()) << endl;
-            //cout << aPopulation.back() << endl;
+            cout << aPopulation.back() << endl;
 
             log.createCharts();
         }

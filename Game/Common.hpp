@@ -3,7 +3,7 @@
 using namespace std;
 
 //#define TEST_PARAMS
-#define TEST
+//#define TEST
 
 #ifndef _DEBUG
 #define USE_PARALEL_OPTIMIZATION

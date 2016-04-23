@@ -46,9 +46,9 @@ void PSO::test()
     };
 
     int test[] =
-        { -1, 0, 1, 13 };
+        { -1, 0, 1, 13, 66};
 
-    for (int j = 0; j < 4; ++j)
+    for (int j = 0; j < 5; ++j)
     {
         ScientificData log(string("PSO_test") + to_string(j));
         vector<pso_game_t> games;

@@ -40,7 +40,7 @@ protected:
 
     virtual void activityBeforeTurn() = 0;
 
-    inline bool gameOver()
+    inline bool gameOver() const
     {
         return aNextStates.size() == 0;
     }

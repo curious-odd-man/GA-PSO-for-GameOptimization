@@ -9,6 +9,17 @@ Game::Game(UtilityEvaluator* evaluator, size_t width, size_t height, size_t figu
 
 size_t Game::play()
 {
+    auto addFigure = [&]()
+    {
+        if (aFiguresForGame.empty())
+            aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
+        else
+        {
+            aFiguresHistory.emplace_back(aFiguresForGame.back());
+            aFiguresForGame.pop_back();
+        }
+    };
+
     aScore = 0;
     aField.reset();
     aNextStates.clear();
@@ -24,22 +35,18 @@ size_t Game::play()
     cout << "NEW GAME STARTED" << endl;
 #endif
 
+    addFigure();
+
     while (true)
     {
-        if (aFiguresForGame.empty())
-            aFiguresHistory.emplace_back(aFigureSize, aColorsCount);
-        else
-        {
-            aFiguresHistory.emplace_back(aFiguresForGame.back());
-            aFiguresForGame.pop_back();
-        }
-
 #ifdef TEST_PARAMS
         cout << DELIMITER << "New turn!" << endl << "current field is " << aField << endl;
 #endif
         aField.getNextStates(aFiguresHistory.back(), aNextStates);
 
+        addFigure();
         activityBeforeTurn();
+
         if (gameOver())
             break;
 

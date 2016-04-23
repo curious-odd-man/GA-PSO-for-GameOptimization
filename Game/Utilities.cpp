@@ -26,7 +26,12 @@ ostream& operator<<(ostream& os, const Field& f)
     {
         if (i % f.aWidth == 0)
             os << endl;
-        os << +f.aField[i] << ' ';
+        if (f.aField[i] == 0)
+            os << ". ";
+        else
+            os << string("\033[") << to_string(f.aField[i] + 30) << "m"     // set color
+                << to_string(f.aField[i]) 
+            << "\033[0m" << ' ';                                            // reset color
     }
     os << endl;
 
@@ -47,6 +52,7 @@ ostream& operator<<(ostream& os, const Field& f)
     os << "column heights: ";
     for (auto ch : f.aColumnHeights)
         os << ch << " ";
+    os << endl << "Utility: " << f.aUtility;
     os << endl;
     return os;
 }
@@ -56,6 +62,18 @@ ostream& operator<<(ostream& os, const Game& g)
     os << "Game: Score " << g.aScore << endl;
     if (g.aFiguresHistory.size())
         os << g.aFiguresHistory.back() << endl << g.aField;
+    return os;
+}
+
+ostream& operator<<(ostream& os, const DemonstrationGame& g)
+{
+    os << "Game: Score " << g.aScore << endl;
+    if (g.aFiguresHistory.size())
+        os << g.aFiguresHistory.back() << endl;
+    if (!g.gameOver())
+        os << *max_element(g.aNextStates.begin(), g.aNextStates.end());
+    else
+        os << endl << "\t\tGame Over!" << endl;
     return os;
 }
 

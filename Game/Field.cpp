@@ -40,12 +40,9 @@ Field& Field::operator=(const Field & field)
     return *this;
 }
 
-bool Field::operator<(const Field& f)
+bool Field::operator<(const Field& f) const
 {
-    if (aUtility < f.aUtility)
-        return true;
-    else
-        return false;
+    return aUtility < f.aUtility;
 }
 
 Field::~Field()
@@ -126,26 +123,33 @@ bool Field::markRemovable(unsigned char* mask)
 #ifdef TEST_PARAMS_TWO_IN_LINE
     cout << "Mark removable called" << endl;
 #endif
+    auto isReachable = [this](const unsigned char* start) -> bool
+    {
+        for (const unsigned char* cellPtr = start + aWidth; cellPtr <= start + REMOVABLE_SIZE * aWidth; cellPtr += aWidth)
+            if (cellPtr > aFieldRightBottomCorner || *cellPtr != EMPTY_CELL)
+                return true;
+        return false;
+    };
 
     // Test and mark for deletion
     auto testAndMark =
-            [this, &mask, &changed, &lastColor, &colorRepeats](const unsigned char* cellPtr, int didx)
+            [this, &mask, &changed, &lastColor, &colorRepeats, &isReachable](const unsigned char* start, int didx)
             {
-                if (*cellPtr != EMPTY_CELL)
+                if (*start != EMPTY_CELL)
                 {
-                    if (lastColor == *cellPtr)
+                    if (lastColor == *start)
                     {
-                        unsigned char* ptr_in_mask = mask + (cellPtr - aField);
+                        unsigned char* ptr_in_mask = mask + (start - aField);
                         ++colorRepeats;
                         if (colorRepeats == REMOVABLE_SIZE)
                         {
                             const int endIndex = didx * REMOVABLE_SIZE;
                             for (int i = 0; i != endIndex; i += didx)
-                            *(ptr_in_mask + i) = *(cellPtr + i);
+                            *(ptr_in_mask + i) = *(start + i);
                             changed = true;
                         }
                         else if (colorRepeats > REMOVABLE_SIZE)
-                        *ptr_in_mask = *cellPtr;
+                        *ptr_in_mask = *start;
                         else if (colorRepeats > 1)
                         {
 #ifdef TEST_PARAMS_TWO_IN_LINE
@@ -154,17 +158,21 @@ bool Field::markRemovable(unsigned char* mask)
                             const size_t y = offset / aWidth;
                             cout << "two of one color: " << x << " " << y << endl;
 #endif
-                            ++aTwoCellsCount;
-                            if (::in_range(aField, aFieldRightBottomCorner, cellPtr + didx * 2) && *(cellPtr + didx * 2) == 0)
-                            ++aTwoCellsOnTop;
-                            else if (::in_range(aField, aFieldRightBottomCorner, cellPtr - didx) && *(cellPtr - didx) == 0)
-                            ++aTwoCellsOnTop;
+                            const unsigned char* preCell = start - didx;
+                            const unsigned char* postCell = start + didx * 2;
+
+                            if (::in_range(aField, aFieldRightBottomCorner, postCell) && *postCell == EMPTY_CELL && isReachable(postCell))
+                                ++aTwoCellsOnTop;
+                            else if (::in_range(aField, aFieldRightBottomCorner, preCell) && *preCell == EMPTY_CELL && isReachable(preCell))
+                                ++aTwoCellsOnTop;
+                            else
+                                ++aTwoCellsCount;
                         }
                     }
                     else
                     {
                         colorRepeats = 1;
-                        lastColor = *cellPtr;
+                        lastColor = *start;
                     }
                 }
                 else
@@ -189,8 +197,8 @@ bool Field::markRemovable(unsigned char* mask)
         colorRepeats = 0;
         const unsigned char* lineEnd = lineStart + aWidth;
         // for each cell in a line
-        for (unsigned char* cellPtr = lineStart; cellPtr < lineEnd; ++cellPtr)
-            testAndMark(cellPtr, -1);
+        for (unsigned char* start = lineStart; start < lineEnd; ++start)
+            testAndMark(start, -1);
     }
 
 #ifdef TEST_PARAMS_TWO_IN_LINE
@@ -203,8 +211,8 @@ bool Field::markRemovable(unsigned char* mask)
         lastColor = EMPTY_CELL;
         colorRepeats = 0;
         // for each cell in column
-        for (unsigned char* cellPtr = columnPtr; cellPtr >= aField; cellPtr -= aWidth)
-            testAndMark(cellPtr, (int) aWidth);
+        for (unsigned char* start = columnPtr; start >= aField; start -= aWidth)
+            testAndMark(start, (int) aWidth);
     }
 
     if (aWidth < REMOVABLE_SIZE || aHeight < REMOVABLE_SIZE)  // can 3 in line be on diagonale?
@@ -226,12 +234,12 @@ bool Field::markRemovable(unsigned char* mask)
     cout << " ul-dr search " << endl;
 #endif
 
-    for (unsigned char * cellPtr = startPtr; cellPtr != endPtr;)
+    for (unsigned char * start = startPtr; start != endPtr;)
     {
-        testAndMark(cellPtr, -((int) aWidth + 1));
+        testAndMark(start, -((int) aWidth + 1));
 
-        if (cellPtr != diagEndPtr)
-            cellPtr += aWidth + 1;
+        if (start != diagEndPtr)
+            start += aWidth + 1;
         else
         {
             if (startPtr - aWidth < aField)
@@ -239,7 +247,7 @@ bool Field::markRemovable(unsigned char* mask)
             else
                 startPtr -= aWidth;
 
-            cellPtr = startPtr;
+            start = startPtr;
 
             if (diagEndPtr > aFieldLeftBottomCorner && diagEndPtr < aFieldRightBottomCorner)
                 ++diagEndPtr;
@@ -369,8 +377,8 @@ void Field::calculateUtility(size_t figureSize)
         { (double) aRemoved,                                                            // count of removed cells
                 (double) *max_element(aColumnHeights.begin(), aColumnHeights.end()),    // max column height
                 (double) columnHeightsSum / aWidth,                                     // average column height
-                (double) avgColumnDiff,                                                // column difference absolute sum
-                (double) aTwoCellsCount,                                       // Count of 2 cells with one color in row
+                (double) avgColumnDiff,                                                 // column difference absolute sum
+                (double) aTwoCellsCount,                                                // Count of 2 cells with one color in row
                 (double) aTwoCellsOnTop,       // Count of previous cells that are on top (can be remove with next turn)
                 (double) placesForFigure      // number of next states
             });
