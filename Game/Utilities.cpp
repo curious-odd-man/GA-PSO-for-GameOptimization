@@ -10,23 +10,30 @@
 #include "Common.hpp"
 #include "Chronometer.hpp"
 
+string getFigureColorText(int color)
+{
+    return string("\033[" + to_string(100 + color) + "m");
+}
+
+constexpr auto clearColorText = "\033[0m";
+constexpr auto UPPER_LEFT_CORNER = "\xC9";
+constexpr auto LOWER_LEFT_CORNER = "\xC8";
+constexpr auto UPPER_RIGHT_CORNER = "\xBB";
+constexpr auto LOWER_RIGHT_CORNER = "\xBC";
+constexpr auto HORIZONTAL_BORDER = "\xCD";
+constexpr auto VERTICAL_BORDER = "\xBA";
+
 ostream& operator<<(ostream& os, const Figure& f)
 {
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
-        os << string("\033[") << to_string(99 + f.aData[i]) << "m"     // set color
-        << "  " << "\033[0m";                                        // reset color
+        os << getFigureColorText(f.aData[i]) << "  " << clearColorText;
     return os;
 }
 
 ostream& operator<<(ostream& os, const Field& f)
 {
-    const string UPPER_LEFT_CORNER("\xC9");
-    const string LOWER_LEFT_CORNER("\xC8");
-    const string UPPER_RIGHT_CORNER("\xBB");
-    const string LOWER_RIGHT_CORNER("\xBC");
-    const string HORIZONTAL_BORDER("\xCD");
-    const string VERTICAL_BORDER("\xBA");
+    
     std::cout.setf(std::ios_base::dec, std::ios_base::basefield);
     os << "Field " << f.aWidth << "x" << f.aHeight << " size " << f.aFieldSize;
     os << endl << UPPER_LEFT_CORNER;
@@ -42,7 +49,7 @@ ostream& operator<<(ostream& os, const Field& f)
         if (f.aField[i] == 0)
             os << "  ";
         else
-            os << string("\033[") << to_string(100 + f.aField[i]) << "m  " << "\033[0m";
+            os << getFigureColorText(f.aField[i]) << "  " << clearColorText;
     }
 
     os << VERTICAL_BORDER << endl << LOWER_LEFT_CORNER;
