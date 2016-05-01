@@ -27,14 +27,20 @@ void DemonstrationGame::activityBeforeTurn()
 {
     ++aTurnIdx;
     if (aStopIdx != 0 && aTurnIdx < aStopIdx - 1)
+    {
+        if (gameOver())
+        {
+            cout << DELIMITER << "Turn " << aTurnIdx << endl;
+            Game::operator<<(cout) << *aUtilityEvaluator;
+        }
         return;     // skip unless reached required turn
+    }
+
     do
     {
         cout << DELIMITER << "Turn " << aTurnIdx << endl << *this << *aUtilityEvaluator;
         cout << "Options: l: lists utilities; s: print states; p: play to..." << endl;
-        int ch = cin.get();
-        cin.ignore();
-        switch (ch)
+        switch (cin.get())
         {
             case 'l':
                 printAllStatesUtilities();

@@ -21,7 +21,7 @@ public:
             aUtilitieEvaluators.back().emplace_back(evaluator);
     }
 
-    void evaluate_data()
+    void evaluateData()
     {
         size_t globalBest = 0;
         for (auto& evaluators : aUtilitieEvaluators)
@@ -37,6 +37,8 @@ public:
             for (auto& evaluator : evaluators)
                 aAllUtilities.back().emplace_back(evaluator.getUtility());
 
+            aAverageUtilities.emplace_back((double)accumulate(aAllUtilities.back().begin(), aAllUtilities.back().end(), (size_t)0, plus<size_t>()) / aAllUtilities.back().size());
+
             const vector<double>& multipliers = evaluators.back().getMultipliers();
             aBestMultipliers.resize(multipliers.size());
             for (size_t i = 0; i < aBestMultipliers.size(); ++i)
@@ -46,7 +48,7 @@ public:
 
     void createCharts()
     {
-        evaluate_data();
+        evaluateData();
 
         ofstream allUtilities;
         allUtilities.open(aName + "_allUtilities.log");
@@ -75,6 +77,14 @@ public:
         }
 
         bestMultipliers.close();
+
+        ofstream averageUtilities;
+        averageUtilities.open(aName + "_averageUtilities.log");
+
+        for (size_t j = 0; j < aAverageUtilities.size(); ++j)
+            averageUtilities << j << " " << aAverageUtilities[j] << endl;
+
+        averageUtilities.close();
     }
 
 private:
@@ -83,6 +93,7 @@ private:
     vector<size_t> aGlobalBestUtilities;
     vector<vector<size_t>> aAllUtilities;
     vector<vector<double>> aBestMultipliers;
+    vector<double> aAverageUtilities;
 
     string aName;
 };

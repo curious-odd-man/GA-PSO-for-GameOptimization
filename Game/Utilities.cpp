@@ -14,25 +14,41 @@ ostream& operator<<(ostream& os, const Figure& f)
 {
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
-        os << hex << (size_t)f.aData[i] << " ";
+        os << string("\033[") << to_string(99 + f.aData[i]) << "m"     // set color
+        << "  " << "\033[0m";                                        // reset color
     return os;
 }
 
 ostream& operator<<(ostream& os, const Field& f)
 {
+    const string UPPER_LEFT_CORNER("\xC9");
+    const string LOWER_LEFT_CORNER("\xC8");
+    const string UPPER_RIGHT_CORNER("\xBB");
+    const string LOWER_RIGHT_CORNER("\xBC");
+    const string HORIZONTAL_BORDER("\xCD");
+    const string VERTICAL_BORDER("\xBA");
     std::cout.setf(std::ios_base::dec, std::ios_base::basefield);
     os << "Field " << f.aWidth << "x" << f.aHeight << " size " << f.aFieldSize;
+    os << endl << UPPER_LEFT_CORNER;
+    for (size_t i = 0; i < f.aWidth * 2; ++i)
+        os << HORIZONTAL_BORDER;
+    os << UPPER_RIGHT_CORNER << endl << VERTICAL_BORDER;
+
     for (size_t i = 0; i < f.aFieldSize; ++i)
     {
-        if (i % f.aWidth == 0)
-            os << endl;
+        if (i && i % f.aWidth == 0)
+            os << VERTICAL_BORDER << endl << VERTICAL_BORDER;
+
         if (f.aField[i] == 0)
-            os << ". ";
+            os << "  ";
         else
-            os << string("\033[") << to_string(f.aField[i] + 30) << "m"     // set color
-                    << to_string(f.aField[i]) << "\033[0m" << ' ';                                        // reset color
+            os << string("\033[") << to_string(100 + f.aField[i]) << "m  " << "\033[0m";
     }
-    os << endl;
+
+    os << VERTICAL_BORDER << endl << LOWER_LEFT_CORNER;
+    for (size_t i = 0; i < f.aWidth * 2; ++i)
+        os << HORIZONTAL_BORDER;
+    os << LOWER_RIGHT_CORNER << endl;
 
     if (f.aFieldParameters.size())
     {
@@ -53,14 +69,6 @@ ostream& operator<<(ostream& os, const Field& f)
         os << ch << " ";
     os << endl << "Utility: " << f.aUtility;
     os << endl;
-    return os;
-}
-
-ostream& operator<<(ostream& os, const Game& g)
-{
-    os << "Game: Score " << g.aScore << endl;
-    if (g.aFiguresHistory.size())
-        os << g.aFiguresHistory.back() << endl << g.aField;
     return os;
 }
 

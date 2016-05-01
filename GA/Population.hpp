@@ -64,8 +64,9 @@ public:
         cout << DELIMITER << "GA optimization started..." << endl;
         ScientificData science("GA");
 #ifdef USE_PARALEL_OPTIMIZATION
-        vector<OptimizationGame> games(aPopulation.size(),
-                                       OptimizationGame(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount));
+        vector<OptimizationGame> games;
+        for (size_t i = 0; i < aPopulationDensity; ++i)
+            games.emplace_back(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 #else
         OptimizationGame game(nullptr, fieldWidth, fieldHeight, figureSize, colorsCount);
 #endif
@@ -75,7 +76,7 @@ public:
         {
 #ifdef USE_PARALEL_OPTIMIZATION
             vector < future < size_t >> future_results;
-            for (size_t j = 0; j < aPopulation.size(); ++j)
+            for (size_t j = 0; j < aPopulationDensity; ++j)
             {
                 games[j].setEvaluator(&aPopulation[j]);
                 future_results.push_back(
@@ -105,9 +106,10 @@ public:
                                  {
                                      return first.getUtility() < second.getUtility();
                                  });
-
+        
         cout << "GA optimization ended in " << Chronometer::duration_seconds(optimizationStart, Chronometer::now())
                 << endl;
+        cout << aSolution << endl;
         ::testSolution("GA", aSolution, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, 1);
 
         science.createCharts();

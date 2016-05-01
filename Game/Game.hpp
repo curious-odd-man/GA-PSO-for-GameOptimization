@@ -44,5 +44,5 @@ protected:
         return aNextStates.size() == 0;
     }
 
-    friend ostream& operator<<(ostream& os, const Game& g);
+    ostream& operator<<(ostream& os);
 };

@@ -7,10 +7,11 @@ using namespace std;
 
 #ifndef _DEBUG
 #   define USE_PARALEL_OPTIMIZATION
-
-#   include <thread>
-#   include <future>
 #endif
+
+#include <thread>
+#include <future>
+
 
 #include <vector>
 #include <cstdlib>

@@ -86,3 +86,10 @@ void Game::setFiguresForGame(istream& in)
     aFiguresForGame.pop_back();     // last is invalid
 }
 
+ostream& Game::operator<<(ostream& os)
+{
+    os << "Game: Score " << aScore << endl;
+    if (aFiguresHistory.size())
+        os << aFiguresHistory.back() << endl << aField;
+    return os;
+}
