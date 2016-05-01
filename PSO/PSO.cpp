@@ -168,7 +168,7 @@ void PSO::testSolution()
 void PSO::print()
 {
     cout << DELIMITER;
-    cout << "Optimization took " << Chronometer::duration_seconds(aOptimizationStart, aOptimizationEnd) << "s" << endl;
+    cout << "Optimization took " << Chronometer::duration(aOptimizationStart, aOptimizationEnd) << endl;
     cout << aGbest << endl << "creating charts now..." << endl;
     aScientificData.createCharts();
     cout << "creating charts done!" << endl;

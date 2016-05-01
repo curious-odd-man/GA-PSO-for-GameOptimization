@@ -107,7 +107,7 @@ public:
                                      return first.getUtility() < second.getUtility();
                                  });
         
-        cout << "GA optimization ended in " << Chronometer::duration_seconds(optimizationStart, Chronometer::now())
+        cout << "GA optimization ended in " << Chronometer::duration(optimizationStart, Chronometer::now())
                 << endl;
         cout << aSolution << endl;
         ::testSolution("GA", aSolution, numberOfSolutionTests, fieldWidth, fieldHeight, figureSize, colorsCount, 1);

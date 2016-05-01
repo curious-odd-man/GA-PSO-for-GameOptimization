@@ -168,11 +168,7 @@ void testSolution(string algo, UtilityEvaluator& testObject, size_t count, size_
     cout << "\t max:" << best << endl;
     cout << "\t avg:"
             << ((double)accumulate(results.begin(), results.end(), (size_t)0, plus<size_t>()) / results.size()) << endl;
-    cout << "\t duration: " << Chronometer::duration_seconds(testStart, testEnd) << "s" << endl;
+    cout << "\t duration: " << Chronometer::duration(testStart, testEnd) << endl;
 
-    if (best - worst > 40000)
-    {
-        cout << "Alert!! Epic difference!!" << endl;
-        min_element(games.begin(), games.end())->dumpFiguresHistory("figures" + to_string(best - worst) + ".log");
-    }
+    min_element(games.begin(), games.end())->dumpFiguresHistory("figures" + to_string(best - worst) + ".log");
 }
