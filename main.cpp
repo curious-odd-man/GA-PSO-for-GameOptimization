@@ -44,6 +44,20 @@ void printHelp()
 
 int main(int argc, char** argv)
 {
+    srand((unsigned int) time(NULL));
+    cout << endl << endl <<
+            "   Oo                   o                            \n"
+            "  o  O                 O                    o        \n"
+            " O    o                o                             \n"
+            "oOooOoOo               O                             \n"
+            "o      O 'OoOo. .oOoO' o  .oOo. .oOo. .oOo  O  .oOoO'\n"
+            "O      o  o   O O   o  O  OooO' O   o `Ooo. o  O   o \n"
+            "o      O  O   o o   O  o  O     o   O     O O  o   O \n"
+            "O.     O  o   O `OoO'o Oo `OoO' oOoO' `OoO' o' `OoO'o\n"
+            "                                O                    \n"
+            "                                o'                   \n"
+    << endl;
+
     /* Set up DEFAULTS parameters */
     string algorithm("BOTH");
     size_t iterations = DEFAULT_ITERATION_COUNT;
@@ -102,11 +116,11 @@ int main(int argc, char** argv)
             case 't':
                 value >> numberOfSolutionTests;
                 break;
-            case 'w':
-                value >> fieldWidth;
-                break;
             case 'v':
                 value >> boolalpha >> visualGame;
+                break;
+            case 'w':
+                value >> fieldWidth;
                 break;
             default:
                 break;

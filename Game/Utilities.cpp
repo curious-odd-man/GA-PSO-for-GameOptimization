@@ -16,18 +16,24 @@ string getFigureColorText(int color)
 }
 
 constexpr auto clearColorText = "\033[0m";
-constexpr auto UPPER_LEFT_CORNER = "\xC9";
-constexpr auto LOWER_LEFT_CORNER = "\xC8";
-constexpr auto UPPER_RIGHT_CORNER = "\xBB";
-constexpr auto LOWER_RIGHT_CORNER = "\xBC";
-constexpr auto HORIZONTAL_BORDER = "\xCD";
-constexpr auto VERTICAL_BORDER = "\xBA";
+constexpr auto UPPER_LEFT_CORNER = "\u2554";    //"\xC9";
+constexpr auto LOWER_LEFT_CORNER = "\u255A";    //"\xC8";
+constexpr auto UPPER_RIGHT_CORNER = "\u2557";   //"\xBB";
+constexpr auto LOWER_RIGHT_CORNER = "\u255D";   //"\xBC";
+constexpr auto HORIZONTAL_BORDER = "\u2550";    //"\xCD";
+constexpr auto VERTICAL_BORDER = "\u2551";      //"\xBA";
 
 ostream& operator<<(ostream& os, const Figure& f)
 {
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
-        os << getFigureColorText(f.aData[i]) << "  " << clearColorText;
+    {
+        if (&os == &cout)
+            os << getFigureColorText(f.aData[i]) << "  " << clearColorText;
+        else
+            os << to_string(f.aData[i]) << " ";
+    }
+
     return os;
 }
 
@@ -87,7 +93,7 @@ ostream& operator<<(ostream& os, const DemonstrationGame& g)
     if (!g.gameOver())
         os << *max_element(g.aNextStates.begin(), g.aNextStates.end());
     else
-        os << endl << "\t\tGame Over!" << endl;
+        os << endl << "\t\t\tGame Over!\n" << endl;
     return os;
 }
 

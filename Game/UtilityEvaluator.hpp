@@ -29,8 +29,10 @@ public:
     }
 
     UtilityEvaluator(size_t countOfParams)
-            : aMultipliers(countOfParams, (double)rand() / RAND_MAX * 2 - 1), aUtility(0)
+            : aMultipliers(countOfParams), aUtility(0)
     {
+        for (auto& multiplier : aMultipliers)
+            multiplier = (double)rand() / RAND_MAX * 2 - 1;
     }
 
     virtual ~UtilityEvaluator()

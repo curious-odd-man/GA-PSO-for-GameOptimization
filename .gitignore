@@ -1,57 +1,20 @@
-# Compiled Object files
-*.slo
-*.lo
-*.o
-*.obj
-
-# Precompiled Headers
-*.gch
-*.pch
-
-# Compiled Dynamic libraries
-*.so
-*.dylib
-*.dll
-
-# Fortran module files
-*.mod
-
-# Compiled Static libraries
-*.lai
-*.la
-*.a
-*.lib
-
-# Executables
-*.exe
-*.out
-*.app
-
-# Output files
-*.log
-
-# Directories
-Release/
-Debug/
-**/.settings/
-
-# Eclipse/VS project files
-**/.cproject
-**/.project
+# Visual Studio project files
 *.sdf
 *.suo
 *.psess
 *.vcxproj.user
 *.vsp
-*.stackdump
 *.tlog
 *.*db
 *.ilk
 
-# *.sln
-# *.vcxproj
-# *.vcxproj.filters
+# Crash reports
+*.stackdump
 
+# Build Directories
+Release/
+Debug/
 
-
+# Output files
+*.log
 

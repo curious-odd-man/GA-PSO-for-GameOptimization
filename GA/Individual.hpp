@@ -23,7 +23,7 @@ public:
     /* Crossover */
     pair<Individual, Individual> operator+(const Individual& other);
 
-    /* Clone*/
+    /* Clone */
     Individual& operator=(const Individual& other);
 
     /* Print */
@@ -43,7 +43,7 @@ private:
 
 /* PUBLIC */
 
-/* CROSSOVER */
+/* Crossover */
 template<typename GeneType>
 pair<Individual<GeneType>, Individual<GeneType>> Individual<GeneType>::operator+(const Individual& other)
 {
@@ -51,7 +51,7 @@ pair<Individual<GeneType>, Individual<GeneType>> Individual<GeneType>::operator+
     return pair<Individual, Individual>(childs.first, childs.second);
 }
 
-/* CLONE */
+/* Clone */
 template<typename GeneType>
 Individual<GeneType>& Individual<GeneType>::operator=(const Individual& other)
 {

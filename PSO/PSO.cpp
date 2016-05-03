@@ -9,8 +9,6 @@ PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFin
                 fieldWidth), aFieldHeight(fieldHeight), aFigureSize(figureSize), aColorsCount(colorsCount), aScientificData(
                 "PSO")
 {
-    srand((unsigned int)time(NULL));
-
     default_random_engine generator;
     uniform_real_distribution<double> distribution(-1.0, 1.0);
 

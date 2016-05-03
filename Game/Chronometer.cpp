@@ -34,7 +34,8 @@ namespace Chronometer
         };
 
         size_t majorUnits = (size_t)duration_milliseconds(t1, t2);
-        int index = 0;
+
+        size_t index = 0;
         vector<string> times(1, to_string(majorUnits) + units[index].first);
 
         while (++index < units.size())

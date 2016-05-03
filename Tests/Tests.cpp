@@ -330,8 +330,6 @@ void testField()
 
 void test()
 {
-    srand((unsigned int) time(NULL));      // note this need to be called once for a program
-
     testFigure();
     cout << "figure ended" << endl;
     testField();
