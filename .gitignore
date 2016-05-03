@@ -39,10 +39,8 @@ Debug/
 **/.cproject
 **/.project
 *.sdf
-*.sln
 *.suo
 *.psess
-*.vcxproj
 *.vcxproj.user
 *.vcxproj.filters
 *.vsp
@@ -50,6 +48,10 @@ Debug/
 *.tlog
 *.*db
 *.ilk
+
+# *.sln
+# *.vcxproj
+
 
 
 
