@@ -42,7 +42,6 @@ Debug/
 *.suo
 *.psess
 *.vcxproj.user
-*.vcxproj.filters
 *.vsp
 *.stackdump
 *.tlog
@@ -51,6 +50,7 @@ Debug/
 
 # *.sln
 # *.vcxproj
+# *.vcxproj.filters
 
 
 
