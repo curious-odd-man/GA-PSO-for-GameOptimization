@@ -16,12 +16,22 @@ string getFigureColorText(int color)
 }
 
 constexpr auto clearColorText = "\033[0m";
-constexpr auto UPPER_LEFT_CORNER = "\u2554";    //"\xC9";
-constexpr auto LOWER_LEFT_CORNER = "\u255A";    //"\xC8";
-constexpr auto UPPER_RIGHT_CORNER = "\u2557";   //"\xBB";
-constexpr auto LOWER_RIGHT_CORNER = "\u255D";   //"\xBC";
-constexpr auto HORIZONTAL_BORDER = "\u2550";    //"\xCD";
-constexpr auto VERTICAL_BORDER = "\u2551";      //"\xBA";
+#ifdef _WIN32
+constexpr auto UPPER_LEFT_CORNER =  "\xC9";
+constexpr auto LOWER_LEFT_CORNER =  "\xC8";
+constexpr auto UPPER_RIGHT_CORNER = "\xBB";
+constexpr auto LOWER_RIGHT_CORNER = "\xBC";
+constexpr auto HORIZONTAL_BORDER =  "\xCD";
+constexpr auto VERTICAL_BORDER =    "\xBA";
+
+#else
+constexpr auto UPPER_LEFT_CORNER = "\u2554"; 
+constexpr auto LOWER_LEFT_CORNER = "\u255A"; 
+constexpr auto UPPER_RIGHT_CORNER = "\u2557";
+constexpr auto LOWER_RIGHT_CORNER = "\u255D";
+constexpr auto HORIZONTAL_BORDER = "\u2550"; 
+constexpr auto VERTICAL_BORDER = "\u2551";   
+#endif
 
 ostream& operator<<(ostream& os, const Figure& f)
 {
