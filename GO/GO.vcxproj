@@ -142,11 +142,13 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\GA;$(MSBuildProjectDirectory)\..\PSO;$(IncludePath)</IncludePath>
     <SourcePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\PSO;$(MSBuildProjectDirectory)\..\GA;$(SourcePath)</SourcePath>
+    <TargetName>Analepsia</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='debyg test|x64'">
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\GA;$(MSBuildProjectDirectory)\..\PSO;$(IncludePath)</IncludePath>
     <SourcePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\PSO;$(MSBuildProjectDirectory)\..\GA;$(SourcePath)</SourcePath>
+    <TargetName>Analepsia</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -157,6 +159,7 @@
     <LinkIncremental>false</LinkIncremental>
     <IncludePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\GA;$(MSBuildProjectDirectory)\..\PSO;$(IncludePath)</IncludePath>
     <SourcePath>$(MSBuildProjectDirectory)\..\Game;$(MSBuildProjectDirectory)\..\PSO;$(MSBuildProjectDirectory)\..\GA;$(SourcePath)</SourcePath>
+    <TargetName>Analepsia</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
