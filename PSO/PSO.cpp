@@ -15,6 +15,7 @@ PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFin
     uniform_real_distribution<double> distribution(-1.0, 1.0);
 
     // PSO initialization
+    aParticles.reserve(aSwarmSize);
     for (size_t i = 0; i < aSwarmSize; ++i)
     {
         vector<double> init;
@@ -22,77 +23,56 @@ PSO::PSO(size_t numberOfParticles, size_t numberOfIterations, size_t numberOfFin
             init.emplace_back(distribution(generator));
 
         // TODO: change when game is reusable
-        PsoParticle * p = new PsoParticle(init);
-        aGames.push_back(
-            { p, new OptimizationGame(p, aFieldWidth, aFieldHeight, aFigureSize, aColorsCount) });
+        aParticles.emplace_back(init);
+        aGames.emplace_back(&aParticles.back(), aFieldWidth, aFieldHeight, aFigureSize, aColorsCount);
     }
 }
 
 PSO::~PSO()
 {
-    for (auto p : aGames)
-    {
-        delete p.game;
-        delete p.evaluator;
-    }
 }
 
 void PSO::test()
 {
-    auto compare_particles = [](const pso_game_t& a, const pso_game_t& b) -> bool
-    {
-        return a.evaluator->getUtility() < b.evaluator->getUtility();
-    };
-
     int test[] =
         { -1, 0, 1, 13, 66 };
 
     for (int j = 0; j < 5; ++j)
     {
         ScientificData log(string("PSO_test") + to_string(j));
-        vector<pso_game_t> games;
+        vector<OptimizationGame> games;
+        vector<PsoParticle> particles;
+
+        for (auto& p : aParticles)
+            particles.emplace_back(p);
         for (auto& g : aGames)
-            games.push_back(
-                { new PsoParticle(*g.evaluator), new OptimizationGame(*g.game) });
+            games.emplace_back(g);
+
         PsoParticle gbest;
-        size_t iterations = 100;
+        size_t iterations = aIterationCount;
 
         do
         {
-            for (size_t i = 0; i < games.size(); ++i)
-                games[i].evaluator->setUtility(test_game::getUtility(games[i].evaluator->getMultipliers(), test[j]));
+            for (auto& p : particles)
+                p.setUtility(test_algorithm::getUtility(p.getMultipliers(), test[j]));
 
-            PsoParticle pbest = *(max_element(games.begin(), games.end(), compare_particles)->evaluator);
+            PsoParticle pbest = *(max_element(particles.begin(), particles.end()));
             if (gbest < pbest)
                 gbest = pbest;    // update global best
-            vector<UtilityEvaluator> allEvaluators;
-            for (size_t i = 0; i < games.size(); ++i)
-                allEvaluators.push_back(*games[i].evaluator);
 
-            log.addStatisticalData(allEvaluators);
+            log.addStatisticalData(vector < UtilityEvaluator >(particles.begin(), particles.end()));
 
             // move particles
-            for (auto g : games)
-                g.evaluator->move(gbest, pbest);
+            for (auto& p : particles)
+                p.move(gbest, pbest);
         } while (--iterations > 0);
         cout << "Test " << test[j] << " " << gbest << endl;
-        for (auto p : games)
-        {
-            delete p.game;
-            delete p.evaluator;
-        }
         log.createCharts();
     }
-
 }
 
 void PSO::optimize()
 {
-    auto compare_particles = [](const pso_game_t& a, const pso_game_t& b) -> bool
-    {
-        return a.evaluator->getUtility() < b.evaluator->getUtility();
-    };
-
     aOptimizationStart = Chronometer::now();
 
     do
@@ -102,24 +82,21 @@ void PSO::optimize()
         vector < future < size_t >> future_results;
         for (size_t i = 0; i < aGames.size(); ++i)
             future_results.push_back(
-                    async(&OptimizationGame::play, aGames[i].game, OptimizationGame::DEFAULT_GAMES_COUNT));
+                    async(&OptimizationGame::play, &aGames[i], OptimizationGame::DEFAULT_GAMES_COUNT));
 
         for (auto& r : future_results)
             r.get();
 #else
-        for (size_t i = 0; i < aGames.size(); ++i)
-        aGames[i].game->play();
+        for (auto& g : aGames)
+            g.play();
 #endif
 
-        aPbest = *(max_element(aGames.begin(), aGames.end(), compare_particles)->evaluator);
+        aPbest = *(max_element(aParticles.begin(), aParticles.end()));
         if (aGbest < aPbest)
-            aGbest = aPbest;    // update global best
+            aGbest = aPbest;
 
-        vector<UtilityEvaluator> allEvaluators;
-        for (size_t i = 0; i < aGames.size(); ++i)
-            allEvaluators.push_back(*aGames[i].evaluator);
-
-        aScientificData.addStatisticalData(allEvaluators);
+        // TODO: don't create vector to copy data
+        aScientificData.addStatisticalData(vector < UtilityEvaluator >(aParticles.begin(), aParticles.end()));
 
         // TODO: this should be moved into g->play();
         int c = 0;
@@ -152,8 +129,8 @@ void PSO::optimize()
             }
         }
         // move particles 
-        for (auto g : aGames)
-            g.evaluator->move(aGbest, aPbest);
+        for (auto& p : aParticles)
+            p.move(aGbest, aPbest);
 
     } while (--aIterationCount > 0);
 

@@ -15,6 +15,7 @@ public:
     friend ostream& operator<<(ostream& os, const PsoParticle& u);
 
 private:
+
     vector<double> aVelocity;
 
     double aC1;

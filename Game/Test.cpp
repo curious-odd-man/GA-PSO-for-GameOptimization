@@ -1,7 +1,7 @@
 #include "Common.hpp"
 #include "Test.hpp"
 
-size_t test_game::getUtility(const vector<double>& multipliers, int hz)
+size_t test_algorithm::getUtility(const vector<double>& multipliers, int hz)
 {
     double sum = accumulate(multipliers.begin(), multipliers.end(), (double)0, plus<double>());
     double max = 0;

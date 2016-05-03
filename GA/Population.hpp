@@ -36,7 +36,7 @@ public:
             for (size_t i = 0; i < aGenerations; ++i)
             {
                 for (auto& individual : aPopulation)
-                    individual.setUtility(test_game::getUtility(individual.getMultipliers(), test[j]));
+                    individual.setUtility(test_algorithm::getUtility(individual.getMultipliers(), test[j]));
 
                 log.addStatisticalData(vector < UtilityEvaluator > (aPopulation.begin(), aPopulation.end()));
 

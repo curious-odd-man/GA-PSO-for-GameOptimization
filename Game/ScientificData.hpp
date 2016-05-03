@@ -16,9 +16,7 @@ public:
 
     inline void addStatisticalData(const vector<UtilityEvaluator>& evaluators)
     {
-        aUtilitieEvaluators.emplace_back();
-        for (auto evaluator : evaluators)
-            aUtilitieEvaluators.back().emplace_back(evaluator);
+        aUtilitieEvaluators.emplace_back(evaluators);
     }
 
     void evaluateData()

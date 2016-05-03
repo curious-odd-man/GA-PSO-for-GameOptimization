@@ -29,13 +29,9 @@ public:
 #endif
 
 private:
-    typedef struct
-    {
-        PsoParticle* evaluator;
-        OptimizationGame* game;
-    } pso_game_t;
 
-    vector<pso_game_t> aGames;
+    vector<OptimizationGame> aGames;
+    vector<PsoParticle> aParticles;
 
     PsoParticle aPbest;
     PsoParticle aGbest;
