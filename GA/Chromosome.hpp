@@ -89,7 +89,7 @@ pair<Chromosome<GeneType>, Chromosome<GeneType>> Chromosome<GeneType>::operator+
 
         // AB|CDEF + GH|IJKL = AB|IJKL & CDEF|GH
         genes1[i] = aGenes[i];
-        genes2[aGeneCount - algorithm + i] = aGenes[i];
+        genes2[aGeneCount - algorithm + i] = other.aGenes[i];
     }
 
     for (size_t i = algorithm; i < aGeneCount; i++)
