@@ -83,15 +83,26 @@ pair<Chromosome<GeneType>, Chromosome<GeneType>> Chromosome<GeneType>::operator+
 
     for (size_t i = 0; i < algorithm; i++)
     {
+        // AB|CDEF + GH|IJKL = AB|IJKL & GH|CDEF
+        //genes1[i] = aGenes[i];
+        //genes2[i] = other.aGenes[i];
+
+        // AB|CDEF + GH|IJKL = AB|IJKL & CDEF|GH
         genes1[i] = aGenes[i];
-        genes2[i] = other.aGenes[i];
+        genes2[aGeneCount - algorithm + i] = aGenes[i];
     }
 
     for (size_t i = algorithm; i < aGeneCount; i++)
     {
+        // AB|CDEF + GH|IJKL = AB|IJKL & GH|CDEF
+        //genes1[i] = other.aGenes[i];
+        //genes2[i] = aGenes[i];
+
+        // AB|CDEF + GH|IJKL = AB|IJKL & CDEF|GH
         genes1[i] = other.aGenes[i];
-        genes2[i] = aGenes[i];
+        genes2[i - algorithm] = aGenes[i];
     }
+
 
     return pair<Chromosome<GeneType>, Chromosome<GeneType>>(++Chromosome(aGeneCount, genes1),
                                                             ++Chromosome(aGeneCount, genes2));

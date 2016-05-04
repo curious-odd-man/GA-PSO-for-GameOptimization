@@ -40,6 +40,7 @@ private:
 
     static const double MUTATION_PROBABILITY;
     static const double MUTATION_RESUS;
+    static const double MUTATION_STRENGTH;
 
     /* Randomizer */
     GeneType getRandomValue();
@@ -50,9 +51,11 @@ private:
 /* PRIVATE */
 
 template<typename GeneType>
-const double Gene<GeneType>::MUTATION_PROBABILITY = 0.01;
+const double Gene<GeneType>::MUTATION_PROBABILITY = 0.05;
 template<typename GeneType>
 const double Gene<GeneType>::MUTATION_RESUS = 0.5;
+template<typename GeneType>
+const double Gene<GeneType>::MUTATION_STRENGTH = 0.1;
 
 /* Randomizer */
 
@@ -90,7 +93,7 @@ Gene<GeneType>& Gene<GeneType>::operator++()
     if (getMutationProbability() > MUTATION_PROBABILITY)
         return *this;
 
-    aValue = (getMutationResus() > MUTATION_RESUS ? 1 : -1) * aValue * 0.1; // FIXME Magic numbers
+    aValue += (getMutationResus() > MUTATION_RESUS ? 1 : -1) * aValue * MUTATION_STRENGTH;
 
     aValue = aValue < aMinValue ? aMinValue : aValue;
     aValue = aValue > aMaxValue ? aMaxValue : aValue;
