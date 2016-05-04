@@ -41,6 +41,40 @@ public:
             aBestMultipliers.resize(multipliers.size());
             for (size_t i = 0; i < aBestMultipliers.size(); ++i)
                 aBestMultipliers[i].emplace_back(multipliers[i]);
+
+
+            vector<double> coefficientSums(multipliers.size());
+            // calculate sums
+            for (auto& e : evaluators)
+            {
+                const vector<double>& coef = e.getMultipliers();
+                for (size_t i = 0; i < coef.size(); ++i)
+                    coefficientSums[i] += coef[i];
+            }
+
+            // calculate average
+            for (auto& sum : coefficientSums)
+                sum /= evaluators.size();
+
+            // calculate MSE
+            // for each coefficien - vector
+            aCoefficientDifferences.resize(multipliers.size());
+            for (auto& vec : aCoefficientDifferences)
+                vec.emplace_back(); // add one new element to each vector - another iteration
+
+            for (auto& e : evaluators)
+            {
+                const vector<double>& coef = e.getMultipliers();
+                for (size_t i = 0; i < coef.size(); ++i)
+                {
+                    const double difference = (coefficientSums[i] - coef[i]) * 100;  // * 100, cause 0.2*0.2 < 0.2, but 2*2>2
+                    aCoefficientDifferences[i].back() += difference * difference;
+                }
+            }
+
+            for (auto& vec : aCoefficientDifferences)
+                vec.back() /= evaluators.size();
+
         }
     }
 
@@ -83,6 +117,13 @@ public:
             averageUtilities << j << " " << aAverageUtilities[j] << endl;
 
         averageUtilities.close();
+
+        ofstream coefMse;
+        coefMse.open(aName + "_coefMse.log");
+        for (size_t j = 0; j < aCoefficientDifferences.size(); ++j)
+            for (size_t i = 0; i < aCoefficientDifferences[j].size(); ++i)
+                coefMse << j << " " << i << " " << aCoefficientDifferences[j][i] << endl;
+        coefMse.close();
     }
 
 private:
@@ -92,6 +133,7 @@ private:
     vector<vector<size_t>> aAllUtilities;
     vector<vector<double>> aBestMultipliers;
     vector<double> aAverageUtilities;
+    vector<vector<double>> aCoefficientDifferences;
 
     string aName;
 };
