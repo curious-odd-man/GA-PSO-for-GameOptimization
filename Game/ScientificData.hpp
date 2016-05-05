@@ -43,38 +43,23 @@ public:
                 aBestMultipliers[i].emplace_back(multipliers[i]);
 
 
-            vector<double> coefficientSums(multipliers.size());
-            // calculate sums
-            for (auto& e : evaluators)
-            {
-                const vector<double>& coef = e.getMultipliers();
-                for (size_t i = 0; i < coef.size(); ++i)
-                    coefficientSums[i] += coef[i];
-            }
+            aEvaluatorsDistances.emplace_back(0.0);
+            // for each evaluator
+			for (auto itr1 = evaluators.begin(); itr1 != evaluators.end(); ++itr1)
+			{
+				// with each other evaluator
+				for (auto itr2 = itr1; itr2 != evaluators.end(); ++itr2)
+				{
+					const vector<double>& mult1 = itr1->getMultipliers();
+					const vector<double>& mult2 = itr2->getMultipliers();
 
-            // calculate average
-            for (auto& sum : coefficientSums)
-                sum /= evaluators.size();
-
-            // calculate MSE
-            // for each coefficien - vector
-            aCoefficientDifferences.resize(multipliers.size());
-            for (auto& vec : aCoefficientDifferences)
-                vec.emplace_back(); // add one new element to each vector - another iteration
-
-            for (auto& e : evaluators)
-            {
-                const vector<double>& coef = e.getMultipliers();
-                for (size_t i = 0; i < coef.size(); ++i)
-                {
-                    const double difference = (coefficientSums[i] - coef[i]) * 100;  // * 100, cause 0.2*0.2 < 0.2, but 2*2>2
-                    aCoefficientDifferences[i].back() += difference * difference;
-                }
-            }
-
-            for (auto& vec : aCoefficientDifferences)
-                vec.back() /= evaluators.size();
-
+					double sumOfSquares = 0.0;
+					for (auto m1 = mult1.begin(), m2 = mult2.begin(); m1 != mult1.end(); ++m1, ++m2)
+						sumOfSquares += (m1 - m2) * (m1 - m2);
+					// calculate distance
+					aEvaluatorsDistances.back() += sqrt(sumOfSquares);
+				}
+			}
         }
     }
 
@@ -118,12 +103,11 @@ public:
 
         averageUtilities.close();
 
-        ofstream coefMse;
-        coefMse.open(aName + "_coefMse.log");
-        for (size_t j = 0; j < aCoefficientDifferences.size(); ++j)
-            for (size_t i = 0; i < aCoefficientDifferences[j].size(); ++i)
-                coefMse << j << " " << i << " " << aCoefficientDifferences[j][i] << endl;
-        coefMse.close();
+        ofstream coefDistances;
+        coefDistances.open(aName + "_coefDistances.log");
+        for (size_t j = 0; j < aEvaluatorsDistances.size(); ++j)
+            coefDistances << j << " " << aEvaluatorsDistances[j] << endl;
+        coefDistances.close();
     }
 
 private:
@@ -133,7 +117,7 @@ private:
     vector<vector<size_t>> aAllUtilities;
     vector<vector<double>> aBestMultipliers;
     vector<double> aAverageUtilities;
-    vector<vector<double>> aCoefficientDifferences;
+    vector<double> aEvaluatorsDistances;
 
     string aName;
 };
