@@ -1,22 +1,59 @@
-#ifndef _WIN32
+#ifdef _WIN32
+#include <conio.h>
+#include <windows.h>
+#else
 #include <sys/select.h>
 #include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
-#else
-#include <conio.h>
 #endif
 
 #include "Common.hpp"
 #include "Chronometer.hpp"
 
-string getFigureColorText(int color)
+bool colorsSupported(size_t colorsCount)
 {
-    return string("\033[" + to_string(100 + color) + "m");
+    if (colorsCount <= 7)
+        return true;
+    else
+        return false;
 }
 
-constexpr auto clearColorText = "\033[0m";
 #ifdef _WIN32
+
+#define clearColorText resetColor()
+
+string resetColor()
+{
+    SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED);
+    return "";
+}
+
+string getFigureColorText(int color)
+{
+    static const unsigned colors[] = {
+        BACKGROUND_INTENSITY | BACKGROUND_BLUE,
+        BACKGROUND_INTENSITY | BACKGROUND_GREEN,
+        BACKGROUND_INTENSITY | BACKGROUND_RED,
+        BACKGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_GREEN,
+        BACKGROUND_INTENSITY | BACKGROUND_BLUE | BACKGROUND_RED,
+        BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_RED,
+        BACKGROUND_INTENSITY | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_BLUE,
+        BACKGROUND_RED,
+    };
+
+    if (color > 0 && color < (sizeof(colors) / sizeof(unsigned)))
+    {
+        SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), colors[color]);
+        return "";
+    }
+    else
+        return to_string(color);
+
+    
+}
+
+
 constexpr auto UPPER_LEFT_CORNER =  "\xC9";
 constexpr auto LOWER_LEFT_CORNER =  "\xC8";
 constexpr auto UPPER_RIGHT_CORNER = "\xBB";
@@ -25,6 +62,15 @@ constexpr auto HORIZONTAL_BORDER =  "\xCD";
 constexpr auto VERTICAL_BORDER =    "\xBA";
 
 #else
+
+constexpr auto clearColorText = "\033[0m";
+
+string getFigureColorText(int color)
+{
+    return string("\033[" + to_string(100 + color) + "m");
+}
+
+
 constexpr auto UPPER_LEFT_CORNER = "\u2554"; 
 constexpr auto LOWER_LEFT_CORNER = "\u255A"; 
 constexpr auto UPPER_RIGHT_CORNER = "\u2557";
@@ -38,8 +84,11 @@ ostream& operator<<(ostream& os, const Figure& f)
     os << "Figure: ";
     for (size_t i = 0; i < f.aSize; ++i)
     {
-        if (&os == &cout)
-            os << getFigureColorText(f.aData[i]) << "  " << clearColorText;
+        if (&os == &cout && colorsSupported(f.aColorsCount))
+        {
+            os << getFigureColorText(f.aData[i]) << "  ";
+            os << clearColorText;
+        }
         else
             os << to_string(f.aData[i]) << " ";
     }
@@ -64,8 +113,13 @@ ostream& operator<<(ostream& os, const Field& f)
 
         if (f.aField[i] == 0)
             os << "  ";
-        else
-            os << getFigureColorText(f.aField[i]) << "  " << clearColorText;
+        else if (&os == &cout && colorsSupported(f.aField[i]))
+        {
+            os << getFigureColorText(f.aField[i]) << "  ";
+            os << clearColorText;
+        }
+        else 
+            os << to_string(f.aField[i]) << " ";
     }
 
     os << VERTICAL_BORDER << endl << LOWER_LEFT_CORNER;
