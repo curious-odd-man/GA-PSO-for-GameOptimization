@@ -10,10 +10,10 @@
 NotebookFileLineBreakTest
 NotebookFileLineBreakTest
 NotebookDataPosition[       158,          7]
-NotebookDataLength[     16050,        375]
-NotebookOptionsPosition[     15582,        354]
-NotebookOutlinePosition[     15927,        369]
-CellTagsIndexPosition[     15884,        366]
+NotebookDataLength[     15965,        370]
+NotebookOptionsPosition[     15497,        349]
+NotebookOutlinePosition[     15842,        364]
+CellTagsIndexPosition[     15799,        361]
 WindowFrame->Normal*)
 
 (* Beginning of Notebook Content *)
@@ -58,7 +58,7 @@ Cell[BoxData[
       "\[IndentingNewLine]", ";", "\[IndentingNewLine]", 
       "\[IndentingNewLine]", 
       RowBox[{
-       RowBox[{"ListPointPlot3D", "[", 
+       RowBox[{"ListPlot", "[", 
         RowBox[{
          RowBox[{"Import", "[", 
           RowBox[{
@@ -67,19 +67,15 @@ Cell[BoxData[
              RowBox[{
               RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
               RowBox[{"StringJoin", "[", 
-               RowBox[{"i", ",", "\"\<_coefMse.log\>\""}], "]"}]}], "}"}], 
-            "]"}], ",", " ", "\"\<Table\>\""}], "]"}], ",", " ", 
+               RowBox[{"i", ",", "\"\<_coefDistances.log\>\""}], "]"}]}], 
+             "}"}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], ",", " ", 
          RowBox[{"PlotRange", "\[Rule]", " ", "All"}], ",", " ", 
-         RowBox[{"PlotLabel", "\[Rule]", " ", 
+         RowBox[{"PlotLabel", " ", "\[Rule]", " ", 
           RowBox[{"StringJoin", "[", 
-           RowBox[{"i", ",", "\"\< all utilities\>\""}], "]"}]}], ",", " ", 
-         RowBox[{"AxesLabel", "\[Rule]", 
-          RowBox[{"{", 
-           RowBox[{
-           "\"\<Coefficient\>\"", ",", " ", "\"\<Iteration\>\"", ",", 
-            "\"\<MSE\>\""}], "}"}]}]}], "]"}], " ", "//", " ", "Print"}], 
+           RowBox[{"i", ",", "\"\< solution distances\>\""}], "]"}]}]}], 
+        "]"}], "  ", "//", " ", "Print"}], "\[IndentingNewLine]", 
       "\[IndentingNewLine]", ";", "\[IndentingNewLine]", 
-      "\[IndentingNewLine]", 
+      "\[IndentingNewLine]", "\[IndentingNewLine]", 
       RowBox[{
        RowBox[{"ListPlot", "[", 
         RowBox[{
@@ -185,7 +181,8 @@ Cell[BoxData[
    3.6710920116851544`*^9, 3.671092033459738*^9}, {3.671092350692888*^9, 
    3.671092398285881*^9}, {3.6710924352054353`*^9, 3.671092438730352*^9}, {
    3.671372416066862*^9, 3.6713724421829624`*^9}, {3.671372948007517*^9, 
-   3.6713729496198497`*^9}}],
+   3.6713729496198497`*^9}, {3.6714577321579866`*^9, 3.67145777159076*^9}, {
+   3.671457903932958*^9, 3.6714579183051777`*^9}}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -193,7 +190,9 @@ Cell[BoxData[
  CellChangeTimes->{
   3.6710919547238617`*^9, {3.671091987772052*^9, 3.6710920383532677`*^9}, 
    3.6710921676175947`*^9, 3.671092401500875*^9, 3.671092440410862*^9, 
-   3.671372446846681*^9, 3.6713740009241*^9, 3.6713742681833334`*^9}]
+   3.671372446846681*^9, 3.6713740009241*^9, 3.6713742681833334`*^9, 
+   3.671457775702196*^9, {3.671457906351366*^9, 3.6714579194233217`*^9}, 
+   3.67145810831293*^9}]
 }, Open  ]],
 
 Cell[BoxData[""], "Input",
@@ -243,7 +242,7 @@ Cell[BoxData[{
            "}"}]}]}], "]"}], " ", "//", " ", "Print"}], "\[IndentingNewLine]",
       ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
      RowBox[{
-      RowBox[{"ListPointPlot3D", "[", 
+      RowBox[{"ListPlot", "[", 
        RowBox[{
         RowBox[{"Import", "[", 
          RowBox[{
@@ -252,17 +251,13 @@ Cell[BoxData[{
             RowBox[{
              RowBox[{"NotebookDirectory", "[", "]"}], ",", " ", 
              RowBox[{"StringJoin", "[", 
-              RowBox[{"i", ",", "\"\<_coefMse.log\>\""}], "]"}]}], "}"}], 
-           "]"}], ",", " ", "\"\<Table\>\""}], "]"}], ",", " ", 
+              RowBox[{"i", ",", "\"\<_coefDistances.log\>\""}], "]"}]}], 
+            "}"}], "]"}], ",", " ", "\"\<Table\>\""}], "]"}], ",", " ", 
         RowBox[{"PlotRange", "\[Rule]", " ", "All"}], ",", " ", 
-        RowBox[{"PlotLabel", "\[Rule]", " ", 
+        RowBox[{"PlotLabel", " ", "\[Rule]", " ", 
          RowBox[{"StringJoin", "[", 
-          RowBox[{"i", ",", "\"\< all utilities\>\""}], "]"}]}], ",", " ", 
-        RowBox[{"AxesLabel", "\[Rule]", 
-         RowBox[{"{", 
-          RowBox[{
-          "\"\<Coefficient\>\"", ",", " ", "\"\<Iteration\>\"", ",", " ", 
-           "\"\<MSE\>\""}], "}"}]}]}], "]"}], " ", "//", " ", "Print"}], 
+          RowBox[{"i", ",", "\"\< solution distances\>\""}], "]"}]}]}], "]"}],
+       "  ", "//", " ", "Print"}], "\[IndentingNewLine]", 
      "\[IndentingNewLine]", ";", "\[IndentingNewLine]", "\[IndentingNewLine]", 
      RowBox[{
       RowBox[{"ListPlot", "[", 
@@ -341,7 +336,7 @@ Cell[BoxData[{
    3.670154314833714*^9}, {3.6703957427987237`*^9, 3.6703957555476003`*^9}, {
    3.671092073383476*^9, 3.6710920737572165`*^9}, 3.6710925206217885`*^9, {
    3.6713725205223665`*^9, 3.6713725229600177`*^9}, {3.6713729343326793`*^9, 
-   3.6713729414399548`*^9}}],
+   3.6713729414399548`*^9}, 3.671458148163659*^9}],
 
 Cell[BoxData[
  RowBox[{"{", 
@@ -369,13 +364,13 @@ CellTagsIndex->{}
 (*NotebookFileOutline
 Notebook[{
 Cell[CellGroupData[{
-Cell[580, 22, 8022, 165, 672, "Input"],
-Cell[8605, 189, 316, 6, 31, "Output"]
+Cell[580, 22, 7981, 162, 692, "Input"],
+Cell[8564, 186, 415, 8, 31, "Output"]
 }, Open  ]],
-Cell[8936, 198, 68, 1, 31, "Input"],
+Cell[8994, 197, 68, 1, 31, "Input"],
 Cell[CellGroupData[{
-Cell[9029, 203, 6227, 140, 612, "Input"],
-Cell[15259, 345, 307, 6, 31, "Output"]
+Cell[9087, 202, 6084, 136, 612, "Input"],
+Cell[15174, 340, 307, 6, 31, "Output"]
 }, Open  ]]
 }
 ]

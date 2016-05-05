@@ -45,17 +45,17 @@ public:
 
             aEvaluatorsDistances.emplace_back(0.0);
             // for each evaluator
-			for (auto itr1 = evaluators.begin(); itr1 != evaluators.end(); ++itr1)
+			for (auto itr1 = evaluators.begin(); itr1 != evaluators.end() - 1; ++itr1)
 			{
 				// with each other evaluator
-				for (auto itr2 = itr1; itr2 != evaluators.end(); ++itr2)
+				for (auto itr2 = itr1 + 1; itr2 != evaluators.end(); ++itr2)
 				{
 					const vector<double>& mult1 = itr1->getMultipliers();
 					const vector<double>& mult2 = itr2->getMultipliers();
 
 					double sumOfSquares = 0.0;
 					for (auto m1 = mult1.begin(), m2 = mult2.begin(); m1 != mult1.end(); ++m1, ++m2)
-						sumOfSquares += (m1 - m2) * (m1 - m2);
+						sumOfSquares += (*m1 - *m2) * (*m1 - *m2);
 					// calculate distance
 					aEvaluatorsDistances.back() += sqrt(sumOfSquares);
 				}
